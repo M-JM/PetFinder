@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using PetFinder.Models;
 using PetFinder.ViewModels;
 using PetFinderDAL.Models;
@@ -20,16 +21,31 @@ namespace PetFinder.Controllers
     {
         private readonly IPetRepository _petRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ILogger<PetController> _logger;
 
-        public PetController(IPetRepository petRepository, IWebHostEnvironment WebHostEnvironment)
+        public PetController(IPetRepository petRepository,
+            IWebHostEnvironment WebHostEnvironment,
+             ILogger<PetController> logger)
         {
             _petRepository = petRepository;
             _webHostEnvironment = WebHostEnvironment;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                var petList = _petRepository.GetAllPets();
+                return View(petList);
+            }
+            
+             catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When retrieving Company List.");
+                throw;
+
+            }
         }
 
         [HttpGet]
@@ -100,10 +116,26 @@ namespace PetFinder.Controllers
             return View(createmodel);
 
         }
-
-        public IActionResult Update()
+        [HttpGet]
+        public IActionResult Edit(int id)
         {
-            return View();
+            var pet = _petRepository.GetById(id);
+
+            PetEditViewModel editModel = new PetEditViewModel()
+            {
+
+                Name = pet.Name,
+                Description = pet.Description,
+                DOB = pet.DOB,
+                Gender = pet.Gender,
+                PetColorId = pet.PetColorId,
+                PetKindId = pet.PetKindId,
+                ShelterId = pet.ShelterId,
+                Size = pet.Size,
+                PetRaceId = pet.PetRaceId,
+                Social = pet.Social
+            };
+            return View(editModel);
         }
 
         [HttpGet]

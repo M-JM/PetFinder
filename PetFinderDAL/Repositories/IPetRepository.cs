@@ -13,7 +13,7 @@ namespace PetFinderDAL.Repositories
         PetPicture AddPetPicture(PetPicture petPicture);
 
         //Read
-
+        IEnumerable<Pet> GetAllPets();
         IEnumerable<PetColor> GetPetColors();
         IEnumerable<PetRace> GetPetRaces();
         IEnumerable<PetKind> GetPetKinds();

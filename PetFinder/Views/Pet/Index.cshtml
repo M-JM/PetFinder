@@ -1,10 +1,30 @@
-﻿@page
-@model PetFinder.IndexModel
-
+﻿@model IEnumerable<Pet>
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="row-cols-1 mt-lg-5 mb-lg-5 text-center">
+    <h1>Overview of all pets</h1>
+</div>
 
-<
+<div class="row h-25 mt-lg-4 mb-lg-4">
+
+    <a asp-action="Create" asp-controller="Pet" class="btn btn-success mb-2 ml-3">Create a new pet</a>
+</div>
+
+<div class="card-deck mt-3">
+    @foreach (var pet in Model)
+    {
+    
+        <div class="card m-3" style="width: 9rem; max-width:25%">
+            <div class="card-header">
+                <h3 class="text-center">@pet.Name</h3>
+            </div>
+            <div class="card-footer text-center">
+                <a asp-action="Details" asp-controller="Pet" asp-route-id="@pet.PetId" class="btn btn-info">Details</a>
+                <a asp-action="Edit" asp-controller="Pet" asp-route-id="@pet.PetId" class="btn btn-warning">Edit</a>
+                <a asp-action="Delete" asp-controller="Pet" asp-route-id="@pet.PetId" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    }
+</div>

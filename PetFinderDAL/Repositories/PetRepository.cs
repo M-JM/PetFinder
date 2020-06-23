@@ -74,6 +74,16 @@ namespace PetFinderDAL.Repositories
 
             return pet;
         }
+
+        // Get - All Pets
+
+        public IEnumerable<Pet> GetAllPets()
+        {
+            var listPets = _context.Pets.ToList();
+
+            return listPets;
+        }
+
         // Get - PetColors
 
         public IEnumerable<PetColor> GetPetColors()
