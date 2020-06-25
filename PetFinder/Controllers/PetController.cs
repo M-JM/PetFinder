@@ -53,30 +53,34 @@ namespace PetFinder.Controllers
         {
             var PetColorList = _petRepository.GetPetColors();
             var PetRaceList = _petRepository.GetPetRaces();
-            var PetKindList = _petRepository.GetPetKinds();
+            List<PetKind> PetKindList = _petRepository.GetPetKinds();
+            List<PetKind> test = _petRepository.GetPetKinds();
 
-            PetCreateViewModel CreateModel = new PetCreateViewModel()
+            PetCreateViewModel CreateModel = new PetCreateViewModel(PetColorList, PetKindList, PetRaceList)
             {
-                PetColorList = PetColorList.Select(r =>
-                new SelectListItem()
-                {
-                     Value = r.PetColorId.ToString(),
-                     Text = r.Color
-                }),
 
-                PetRaceList = PetRaceList.Select(r =>
-                new SelectListItem()
-                {
-                    Value = r.PetRaceId.ToString(),
-                    Text = r.RaceName
-                }),
+                             
+                //PetColorList = PetColorList.Select(r =>
+                //new SelectListItem()
+                //{
+                //     Value = r.PetColorId.ToString(),
+                //     Text = r.Color
+                //}),
 
-                PetKindList = PetKindList.Select(r =>
-                new SelectListItem()
-                {
-                    Value = r.PetKindId.ToString(),
-                    Text = r.AnimalType
-                })
+               
+                //PetRaceList = PetRaceList.Select(r =>
+                //new SelectListItem()
+                //{
+                //    Value = r.PetRaceId.ToString(),
+                //    Text = r.RaceName
+                //}),
+
+                //PetKindList = PetKindList.Select(r =>
+                //new SelectListItem()
+                //{
+                //    Value = r.PetKindId.ToString(),
+                //    Text = r.AnimalType
+                //}).ToList()
             };
             return View(CreateModel);
         }
@@ -120,8 +124,12 @@ namespace PetFinder.Controllers
         public IActionResult Edit(int id)
         {
             var pet = _petRepository.GetById(id);
+            var PetColorList = _petRepository.GetPetColors();
+            var PetRaceList = _petRepository.GetPetRaces();
+            List<PetKind> PetKindList = _petRepository.GetPetKinds();
+         
 
-            PetEditViewModel editModel = new PetEditViewModel()
+            PetEditViewModel editModel = new PetEditViewModel(PetColorList, PetKindList, PetRaceList)
             {
 
                 Name = pet.Name,
@@ -200,6 +208,8 @@ namespace PetFinder.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        // Private populate list method. ( parameter)
 
     }
 }

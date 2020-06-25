@@ -105,7 +105,7 @@ namespace PetFinderDAL.Repositories
         }
 
         // Get - PetKinds
-        public IEnumerable<PetKind> GetPetKinds()
+        public List<PetKind> GetPetKinds()
         {
             var PetKindList = _context.PetKind.ToList();
 
