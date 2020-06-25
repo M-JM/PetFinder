@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,7 @@ namespace PetFinder.Controllers
         {
             try
             {
-                var petList = _petRepository.GetAllPets();
+                IEnumerable<Pet> petList = _petRepository.GetAllPets();
                 return View(petList);
             }
             
@@ -51,41 +52,19 @@ namespace PetFinder.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var PetColorList = _petRepository.GetPetColors();
-            var PetRaceList = _petRepository.GetPetRaces();
+            List<PetColor> PetColorList = _petRepository.GetPetColors();
+            List<PetRace> PetRaceList = _petRepository.GetPetRaces();
             List<PetKind> PetKindList = _petRepository.GetPetKinds();
-            List<PetKind> test = _petRepository.GetPetKinds();
-
+           
             PetCreateViewModel CreateModel = new PetCreateViewModel(PetColorList, PetKindList, PetRaceList)
             {
 
-                             
-                //PetColorList = PetColorList.Select(r =>
-                //new SelectListItem()
-                //{
-                //     Value = r.PetColorId.ToString(),
-                //     Text = r.Color
-                //}),
-
-               
-                //PetRaceList = PetRaceList.Select(r =>
-                //new SelectListItem()
-                //{
-                //    Value = r.PetRaceId.ToString(),
-                //    Text = r.RaceName
-                //}),
-
-                //PetKindList = PetKindList.Select(r =>
-                //new SelectListItem()
-                //{
-                //    Value = r.PetKindId.ToString(),
-                //    Text = r.AnimalType
-                //}).ToList()
+              
             };
             return View(CreateModel);
         }
         [HttpPost]
-        public IActionResult Create(PetCreateViewModel createmodel)
+        public IActionResult Create( PetCreateViewModel createmodel)
         {
             if(ModelState.IsValid)
             {
@@ -123,11 +102,11 @@ namespace PetFinder.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var pet = _petRepository.GetById(id);
-            var PetColorList = _petRepository.GetPetColors();
-            var PetRaceList = _petRepository.GetPetRaces();
+            Pet pet = _petRepository.GetById(id);
+            List<PetColor> PetColorList = _petRepository.GetPetColors();
+            List<PetRace> PetRaceList = _petRepository.GetPetRaces();
             List<PetKind> PetKindList = _petRepository.GetPetKinds();
-         
+
 
             PetEditViewModel editModel = new PetEditViewModel(PetColorList, PetKindList, PetRaceList)
             {
@@ -149,18 +128,19 @@ namespace PetFinder.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var pet = _petRepository.GetById(id);
+            Pet pet = _petRepository.GetById(id);
 
             return View(pet);
         }
         [HttpPost]
         public IActionResult DeleteSure(int PetId)
         {
-            var pet = _petRepository.GetById(PetId);
-            var response = _petRepository.RemovePet(pet);
+            Pet pet = _petRepository.GetById(PetId);
+            Pet response = _petRepository.RemovePet(pet);
 
             if (response != null && response.PetId != 0)
             {
+                // the pictures are automatically deleted due to cascade in DB
                 //foreach( var picture in pet.PetPictures)
                 //{
                 //    _petRepository.RemovePetPicture(picture);
@@ -174,7 +154,7 @@ namespace PetFinder.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var pet = _petRepository.GetById(id);
+            Pet pet = _petRepository.GetById(id);
 
             PetDetailViewModel detailViewModel = new PetDetailViewModel()
             {
@@ -187,13 +167,13 @@ namespace PetFinder.Controllers
         private List<string> ProcessUploadFile(PetCreateViewModel createmodel)
         {
             List<string> uniqueFilenames = new List<string>();
-            foreach (var Photo in createmodel.PetPictures)
+            foreach (IFormFile Photo in createmodel.PetPictures)
             {
                 if (createmodel.PetPictures != null)
                 {
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                     using FileStream fileStream = new FileStream(filePath, FileMode.Create);
                     Photo.CopyTo(fileStream);

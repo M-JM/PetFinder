@@ -86,7 +86,7 @@ namespace PetFinderDAL.Repositories
 
         // Get - PetColors
 
-        public IEnumerable<PetColor> GetPetColors()
+        public List<PetColor> GetPetColors()
         {
             var PetcolorList = _context.PetColors.ToList();
 
@@ -96,7 +96,7 @@ namespace PetFinderDAL.Repositories
 
         // Get - PetRaces
 
-        public IEnumerable<PetRace> GetPetRaces()
+        public List<PetRace> GetPetRaces()
         {
             var PetRaceList = _context.PetRaces.ToList();
         
