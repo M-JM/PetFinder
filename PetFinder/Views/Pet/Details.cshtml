@@ -27,15 +27,26 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            @foreach (var picture in pet.PetPictures)
+                            @if (pet.PetPictures.Count > 0) { 
+                            foreach (var picture in pet.PetPictures)
                             {
-                                var imagepath = "~/images/" + picture.PhotoPath;
-
-                                <div class="thumbnail">
-                                    <img class="imageThumbnail" src="@imagepath" asp-append-version="true" />
-                                </div>
-
+                                    <h4>testing 2</h4>
+                                    var imagepath = "~/images/" + picture.PhotoPath;
+                                    <div class="thumbnail">
+                                        <img class="imageThumbnail" src="@imagepath" asp-append-version="true" />
+                                    </div>
+                                } 
                             }
+                             else
+                                {
+                                <h4>Testing</h4>
+                                    <div class="thumbnail">
+                                        <img class="imageThumbnail" src="~/images/noimage.jpg" asp-append-version="true" />
+                                    </div>
+                                }
+
+
+                            
                         </div>
 
                     </div>

@@ -68,8 +68,7 @@ namespace PetFinder.Controllers
         {
             if(ModelState.IsValid)
             {
-                List<string> uniqueFilenames = ProcessUploadFile(createmodel);
-
+               
                 Pet newPet = new Pet
                 {
                     Name = createmodel.Name,
@@ -85,16 +84,22 @@ namespace PetFinder.Controllers
                 };
                 _petRepository.AddPet(newPet);
 
-                foreach (var picture in uniqueFilenames)
-                {
-                    PetPicture newPicture = new PetPicture
+                if (createmodel.PetPictures != null ) {
+                    List<string> uniqueFilenames = ProcessUploadFile(createmodel);
+
+                    foreach (var picture in uniqueFilenames)
                     {
-                        Pet = newPet,
-                        PhotoPath = picture
-                    };
-                    _petRepository.AddPetPicture(newPicture);
+                        PetPicture newPicture = new PetPicture
+                        {
+                            Pet = newPet,
+                            PhotoPath = picture
+                        };
+                        _petRepository.AddPetPicture(newPicture);
+                    }
                 }
+                else { 
                 return RedirectToAction("Details", new { id = newPet.PetId });
+                }
             }
             return View(createmodel);
 

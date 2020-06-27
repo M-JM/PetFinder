@@ -16,11 +16,23 @@ namespace PetFinder.ViewModels
          //https://stackoverflow.com/questions/54237069/model-bound-complex-types-must-not-be-abstract-or-value-types-and-must-have-a-pa
         }
 
-
         public List<SelectListItem> PetKindList { get; set; }
         public List<SelectListItem> PetColorList { get; set; }
         public List<SelectListItem> PetRaceList { get; set; }
         public List<IFormFile> PetPictures { get; set; }
+
+        public List<SelectListItem> Genderlist { get; } = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "M", Text = "Male" },
+            new SelectListItem { Value = "F", Text = "Female" },
+        };
+        public List<SelectListItem> SizeList { get; } = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "Small", Text = "Small" },
+            new SelectListItem { Value = "Medium", Text = "Medium" },
+             new SelectListItem { Value = "Large", Text = "Large" },
+        };
+
 
         public PetCreateViewModel(IEnumerable<PetColor> colors, IEnumerable<PetKind> petKinds, IEnumerable<PetRace> petRaces)
         {
