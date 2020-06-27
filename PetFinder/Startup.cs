@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,12 @@ namespace PetFinder
               options =>
                   options.UseSqlServer(_config.GetConnectionString("PetDBConnection"))
           );
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 10;
+                options.Password.RequiredUniqueChars = 3;
+            }).AddEntityFrameworkStores<AppDbContext>(); 
+
             services.AddControllersWithViews();
             services.AddScoped<IPetRepository, PetRepository>();
 

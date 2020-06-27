@@ -25,5 +25,7 @@ namespace PetFinderDAL.Models
 
         public virtual Shelter Shelter { get; set; }
 
+        public virtual ApplicationUser ApplicationUser{ get; set; }
+
     }
 }

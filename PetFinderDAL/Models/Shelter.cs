@@ -18,9 +18,10 @@ namespace PetFinderDAL.Models
         public string PhoneNumber { get; set; }
 
         public List<Pet> Pets { get; set; }
-       
-        [ForeignKey("Location")]
 
+        public List<ApplicationUser> ApplicationUsers{ get; set; }
+
+        [ForeignKey("Location")]
         public int LocationId { get; set; }
         public virtual Location Location { get; set; }
 
