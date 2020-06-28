@@ -43,7 +43,7 @@ namespace PetFinder.Controllers
             
              catch (Exception ex)
             {
-                _logger.LogError(ex, $"When retrieving Company List.");
+                _logger.LogError(ex, $"When retrieving Pets List.");
                 throw;
 
             }

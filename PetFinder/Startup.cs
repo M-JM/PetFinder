@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PetFinderDAL.Context;
+using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
 
 namespace PetFinder
@@ -28,11 +29,12 @@ namespace PetFinder
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+          
             services.AddDbContextPool<AppDbContext>(
               options =>
                   options.UseSqlServer(_config.GetConnectionString("PetDBConnection"))
           );
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 10;
                 options.Password.RequiredUniqueChars = 3;
@@ -40,6 +42,10 @@ namespace PetFinder
 
             services.AddControllersWithViews();
             services.AddScoped<IPetRepository, PetRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddHttpClient<Controllers.AccountController>();
+
+        
 
         }
 
@@ -57,9 +63,9 @@ namespace PetFinder
             }
             app.UseStaticFiles();
 
-            app.UseAuthentication();
-
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

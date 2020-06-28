@@ -19,9 +19,9 @@ namespace PetFinderDAL.Models
 
         public int HouseNumber { get; set; }
 
-        public int Latitude { get; set; }
+        public float Latitude { get; set; }
 
-        public int Longitude { get; set; }
+        public float Longitude { get; set; }
 
         public virtual Shelter Shelter { get; set; }
 
