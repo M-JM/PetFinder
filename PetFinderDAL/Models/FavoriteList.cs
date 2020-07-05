@@ -4,7 +4,10 @@ using System.Text;
 
 namespace PetFinderDAL.Models
 {
-    class FavoriteList
+   public class FavoriteList
     {
+        public int? FavoritelistId { get; set; }
+
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

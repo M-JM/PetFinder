@@ -21,17 +21,20 @@ namespace PetFinder.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly ILocationRepository _locationRepository;
+        private readonly IShelterRepository _shelterRepository;
         private const string _baseUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=a&key=";
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<AccountController> logger,
-            ILocationRepository locationRepository)
+            ILocationRepository locationRepository,
+            IShelterRepository shelterRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _locationRepository = locationRepository;
+            _shelterRepository = shelterRepository;
         }
 
         private async Task<string> GetGeoAsync()
@@ -42,10 +45,6 @@ namespace PetFinder.Controllers
             return reply;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpGet]
         public IActionResult Login()
@@ -94,15 +93,25 @@ namespace PetFinder.Controllers
             
             return View(Registermodel);
         }
+        [HttpGet]
+        public IActionResult ShelterRegister()
+        {
+            ShelterRegisterViewModel Registermodel = new ShelterRegisterViewModel
+            {
+
+            };
+
+            return View(Registermodel);
+        }
         [HttpPost]
         public async Task<IActionResult> RegisterAsync(UserRegisterViewModel Registermodel)
         {
          
             using HttpClient client = new HttpClient();
-            var testingasJson = await client.GetFromJsonAsync<GoogleApi>(_baseUrl);
+            //var testingasJson = await client.GetFromJsonAsync<GoogleApi>(_baseUrl);
             var testingasstring= await client.GetAsync(_baseUrl);
             var result = testingasstring.Content.ReadAsStringAsync().Result;
-            var test = await testingasstring.Content.ReadAsStringAsync();
+            //var test = await testingasstring.Content.ReadAsStringAsync();
             GoogleApi.Rootobject google = JsonConvert.DeserializeObject<GoogleApi.Rootobject>(result);
             var testing = google.results.FirstOrDefault();
 
@@ -132,11 +141,12 @@ namespace PetFinder.Controllers
                 UserName = Registermodel.Email,
                 Email = Registermodel.Email,
                 LocationId = UserLocation.LocationtId
-               
-                                                                        
+                                                                                       
             };
          var resulting = await _userManager.CreateAsync(user, Registermodel.Password);
-         
+         var receivedUser = await _userManager.FindByEmailAsync(Registermodel.Email);
+            await _userManager.AddToRoleAsync(receivedUser, "User");
+
 
             if (resulting.Succeeded)
             {
@@ -146,6 +156,55 @@ namespace PetFinder.Controllers
             return View(Registermodel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ShelterRegisterAsync(ShelterRegisterViewModel Registermodel)
+        {
+
+           
+            Location ShelterLocation = new Location
+            {
+                Street = Registermodel.Street,
+                HouseNumber = Registermodel.HouseNumber,
+                City = Registermodel.City,
+                Country = Registermodel.Country,
+                Latitude = 1,
+                Longitude = 1
+            };
+
+            _locationRepository.Addlocation(ShelterLocation);
+
+            var shelter = new Shelter
+            {
+                Name = Registermodel.Name,
+                Email = Registermodel.Email,
+                Description = Registermodel.Description,
+                PhoneNumber = Registermodel.PhoneNumber,
+                LocationId = ShelterLocation.LocationtId,
+            };
+
+            _shelterRepository.AddShelter(shelter);
+
+            var user = new ApplicationUser
+            {
+                UserName = Registermodel.Email,
+                Email = Registermodel.Email,
+                ShelterId = shelter.ShelterId
+   
+            };
+
+           
+            var resulting = await _userManager.CreateAsync(user, Registermodel.Password);
+            var receivedUser = await _userManager.FindByEmailAsync(Registermodel.Email);
+            await _userManager.AddToRoleAsync(receivedUser, "Admin");
+
+
+            if (resulting.Succeeded)
+            {
+                return View();
+            }
+
+            return View(Registermodel);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

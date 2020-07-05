@@ -43,6 +43,7 @@ namespace PetFinder
             services.AddControllersWithViews();
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IShelterRepository, ShelterRepository>();
             services.AddHttpClient<Controllers.AccountController>();
 
         

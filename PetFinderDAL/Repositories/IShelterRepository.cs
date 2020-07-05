@@ -1,10 +1,12 @@
-﻿using System;
+﻿using PetFinderDAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace PetFinderDAL.Repositories
 {
-    class IShelterRepository
+   public interface IShelterRepository
     {
+        Shelter AddShelter(Shelter Shelter);
     }
 }

@@ -29,6 +29,8 @@ namespace PetFinder.ViewModels.AccountViewModel
         [Required]
         public string City { get; set; }
         [Required]
+        public string Zipcode { get; set; }
+        [Required]
         public string Country { get; set; }
      
 

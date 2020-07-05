@@ -169,7 +169,10 @@ namespace PetFinderDAL.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LocationId")
+                    b.Property<int?>("FavoritelistId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
@@ -210,8 +213,13 @@ namespace PetFinderDAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FavoritelistId")
+                        .IsUnique()
+                        .HasFilter("[FavoritelistId] IS NOT NULL");
+
                     b.HasIndex("LocationId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[LocationId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -224,6 +232,18 @@ namespace PetFinderDAL.Migrations
                     b.HasIndex("ShelterId");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("PetFinderDAL.Models.FavoriteList", b =>
+                {
+                    b.Property<int?>("FavoritelistId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("FavoritelistId");
+
+                    b.ToTable("FavoriteList");
                 });
 
             modelBuilder.Entity("PetFinderDAL.Models.Location", b =>
@@ -249,6 +269,9 @@ namespace PetFinderDAL.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Zipcode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LocationtId");
@@ -454,11 +477,13 @@ namespace PetFinderDAL.Migrations
 
             modelBuilder.Entity("PetFinderDAL.Models.ApplicationUser", b =>
                 {
+                    b.HasOne("PetFinderDAL.Models.FavoriteList", "FavoriteList")
+                        .WithOne("ApplicationUser")
+                        .HasForeignKey("PetFinderDAL.Models.ApplicationUser", "FavoritelistId");
+
                     b.HasOne("PetFinderDAL.Models.Location", "Location")
                         .WithOne("ApplicationUser")
-                        .HasForeignKey("PetFinderDAL.Models.ApplicationUser", "LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PetFinderDAL.Models.ApplicationUser", "LocationId");
 
                     b.HasOne("PetFinderDAL.Models.Shelter", "Shelter")
                         .WithMany("ApplicationUsers")
