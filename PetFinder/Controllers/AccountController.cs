@@ -53,13 +53,43 @@ namespace PetFinder.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> LoginAsync(LoginViewModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                if (signInResult.Succeeded)
+                {
+                    if (string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    var currentuser = await _userManager.FindByEmailAsync(model.Email);
+
+                    //if (User.IsInRole("Admin"))
+
+                    if (await _userManager.IsInRoleAsync(currentuser, "Admin"))
+                    {
+                        return RedirectToAction("AdminIndex", "Home");
+                    }
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+            }
+
+            return View(model);
+        }
+
         [HttpGet]
         public IActionResult Register()
         {
             UserRegisterViewModel Registermodel = new UserRegisterViewModel
             {
-               
-             
+    
             };
             
             return View(Registermodel);
@@ -115,6 +145,15 @@ namespace PetFinder.Controllers
 
             return View(Registermodel);
         }
-        
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
