@@ -67,6 +67,13 @@ namespace PetFinderDAL.Repositories
 
             return favorite;
                 }
-   
+
+        public bool FavoriteExists (string userId, int petId)
+        {
+            var Exist = _context.FavoriteList.Where(x => x.ApplicationUser.Id == userId && x.PetId == petId).Count()>0;
+
+            return Exist;
+        }
+
     }
 }

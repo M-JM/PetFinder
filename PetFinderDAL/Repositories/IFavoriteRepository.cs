@@ -11,5 +11,6 @@ namespace PetFinderDAL.Repositories
         FavoriteList GetFavoritePet(string userId, int petId);
         FavoriteList AddFavoritePet(FavoriteList Favorite);
         FavoriteList RemoveFavoritePet(FavoriteList Favorite);
+        public bool FavoriteExists(string userId, int petId);
     }
 }

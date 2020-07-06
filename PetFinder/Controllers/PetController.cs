@@ -165,13 +165,18 @@ namespace PetFinder.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> DetailsAsync(int id)
         {
             Pet pet = _petRepository.GetById(id);
+            var currentuser = await _userManager.GetUserAsync(HttpContext.User);
+            bool isFavorite = _favoriteRepository.FavoriteExists(currentuser.Id, pet.PetId);
 
             PetDetailViewModel detailViewModel = new PetDetailViewModel()
             {
-                Pet = pet
+                Pet = pet,
+                Isfavorite = isFavorite
+
+
             };
 
             return View(detailViewModel);
