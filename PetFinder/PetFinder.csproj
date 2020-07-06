@@ -22,11 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Scripts\" />
-    <Folder Include="Views\Shelter\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 

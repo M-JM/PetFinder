@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetFinderDAL.Context;
 
 namespace PetFinderDAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200706210108_FavoritelistupdatePetId")]
+    partial class FavoritelistupdatePetId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,6 +171,9 @@ namespace PetFinderDAL.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("FavoritelistId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
@@ -210,6 +215,9 @@ namespace PetFinderDAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FavoritelistId")
+                        .IsUnique();
+
                     b.HasIndex("LocationId")
                         .IsUnique()
                         .HasFilter("[LocationId] IS NOT NULL");
@@ -234,17 +242,10 @@ namespace PetFinderDAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("PetId")
                         .HasColumnType("int");
 
                     b.HasKey("FavoritelistId");
-
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique()
-                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
                     b.HasIndex("PetId");
 
@@ -482,6 +483,12 @@ namespace PetFinderDAL.Migrations
 
             modelBuilder.Entity("PetFinderDAL.Models.ApplicationUser", b =>
                 {
+                    b.HasOne("PetFinderDAL.Models.FavoriteList", "FavoriteList")
+                        .WithOne("ApplicationUser")
+                        .HasForeignKey("PetFinderDAL.Models.ApplicationUser", "FavoritelistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PetFinderDAL.Models.Location", "Location")
                         .WithOne("ApplicationUser")
                         .HasForeignKey("PetFinderDAL.Models.ApplicationUser", "LocationId");
@@ -493,10 +500,6 @@ namespace PetFinderDAL.Migrations
 
             modelBuilder.Entity("PetFinderDAL.Models.FavoriteList", b =>
                 {
-                    b.HasOne("PetFinderDAL.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("FavoriteList")
-                        .HasForeignKey("PetFinderDAL.Models.FavoriteList", "ApplicationUserId");
-
                     b.HasOne("PetFinderDAL.Models.Pet", "Pet")
                         .WithMany()
                         .HasForeignKey("PetId")

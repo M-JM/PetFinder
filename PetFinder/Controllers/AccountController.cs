@@ -108,12 +108,16 @@ namespace PetFinder.Controllers
         {
          
             using HttpClient client = new HttpClient();
+
+            //WORKING CODE
+            //var testingasstring= await client.GetAsync(_baseUrl);
+            //var result = testingasstring.Content.ReadAsStringAsync().Result;
+            //GoogleApi.Rootobject google = JsonConvert.DeserializeObject<GoogleApi.Rootobject>(result);
+            //var testing = google.results.FirstOrDefault();
+            // ENDWORKING CODE
+
             //var testingasJson = await client.GetFromJsonAsync<GoogleApi>(_baseUrl);
-            var testingasstring= await client.GetAsync(_baseUrl);
-            var result = testingasstring.Content.ReadAsStringAsync().Result;
             //var test = await testingasstring.Content.ReadAsStringAsync();
-            GoogleApi.Rootobject google = JsonConvert.DeserializeObject<GoogleApi.Rootobject>(result);
-            var testing = google.results.FirstOrDefault();
 
             // Entire API call to google needs to be rewritten into a service with method accepting Concatnated Address parameter
             // In case the address return no object -> use City ZIP CODE to get at least approx. geocoding
@@ -122,7 +126,8 @@ namespace PetFinder.Controllers
 
 
             //GoogleApi TestingJSONreslut = Newtonsoft.Json.JsonSerializer.Deserialize<GoogleApi>(result);
-            System.Diagnostics.Debug.WriteLine(testingasstring.ToString());
+           
+
 
             Location UserLocation = new Location
             {
@@ -130,8 +135,10 @@ namespace PetFinder.Controllers
                 HouseNumber = Registermodel.HouseNumber,
                 City = Registermodel.City,
                 Country = Registermodel.Country,
-                Latitude = testing.geometry.location.lat,
-                Longitude = testing.geometry.location.lng,
+                //Latitude = testing.geometry.location.lat,
+                //Longitude = testing.geometry.location.lng,
+                Latitude = 1,
+                Longitude = 1,
             };
 
             _locationRepository.Addlocation(UserLocation);
@@ -140,8 +147,8 @@ namespace PetFinder.Controllers
             {
                 UserName = Registermodel.Email,
                 Email = Registermodel.Email,
-                LocationId = UserLocation.LocationtId
-                                                                                       
+                LocationId = UserLocation.LocationtId,
+                                                                                                       
             };
          var resulting = await _userManager.CreateAsync(user, Registermodel.Password);
          var receivedUser = await _userManager.FindByEmailAsync(Registermodel.Email);

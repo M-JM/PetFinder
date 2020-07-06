@@ -18,10 +18,6 @@ namespace PetFinderDAL.Models
 
         public virtual Shelter Shelter { get; set; }
 
-
-        [ForeignKey("FavoriteList")]
-        public int? FavoritelistId { get; set; }
-
         public virtual FavoriteList FavoriteList { get; set; }
 
     }

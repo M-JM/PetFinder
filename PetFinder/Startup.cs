@@ -44,6 +44,7 @@ namespace PetFinder
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IShelterRepository, ShelterRepository>();
+            services.AddScoped<IFavoriteRepository, FavoriteRepository>();
             services.AddHttpClient<Controllers.AccountController>();
 
         

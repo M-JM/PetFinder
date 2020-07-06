@@ -6,11 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using PetFinder.Models;
 using PetFinder.ViewModels;
+using PetFinder.ViewModels.FavoriteViewModel;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
 
@@ -21,16 +23,22 @@ namespace PetFinder.Controllers
     public class PetController : Controller
     {
         private readonly IPetRepository _petRepository;
+        private readonly IFavoriteRepository _favoriteRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<PetController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public PetController(IPetRepository petRepository,
+            IFavoriteRepository favoriteRepository,
             IWebHostEnvironment WebHostEnvironment,
-             ILogger<PetController> logger)
+             ILogger<PetController> logger,
+              UserManager<ApplicationUser> userManager)
         {
             _petRepository = petRepository;
+            _favoriteRepository = favoriteRepository;
             _webHostEnvironment = WebHostEnvironment;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -167,6 +175,29 @@ namespace PetFinder.Controllers
             };
 
             return View(detailViewModel);
+        }
+
+        public async Task<IActionResult> AddFavoriteAsync(int id)
+        {
+            Pet pet = _petRepository.GetById(id);
+            var currentuser = await _userManager.GetUserAsync(HttpContext.User);
+            var currentpet = _favoriteRepository.GetFavoritePet(currentuser.Id, pet.PetId);
+            if (currentpet != null)
+            {
+                _favoriteRepository.RemoveFavoritePet(currentpet);
+            }
+            else { 
+
+            NewFavoriteViewModel model = new NewFavoriteViewModel()
+            {
+                ApplicationUser = currentuser,
+                Pet = pet,
+              
+            };
+
+            _favoriteRepository.AddFavoritePet(model);
+            }
+            return RedirectToAction("Details", new { id });
         }
 
         private List<string> ProcessUploadFile(PetCreateViewModel createmodel)
