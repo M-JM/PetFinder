@@ -164,6 +164,61 @@ namespace PetFinder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AdminRegister(UserRegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    var admin = await _userManager.FindByEmailAsync(User.Identity.Name);
+                    var Shelter = _shelterRepository.GetShelterById(admin.ShelterId);
+                   
+                    Location UserLocation = new Location
+                    {
+                        Street = model.Street,
+                        HouseNumber = model.HouseNumber,
+                        City = model.City,
+                        Country = model.Country,
+                        //Latitude = testing.geometry.location.lat,
+                        //Longitude = testing.geometry.location.lng,
+                        Latitude = 1,
+                        Longitude = 1,
+                    };
+                    _locationRepository.Addlocation(UserLocation);
+
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.Email,
+                        Email = model.Email,
+                        LocationId = UserLocation.LocationtId,
+                        ShelterId = Shelter.ShelterId
+
+                    };
+
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                    var receivedUser = await _userManager.FindByEmailAsync(model.Email);
+                    await _userManager.AddToRoleAsync(receivedUser, "ShelterUser");
+                    // If user is successfully created
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ListUsers", "Administration");
+                    }
+                    // If there are any errors, add them to the ModelState object
+                    // which will be displayed by the validation summary tag helper
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                return View(model);
+            }
+            return View("Error"); // global expection
+        }
+
+
+        [HttpPost]
         public async Task<IActionResult> ShelterRegisterAsync(ShelterRegisterViewModel Registermodel)
         {
 
@@ -195,8 +250,10 @@ namespace PetFinder.Controllers
             {
                 UserName = Registermodel.Email,
                 Email = Registermodel.Email,
-                ShelterId = shelter.ShelterId
-   
+                ShelterId = shelter.ShelterId,
+                LocationId = ShelterLocation.LocationtId
+
+
             };
 
            

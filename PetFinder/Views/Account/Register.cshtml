@@ -59,7 +59,15 @@
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary">Register</button>
+            @if (User.IsInRole("Admin"))
+            {
+                <button type="submit" formaction='@Url.Action("AdminRegister","Account")' class="btn btn-primary">Add new User</button>
+                <a asp-action="ListUsers" asp-controller="Administration" class="btn btn-secondary">Back</a>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-primary">Register</button>
+            }
 
         </form>
     </div>

@@ -35,6 +35,14 @@ namespace PetFinderDAL.Repositories
             return null;
 
         }
+
+        public Shelter GetShelterById(int? id)
+        {
+            Shelter shelter =_context.Shelters.Find(id);
+
+            return shelter;
+        }
+
     }
 }
 

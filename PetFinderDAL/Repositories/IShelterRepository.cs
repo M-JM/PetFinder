@@ -8,5 +8,6 @@ namespace PetFinderDAL.Repositories
    public interface IShelterRepository
     {
         Shelter AddShelter(Shelter Shelter);
+        Shelter GetShelterById(int? id);
     }
 }
