@@ -15,38 +15,7 @@
                 <li class="nav-item active">
                     <a class="nav-link" asp-action="Index" asp-controller="Home">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Companies
-                    </a>
-
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" asp-action="CompanyList" asp-controller="Companies">List Companies</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Boards
-                    </a>
-
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" asp-action="BoardsList" asp-controller="Boards">List Boards</a>
-                    </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Manage
-                    </a>
-
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" asp-action="ListUsers" asp-controller="Administration">Users</a>
-                        <a class="dropdown-item" asp-action="ListRoles" asp-controller="Administration">Roles</a>
-                    </div>
-                </li>
+               
             }
             @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
             {
@@ -73,8 +42,23 @@
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" asp-action="ListUsers" asp-controller="Administration"> Manage company Users</a>
+                        <a class="dropdown-item" asp-action="" asp-controller=""> Manage Shelter Users</a>
+                    </div>
 
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" asp-action="" asp-controller=""> Create Shelter Users</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Appointments
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" asp-action="" asp-controller="">Appointments</a>
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" asp-action="" asp-controller="">Agenda</a>
                     </div>
                 </li>
             }
@@ -114,18 +98,20 @@
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" asp-action="" asp-controller="">My Appointments</a>
-
                     </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Profile
+                        Shelter Profile
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" asp-action="" asp-controller="">My Profile</a>
+                        <a class="dropdown-item" asp-action="" asp-controller="">Shelter profile</a>
+                    </div>
 
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" asp-action="" asp-controller=""> Edit Shelter profile</a>
                     </div>
                 </li>
             }
