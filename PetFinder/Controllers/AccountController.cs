@@ -126,28 +126,18 @@ namespace PetFinder.Controllers
 
 
             //GoogleApi TestingJSONreslut = Newtonsoft.Json.JsonSerializer.Deserialize<GoogleApi>(result);
-           
 
 
-            Location UserLocation = new Location
-            {
-                Street = Registermodel.Street,
-                HouseNumber = Registermodel.HouseNumber,
-                City = Registermodel.City,
-                Country = Registermodel.Country,
-                //Latitude = testing.geometry.location.lat,
-                //Longitude = testing.geometry.location.lng,
-                Latitude = 1,
-                Longitude = 1,
-            };
 
-            _locationRepository.Addlocation(UserLocation);
+            var location = AddLocation(Registermodel);
+
+            
 
             var user = new ApplicationUser
             {
                 UserName = Registermodel.Email,
                 Email = Registermodel.Email,
-                LocationId = UserLocation.LocationtId,                                                                                      
+                LocationId = location.LocationtId,                                                                                      
             };
 
          var resulting = await _userManager.CreateAsync(user, Registermodel.Password);
@@ -173,25 +163,14 @@ namespace PetFinder.Controllers
                 {
                     var admin = await _userManager.FindByEmailAsync(User.Identity.Name);
                     var Shelter = _shelterRepository.GetShelterById(admin.ShelterId);
-                   
-                    Location UserLocation = new Location
-                    {
-                        Street = model.Street,
-                        HouseNumber = model.HouseNumber,
-                        City = model.City,
-                        Country = model.Country,
-                        //Latitude = testing.geometry.location.lat,
-                        //Longitude = testing.geometry.location.lng,
-                        Latitude = 1,
-                        Longitude = 1,
-                    };
-                    _locationRepository.Addlocation(UserLocation);
+
+                    var location = AddLocation(model);
 
                     var user = new ApplicationUser
                     {
                         UserName = model.Email,
                         Email = model.Email,
-                        LocationId = UserLocation.LocationtId,
+                        LocationId = location.LocationtId,
                         ShelterId = Shelter.ShelterId
 
                     };
@@ -222,26 +201,16 @@ namespace PetFinder.Controllers
         public async Task<IActionResult> ShelterRegisterAsync(ShelterRegisterViewModel Registermodel)
         {
 
-           
-            Location ShelterLocation = new Location
-            {
-                Street = Registermodel.Street,
-                HouseNumber = Registermodel.HouseNumber,
-                City = Registermodel.City,
-                Country = Registermodel.Country,
-                Latitude = 1,
-                Longitude = 1
-            };
+           var location =  AddLocation(Registermodel);
 
-            _locationRepository.Addlocation(ShelterLocation);
 
-            var shelter = new Shelter
+             var shelter = new Shelter
             {
                 Name = Registermodel.Name,
                 Email = Registermodel.Email,
                 Description = Registermodel.Description,
                 PhoneNumber = Registermodel.PhoneNumber,
-                LocationId = ShelterLocation.LocationtId,
+                LocationId = location.LocationtId,
             };
 
             _shelterRepository.AddShelter(shelter);
@@ -251,7 +220,7 @@ namespace PetFinder.Controllers
                 UserName = Registermodel.Email,
                 Email = Registermodel.Email,
                 ShelterId = shelter.ShelterId,
-                LocationId = ShelterLocation.LocationtId
+                LocationId = location.LocationtId
 
 
             };
@@ -276,6 +245,26 @@ namespace PetFinder.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        // ToDo
+        // Make generic Viewmodel Interface for Location and user to make a Method who takes Generic Viewmodel to perform 
+        // Location and user creation ( avoiding DRY in both ShelterReg. and UserReg.
+
+        public Location AddLocation(RegisterViewModel model)
+        {
+            Location Location = new Location
+            {
+                Street = model.Street,
+                HouseNumber = model.HouseNumber,
+                City = model.City,
+                Country = model.Country,
+                Latitude = 1,
+                Longitude = 1
+            };
+            _locationRepository.Addlocation(Location);
+
+            return Location;
         }
 
     }

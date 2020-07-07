@@ -7,40 +7,40 @@ using System.Threading.Tasks;
 
 namespace PetFinder.ViewModels.AccountViewModel
 {
-    public class ShelterRegisterViewModel 
+    public class ShelterRegisterViewModel : RegisterViewModel
     {
         [Required]
-        public string Name { get; set; }
+        public override string Name { get; set; }
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public override string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public override string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password",
             ErrorMessage = "Password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
+        public override string ConfirmPassword { get; set; }
 
         [Required]
-        public string Street { get; set; }
+        public override string Street { get; set; }
         [Required]
-        public int HouseNumber { get; set; }
+        public override int HouseNumber { get; set; }
         [Required]
-        public string PhoneNumber { get; set; }
+        public override string PhoneNumber { get; set; }
         [Required]
-        public string City { get; set; }
+        public override string City { get; set; }
 
         [Required]
-        public string Zipcode { get; set; }
+        public override string Zipcode { get; set; }
         [Required]
-        public string Country { get; set; }
+        public override string Country { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public override string Description { get; set; }
 
     }
 }
