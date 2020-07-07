@@ -88,7 +88,6 @@ namespace PetFinder.Controllers
         {
             UserRegisterViewModel Registermodel = new UserRegisterViewModel
             {
-    
             };
             
             return View(Registermodel);
@@ -98,7 +97,6 @@ namespace PetFinder.Controllers
         {
             ShelterRegisterViewModel Registermodel = new ShelterRegisterViewModel
             {
-
             };
 
             return View(Registermodel);
@@ -129,19 +127,13 @@ namespace PetFinder.Controllers
 
 
 
-            var location = AddLocation(Registermodel);
+            Location location = AddLocation(Registermodel);
+            int? shelter = null;
 
-            
+            ApplicationUser user = AddUser(Registermodel, location, shelter);
 
-            var user = new ApplicationUser
-            {
-                UserName = Registermodel.Email,
-                Email = Registermodel.Email,
-                LocationId = location.LocationtId,                                                                                      
-            };
-
-         var resulting = await _userManager.CreateAsync(user, Registermodel.Password);
-         var receivedUser = await _userManager.FindByEmailAsync(Registermodel.Email);
+            IdentityResult resulting = await _userManager.CreateAsync(user, Registermodel.Password);
+            ApplicationUser receivedUser = await _userManager.FindByEmailAsync(Registermodel.Email);
             await _userManager.AddToRoleAsync(receivedUser, "User");
 
 
@@ -161,22 +153,14 @@ namespace PetFinder.Controllers
             {
                 if (User.IsInRole("Admin"))
                 {
-                    var admin = await _userManager.FindByEmailAsync(User.Identity.Name);
-                    var Shelter = _shelterRepository.GetShelterById(admin.ShelterId);
+                    ApplicationUser admin = await _userManager.FindByEmailAsync(User.Identity.Name);
+                    Shelter shelter = _shelterRepository.GetShelterById(admin.ShelterId);
+                    Location location = AddLocation(model);
 
-                    var location = AddLocation(model);
+                    ApplicationUser user = AddUser(model, location, shelter.ShelterId);
 
-                    var user = new ApplicationUser
-                    {
-                        UserName = model.Email,
-                        Email = model.Email,
-                        LocationId = location.LocationtId,
-                        ShelterId = Shelter.ShelterId
-
-                    };
-
-                    var result = await _userManager.CreateAsync(user, model.Password);
-                    var receivedUser = await _userManager.FindByEmailAsync(model.Email);
+                    IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+                    ApplicationUser receivedUser = await _userManager.FindByEmailAsync(model.Email);
                     await _userManager.AddToRoleAsync(receivedUser, "ShelterUser");
                     // If user is successfully created
                     if (result.Succeeded)
@@ -201,10 +185,9 @@ namespace PetFinder.Controllers
         public async Task<IActionResult> ShelterRegisterAsync(ShelterRegisterViewModel Registermodel)
         {
 
-           var location =  AddLocation(Registermodel);
+           Location location =  AddLocation(Registermodel);
 
-
-             var shelter = new Shelter
+             Shelter shelter = new Shelter
             {
                 Name = Registermodel.Name,
                 Email = Registermodel.Email,
@@ -215,19 +198,10 @@ namespace PetFinder.Controllers
 
             _shelterRepository.AddShelter(shelter);
 
-            var user = new ApplicationUser
-            {
-                UserName = Registermodel.Email,
-                Email = Registermodel.Email,
-                ShelterId = shelter.ShelterId,
-                LocationId = location.LocationtId
-
-
-            };
-
-           
-            var resulting = await _userManager.CreateAsync(user, Registermodel.Password);
-            var receivedUser = await _userManager.FindByEmailAsync(Registermodel.Email);
+            ApplicationUser user = AddUser(Registermodel, location, shelter.ShelterId);
+   
+            IdentityResult resulting = await _userManager.CreateAsync(user, Registermodel.Password);
+            ApplicationUser receivedUser = await _userManager.FindByEmailAsync(Registermodel.Email);
             await _userManager.AddToRoleAsync(receivedUser, "Admin");
 
 
@@ -265,6 +239,21 @@ namespace PetFinder.Controllers
             _locationRepository.Addlocation(Location);
 
             return Location;
+        }
+
+        public ApplicationUser AddUser(RegisterViewModel model , Location location , int? shelterid )
+        {
+
+            ApplicationUser user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                LocationId = location.LocationtId,
+                ShelterId = shelterid
+
+            };
+
+            return user;
         }
 
     }
