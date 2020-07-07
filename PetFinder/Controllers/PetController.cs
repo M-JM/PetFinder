@@ -182,6 +182,9 @@ namespace PetFinder.Controllers
             return View(detailViewModel);
         }
 
+      
+
+
         public async Task<IActionResult> AddFavoriteAsync(int id)
         {
             Pet pet = _petRepository.GetById(id);
@@ -204,6 +207,9 @@ namespace PetFinder.Controllers
             }
             return RedirectToAction("Details", new { id });
         }
+
+
+
 
         private List<string> ProcessUploadFile(PetCreateViewModel createmodel)
         {

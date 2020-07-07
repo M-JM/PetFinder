@@ -57,9 +57,10 @@
 </div>
 @if (Model.Isfavorite)
 {
-    <a asp-action="AddFavorite" asp-controller="pet" asp-route-id="@pet.PetId" class="btn btn-success">Add to Favorite</a>
+    <a asp-action="AddFavorite" asp-controller="pet" asp-route-id="@pet.PetId" class="btn btn-warning">Remove from Favorite</a>
 }
 else
 {
-    <a asp-action="AddFavorite" asp-controller="pet" asp-route-id="@pet.PetId" class="btn btn-warning">Remove from Favorite</a>
+    <a asp-action="AddFavorite" asp-controller="pet" asp-route-id="@pet.PetId" class="btn btn-success">Add to Favorite</a>
+
 }

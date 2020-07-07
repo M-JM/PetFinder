@@ -18,7 +18,6 @@ namespace PetFinderDAL.Models
 
         public virtual Shelter Shelter { get; set; }
 
-        public virtual FavoriteList FavoriteList { get; set; }
-
+       
     }
 }
