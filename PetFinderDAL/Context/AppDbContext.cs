@@ -22,6 +22,8 @@ namespace PetFinderDAL.Context
         public DbSet<PetPicture> PetPictures{ get; set; }
         public DbSet<PetKind> PetKind { get; set; }
         public DbSet<FavoriteList> FavoriteList { get; set; }
+        public DbSet<AppointmentStatus> AppointmentStatuses { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -18,7 +18,8 @@
             <div class="card-body text-center">
                 <h4>@pet.DOB</h4>
                 <h4>@pet.Gender</h4>
-                <h4>@pet.Description</h4>
+            
+                <h4>@Html.Raw(System.Web.HttpUtility.HtmlDecode(pet.Description))</h4>
                 <h4>@pet.PetColor.Color</h4>
                 <h4>@pet.PetKind.AnimalType</h4>
                 <h4>@pet.Shelter.Name</h4>

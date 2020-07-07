@@ -147,9 +147,9 @@ namespace PetFinder.Controllers
             {
                 UserName = Registermodel.Email,
                 Email = Registermodel.Email,
-                LocationId = UserLocation.LocationtId,
-                                                                                                       
+                LocationId = UserLocation.LocationtId,                                                                                      
             };
+
          var resulting = await _userManager.CreateAsync(user, Registermodel.Password);
          var receivedUser = await _userManager.FindByEmailAsync(Registermodel.Email);
             await _userManager.AddToRoleAsync(receivedUser, "User");

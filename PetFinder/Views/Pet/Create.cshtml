@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+    <link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.css" rel="stylesheet" />
 <h1>Create</h1>
 
 <h4>Pet</h4>
@@ -21,11 +21,7 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-            <label asp-for="Gender" class="control-label"></label>
-            <input asp-for="Gender" class="form-control" />
-            <span asp-validation-for="Gender" class="text-danger"></span>
-        </div>*@
+     
             <div class="form-group">
                 <label asp-for="Gender" class="control-label">Gender</label>
                 <select asp-for="Gender" class="form-control" asp-items="Model.Genderlist"></select>
@@ -35,52 +31,49 @@
                 <input asp-for="DOB" class="form-control" />
                 <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="Size" class="control-label"></label>
-                <input asp-for="Size" class="form-control" />
-                <span asp-validation-for="Size" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label asp-for="Size" class="control-label">Gender</label>
-                <select asp-for="Size" class="form-control" asp-items="Model.SizeList"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Social" class="control-label"></label>
-                <input asp-for="Social" class="form-control" />
-                <span asp-validation-for="Social" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShelterId" class="control-label"></label>
-                <input asp-for="ShelterId" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="PetColorId" class="control-label">Color</label>
-                <select asp-for="PetColorId" class="form-control" asp-items="Model.PetColorList"></select>
-            </div>
+        
+             
+                <div class="form-group">
+                    <label asp-for="Size" class="control-label">Gender</label>
+                    <select asp-for="Size" class="form-control" asp-items="Model.SizeList"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea asp-for="Description" id="TextEditor" class="form-control"> </textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Social" class="control-label"></label>
+                    <input asp-for="Social" class="form-control" />
+                    <span asp-validation-for="Social" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ShelterId" class="control-label"></label>
+                    <input asp-for="ShelterId" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="PetColorId" class="control-label">Color</label>
+                    <select asp-for="PetColorId" class="form-control" asp-items="Model.PetColorList"></select>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="PetRaceId" class="control-label">Race</label>
-                <select asp-for="PetRaceId" class="form-control" asp-items="Model.PetRaceList"></select>
-            </div>
+                <div class="form-group">
+                    <label asp-for="PetRaceId" class="control-label">Race</label>
+                    <select asp-for="PetRaceId" class="form-control" asp-items="Model.PetRaceList"></select>
+                </div>
 
-            <div class="form-group row">
-                <label asp-for="PetPictures" class="col-sm-2 col-form-label"></label>
-                <div class="col-sm-10">
-                    <div class="custom-file">
-                        <input multiple asp-for="PetPictures" class="form-control custom-file-input" placeholder="Photo" />
-                        <label class="custom-file-label">Choose File ...</label>
+                <div class="form-group row">
+                    <label asp-for="PetPictures" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <div class="custom-file">
+                            <input multiple asp-for="PetPictures" class="form-control custom-file-input" placeholder="Photo" />
+                            <label class="custom-file-label">Choose File ...</label>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
         </form>
     </div>
 </div>
@@ -88,17 +81,26 @@
 
 
 @section Scripts {
-    <script>$(document).ready(function () {
-                    $('.custom-file-input').on("change", function () {
-                        var fileLabel = $(this).next('.custom-file-label');
-                        var files = $(this)[0].files;
-                        if (files.length > 1) {
-                            fileLabel.html(files.length + ' files selected');
-                        }
-                        else if (files.length == 1) {
-                            fileLabel.html(files[0].name);
-                        }
-                    });
-                });</script>
+    <script>
+    $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                var fileLabel = $(this).next('.custom-file-label');
+                var files = $(this)[0].files;
+                if (files.length > 1) {
+                    fileLabel.html(files.length + ' files selected');
+                }
+                else if (files.length == 1) {
+                    fileLabel.html(files[0].name);
+                }
+            });
+        });</script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/Trumbowyg-master/dist/trumbowyg.min.js"></script>
+    <script>
+    $('#TextEditor').trumbowyg({
+            imageWidthModalEdit: true
+        });</script>
+
+   
 }

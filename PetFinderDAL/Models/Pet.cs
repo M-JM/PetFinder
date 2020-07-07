@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -8,15 +9,15 @@ namespace PetFinderDAL.Models
     public class Pet
     {
         public int PetId { get; set; }
-
+        [Required]
         public string Name { get; set; }
-
+        [Required]
         public string Gender { get; set; }
 
         public  DateTime DOB { get; set; }
 
         public string Size { get; set; }
-
+        [Required]
         public string Description { get; set; }
 
         public string Social { get; set; }

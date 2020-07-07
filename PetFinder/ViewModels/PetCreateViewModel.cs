@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using PetFinderDAL.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,10 @@ namespace PetFinder.ViewModels
         {
          //https://stackoverflow.com/questions/54237069/model-bound-complex-types-must-not-be-abstract-or-value-types-and-must-have-a-pa
         }
+
+       
+        [DataType(DataType.Date)]
+        public new DateTime DOB { get; set; }
 
         public List<SelectListItem> PetKindList { get; set; }
         public List<SelectListItem> PetColorList { get; set; }
