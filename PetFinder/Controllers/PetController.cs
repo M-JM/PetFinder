@@ -185,29 +185,7 @@ namespace PetFinder.Controllers
       
 
 
-        public async Task<IActionResult> AddFavoriteAsync(int id)
-        {
-            Pet pet = _petRepository.GetById(id);
-            var currentuser = await _userManager.GetUserAsync(HttpContext.User);
-            var currentpet = _favoriteRepository.GetFavoritePet(currentuser.Id, pet.PetId);
-            if (currentpet != null)
-            {
-                _favoriteRepository.RemoveFavoritePet(currentpet);
-            }
-            else { 
-
-            NewFavoriteViewModel model = new NewFavoriteViewModel()
-            {
-                ApplicationUser = currentuser,
-                Pet = pet,
-              
-            };
-
-            _favoriteRepository.AddFavoritePet(model);
-            }
-            return RedirectToAction("Details", new { id });
-        }
-
+      
 
 
 
