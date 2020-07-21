@@ -28,9 +28,10 @@ namespace PetFinderDAL.Models
 
         public List<PetPicture> PetPictures { get; set; }
 
-        [ForeignKey("Shelter")]
+        // START HERE WITH FOREIGN KEY AFTER PROPERTIES OF CLASS 
 
-        public int ShelterId { get; set; }
+        [ForeignKey("Shelter")]
+        public int? ShelterId { get; set; }
         public virtual Shelter Shelter { get; set; }
 
         [ForeignKey("PetColor")]

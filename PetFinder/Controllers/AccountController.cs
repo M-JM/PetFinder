@@ -114,6 +114,8 @@ namespace PetFinder.Controllers
             //var testing = google.results.FirstOrDefault();
             // ENDWORKING CODE
 
+            //Seperate document ->store API key local ( no push to Git) .
+
             //var testingasJson = await client.GetFromJsonAsync<GoogleApi>(_baseUrl);
             //var test = await testingasstring.Content.ReadAsStringAsync();
 
@@ -233,6 +235,7 @@ namespace PetFinder.Controllers
                 HouseNumber = model.HouseNumber,
                 City = model.City,
                 Country = model.Country,
+                Zipcode = model.Zipcode,
                 Latitude = 1,
                 Longitude = 1
             };

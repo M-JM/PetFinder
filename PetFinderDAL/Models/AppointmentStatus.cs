@@ -9,5 +9,7 @@ namespace PetFinderDAL.Models
         public int AppointmentStatusId { get; set; }
 
         public string StatusName { get; set; }
+
+        public string Color { get; set; }
     }
 }

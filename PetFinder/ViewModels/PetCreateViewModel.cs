@@ -17,7 +17,7 @@ namespace PetFinder.ViewModels
          //https://stackoverflow.com/questions/54237069/model-bound-complex-types-must-not-be-abstract-or-value-types-and-must-have-a-pa
         }
 
-       
+    
         [DataType(DataType.Date)]
         public new DateTime DOB { get; set; }
 

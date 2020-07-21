@@ -65,7 +65,10 @@ namespace PetFinderDAL.Repositories
 
             public Pet GetById(int id) { 
 
-                var pet = _context.Pets
+            //method GetbyId /datatype Class Pet - take petId as parameter (given with the controller when calling method)
+            // var pet = open DB pets( include table , color , race, kind , pictures, shelter ( all of these tables have relation with Pet)
+           
+               Pet pet = _context.Pets
                 .Include(p => p.PetColor)
                 .Include(p => p.PetRace)
                 .Include(p => p.PetKind)

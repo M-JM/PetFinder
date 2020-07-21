@@ -8,5 +8,6 @@ namespace PetFinder.ViewModels.AppointmentViewModel
 {
     public class AppointmentCreateViewModel : Appointment
     {
+   
     }
 }

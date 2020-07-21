@@ -1,90 +1,224 @@
-﻿@{
+﻿@model PetFinder.ViewModels.AppointmentViewModel.StatusViewModel
+
+@{
     ViewData["Title"] = "Appointment Calander";
 }
+<link href="~/fullcalendar/main.css" rel="stylesheet" />
+<link href="~/fontawesome-iconpicker/css/fontawesome-iconpicker.css" rel="stylesheet" />
 
 
-<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
-<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
 
-<div id="calender"></div>
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 50px; ">
 
-<div id="myModal" class="modal fade" role="dialog">
+    <!-- Then put toasts within -->
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="succesalert" style="background-color:palegreen">
+ 
+        <div class="toast-body">
+Succesfully updated appointment  </div>
+    </div>
+</div>
+
+<div id='calendar'></div>
+
+
+<div id="fullCalModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><span id="eventTitle"></span></h4>
+                <h2 id="modalTitle" class="modal-title text-left"></h2>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
             </div>
-            <div class="modal-body">
-                <p id="pDetails"></p>
-            </div>
+            <div id="modalBody" class="modal-body"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary" button id="btnEdit"> Edit </button>
             </div>
         </div>
     </div>
 </div>
 
 
+
+<div id="myModalSave" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm Appointment</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="col-md-12 form-horizontal">
+                    <input type="hidden" id="appointmentid" value="0" />
+                    <div class="form-group">
+                        <label>Pet Name</label>
+                        <input type="text" id="txtSubject" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Person</label>
+                        <input type="text" id="txtDescription" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Start</label>
+                        <div class="input-group date" id="dtp1">
+                            <input type="text" id="txtStart" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="divEndDate">
+                        <label>End</label>
+                        <div class="input-group date" id="dtp2">
+                            <input type="text" id="txtEnd" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="AppointmentStatusId" class="label">Status</label>
+                        <select asp-for="AppointmentStatusId" class="form-control" asp-items="Model.ListStatuses" id="appointmentstatusId"></select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="btnSave" class="btn btn-success">Save</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
     <script>
-        $(document).ready(function () {
-            var events = [];
-            $.ajax({
-                type: "GET",
-                url: "/home/GetEvents",
-                success: function (data) {
-                    $.each(data, function (i, v) {
-                        events.push({
-                            title: v.Subject,
-                            description: v.Description,
-                            start: moment(v.Start),
-                            end: v.End != null ? moment(v.End) : null,
-                            color: v.ThemeColor,
-                            allDay: v.IsFullDay
-                        });
-                    })
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var selectedEvent = null;
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                dayMaxEvents: true,
+                eventClick: function (event) {
+                    selectedEvent = event;
 
-                    GenerateCalender(events);
+                    $('#modalTitle').text('Appointment ' + event.event.title);
+                    $('#modalBody').html('<b>User: </b>' + event.event.extendedProps.user
+                        + '<br>' + '<b>Pet: </b>' + event.event.title +
+                        '<br>' + '<b>Appointment status: </b>' + event.event.extendedProps.status
+                    );
+                    $('#fullCalModal').modal();
+
                 },
-                error: function (error) {
-                    alert('failed');
+
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                },
+                titleFormat: {
+                    month: 'short',
+                    year: 'numeric',
+                    day: '2-digit',
+                    weekday: 'short',
+                    hour12: false,
+                    meridiem: false,
+                },
+                slotLabelFormat: {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: false,
+                    meridiem: false,
+                },
+                allDayDefault: false,
+
+                views: {
+                    timelineDay: {
+                        slotLabelFormat: ['H:mm'],
+                        meridiem: false,
+                        hour12: false,
+                    },
+                    agenda: {
+                        timeFormat: 'H(:mm)',
+                        meridiem: false,
+                        hour12: false,
+                    },
+                    week: {
+                        timeFormat: 'H(:mm)',
+                        meridiem: false,
+                        hour12: false,
+                    },
+                    day: {
+                        timeFormat: 'H(:mm)',
+                        meridiem: false,
+                        hour12: false,
+                    }
+
+                },
+                slotMinTime: "8:00:00",
+                slotMaxTime: "20:00:00",
+                initialView: 'dayGridMonth',
+                initialDate: '2020-06-12',
+                //eventColor: 'green',
+                events: {
+                    url: '/Appointment/GetAppointments',
+                    method: 'GET',
+
+                    failure: function () {
+                        alert('there was an error while fetching events!');
+                    },
+                },
+                eventTimeFormat: { // like '14:30:00'
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    meridiem: false,
+                    hour12: false,
+                },
+
+
+
+            });
+            $('#btnEdit').click(function () {
+                var options = { hour12: false };
+                $('#fullCalModal').modal('hide');
+                $('#txtSubject').val(selectedEvent.event.title);
+                $('#txtStart').val(selectedEvent.event.start.toLocaleString('en-GB', options));
+                $('#txtEnd').val(selectedEvent.event.end.toLocaleString('en-GB', options));
+                $('#txtDescription').val(selectedEvent.event.extendedProps.user);
+                $('#appointmentid').val(selectedEvent.event.extendedProps.appointmentId);
+
+                $('#myModalSave').modal();
+            });
+
+            $('#btnSave').click(function () {
+
+                var data = {
+                    AppointmentId: $('#appointmentid').val(),
+                    appointmentstatusId: $('#appointmentstatusId').val(),
                 }
+                SaveEvent(data);
+                // call function for submit data to the server
+                $('#myModalSave').modal('hide');
+
             })
 
-            function GenerateCalender(events) {
-                $('#calender').fullCalendar('destroy');
-                $('#calender').fullCalendar({
-                    contentHeight: 400,
-                    defaultDate: new Date(),
-                    timeFormat: 'h(:mm)a',
-                    header: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'month,basicWeek,basicDay,agenda'
+            function SaveEvent(data) {
+                $.ajax({
+                    type: "POST",
+                    url: '/appointment/SaveEvent',
+                    data: data,
+                    success: function (status) {
+                        if (status) {
+                            console.log('testing');
+                            calendar.refetchEvents();
+                            $('#myModalSave').modal('hide');
+                            $('#succesalert').toast({delay: 3000}).toast('show').toast('hide');                        }
                     },
-                    eventLimit: true,
-                    eventColor: '#378006',
-                    events: events,
-                    eventClick: function (calEvent, jsEvent, view) {
-                        $('#myModal #eventTitle').text(calEvent.title);
-                        var $description = $('<div/>');
-                        $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("DD-MMM-YYYY HH:mm a")));
-                        if (calEvent.end != null) {
-                            $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("DD-MMM-YYYY HH:mm a")));
-                        }
-                        $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
-                        $('#myModal #pDetails').empty().html($description);
-
-                        $('#myModal').modal();
+                    error: function () {
+                        alert('Failed');
                     }
                 })
             }
-        })
+
+            calendar.render();
+        });
+
+
     </script>
+
 }

@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/lib/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "fullcalendar@5.1.0",
+      "destination": "wwwroot/fullcalendar/"
+    },
+    {
+      "library": "fontawesome-iconpicker@3.2.0",
+      "destination": "wwwroot/fontawesome-iconpicker/"
+    }
+  ]
+}

@@ -2,3 +2,6 @@
 
 # EF1001: Internal EF Core API usage.
 dotnet_diagnostic.EF1001.severity = silent
+
+# CS0108: Member hides inherited member; missing new keyword
+dotnet_diagnostic.CS0108.severity = none

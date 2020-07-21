@@ -275,6 +275,9 @@ namespace PetFinderDAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("StatusName")
                         .HasColumnType("nvarchar(max)");
 
@@ -349,12 +352,15 @@ namespace PetFinderDAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PetColorId")
@@ -366,7 +372,7 @@ namespace PetFinderDAL.Migrations
                     b.Property<int>("PetRaceId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShelterId")
+                    b.Property<int?>("ShelterId")
                         .HasColumnType("int");
 
                     b.Property<string>("Size")
@@ -603,9 +609,7 @@ namespace PetFinderDAL.Migrations
 
                     b.HasOne("PetFinderDAL.Models.Shelter", "Shelter")
                         .WithMany("Pets")
-                        .HasForeignKey("ShelterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ShelterId");
                 });
 
             modelBuilder.Entity("PetFinderDAL.Models.PetPicture", b =>

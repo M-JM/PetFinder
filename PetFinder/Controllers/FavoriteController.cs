@@ -58,8 +58,11 @@ namespace PetFinder.Controllers
 
         public async Task<IActionResult> AddFavoriteAsync(int id)
         {
+
+
             Pet pet = _petRepository.GetById(id);
             var currentuser = await _userManager.GetUserAsync(HttpContext.User);
+
             var currentpet = _favoriteRepository.GetFavoritePet(currentuser.Id, pet.PetId);
             if (currentpet != null)
             {

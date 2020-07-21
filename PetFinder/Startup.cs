@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using PetFinderDAL.Context;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
+
 
 namespace PetFinder
 {
@@ -38,13 +40,18 @@ namespace PetFinder
             {
                 options.Password.RequiredLength = 10;
                 options.Password.RequiredUniqueChars = 3;
-            }).AddEntityFrameworkStores<AppDbContext>(); 
+            }).AddEntityFrameworkStores<AppDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(
+        options => options.SerializerSettings.ReferenceLoopHandling =
+        ReferenceLoopHandling.Ignore
+    );
+
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IShelterRepository, ShelterRepository>();
             services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
             services.AddHttpClient<Controllers.AccountController>();
 
         

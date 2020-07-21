@@ -58,24 +58,32 @@ namespace PetFinder.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
+            // TODO 
+            // Data validation on models
+            // All forms 
+            // pre-filled placeholders in fields - greyed out 
+
+
+            ApplicationUser user = await _userManager.FindByEmailAsync(User.Identity.Name);
             List<PetColor> PetColorList = _petRepository.GetPetColors();
             List<PetRace> PetRaceList = _petRepository.GetPetRaces();
             List<PetKind> PetKindList = _petRepository.GetPetKinds();
            
             PetCreateViewModel CreateModel = new PetCreateViewModel(PetColorList, PetKindList, PetRaceList)
             {
-
-              
+        
             };
             return View(CreateModel);
         }
         [HttpPost]
-        public IActionResult Create( PetCreateViewModel createmodel)
+        public async Task<IActionResult> CreateAsync( PetCreateViewModel createmodel)
         {
             if(ModelState.IsValid)
             {
+                ApplicationUser user = await _userManager.FindByEmailAsync(User.Identity.Name);
+                int? shelterid = user.ShelterId;
                
                 Pet newPet = new Pet
                 {
@@ -85,7 +93,7 @@ namespace PetFinder.Controllers
                     Gender = createmodel.Gender,
                     PetColorId = createmodel.PetColorId,
                     PetKindId = createmodel.PetKindId,
-                    ShelterId = createmodel.ShelterId,
+                    ShelterId = shelterid,
                     Size = createmodel.Size,
                     PetRaceId = createmodel.PetRaceId,
                     Social = createmodel.Social
@@ -213,6 +221,11 @@ namespace PetFinder.Controllers
         }
 
         // Private populate list method. ( parameter)
+
+        // TODO 
+        // Move getuser in seperate method to call only when required.
+        // Use session cookies as alternative to retrieve current user data. 
+        // Expiration date - key/value principles to add data
 
     }
 }
