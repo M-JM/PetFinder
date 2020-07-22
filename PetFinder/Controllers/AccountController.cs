@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -66,6 +67,8 @@ namespace PetFinder.Controllers
                         return Redirect(returnUrl);
                     }
                     var currentuser = await _userManager.FindByEmailAsync(model.Email);
+                    HttpContext.Session.SetString("Username", currentuser.Email);
+                    HttpContext.Session.SetString("id", currentuser.Id);
 
                     //if (User.IsInRole("Admin"))
 
@@ -219,6 +222,7 @@ namespace PetFinder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
+            HttpContext.Session.Clear();
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }

@@ -172,12 +172,18 @@ namespace PetFinder.Controllers
 
         }
 
+        //Asynchronous action methods are useful when an action must perform several independent long running operations.
+        //Making a method asynchronous does not make it execute faster, and that is an important factor to understand and a misconception many people have.
+
+
         [HttpGet]
-        public async Task<IActionResult> DetailsAsync(int id)
+        public IActionResult Details(int id)
         {
+         
             Pet pet = _petRepository.GetById(id);
-            var currentuser = await _userManager.GetUserAsync(HttpContext.User);
-            bool isFavorite = _favoriteRepository.FavoriteExists(currentuser.Id, pet.PetId);
+            Debug.WriteLine(HttpContext.Session.GetString("id"));
+            //var currentuser = await _userManager.GetUserAsync(HttpContext.User);
+            bool isFavorite = _favoriteRepository.FavoriteExists(HttpContext.Session.GetString("id"), pet.PetId);
 
             PetDetailViewModel detailViewModel = new PetDetailViewModel()
             {

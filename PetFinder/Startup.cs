@@ -41,6 +41,9 @@ namespace PetFinder
                 options.Password.RequiredLength = 10;
                 options.Password.RequiredUniqueChars = 3;
             }).AddEntityFrameworkStores<AppDbContext>();
+                services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+             });
 
             services.AddControllersWithViews().AddNewtonsoftJson(
         options => options.SerializerSettings.ReferenceLoopHandling =
@@ -75,9 +78,23 @@ namespace PetFinder
             app.UseRouting();
 
             app.UseAuthentication();
-
+           
             app.UseAuthorization();
+            app.UseSession();
 
+            /* Cookies vs Session
+             * https://docs.microsoft.com/en-us/archive/msdn-magazine/2003/april/nine-options-for-managing-persistent-user-state-in-asp-net
+             ^-- old but nice overview of different techniques to store data acroos WebApp and when to use what
+            The concept is storing persistent data across page loads for a web visitor.
+            Cookies store it directly on the client.Sessions use a cookie as a key of sorts, to associate with the data that is stored on the server side.
+            It is preferred to use sessions because the actual values are hidden from the client, --> disputed information
+            Sessions use cookies (see below).
+            Sessions are safer than cookies, but not invulnarable.
+            Expiration is reset when the user refreshes or loads a new page.
+
+            and you control when the data expires and becomes invalid. --> disputed information
+            If it was all based on cookies, a user(or hacker) could manipulate their cookie data and then play requests to your site.
+            */
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
