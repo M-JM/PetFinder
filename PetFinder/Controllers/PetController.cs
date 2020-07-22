@@ -139,6 +139,7 @@ namespace PetFinder.Controllers
                     {
                         return RedirectToAction("Details", new { id = newPet.PetId });
                     }
+                    return RedirectToAction("Details", new { id = newPet.PetId });
                 }
                 return View(createmodel);
             }

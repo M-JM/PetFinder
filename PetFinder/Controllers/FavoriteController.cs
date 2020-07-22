@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
 using PetFinder.ViewModels.FavoriteViewModel;
+using Microsoft.AspNetCore.Http;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -35,18 +36,17 @@ namespace PetFinder.Controllers
             _userManager = userManager;
         }
 
-        // GET: /<controller>/
+    
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public async Task<IActionResult> FavoriteList()
+        public IActionResult FavoriteList()
         {
 
-            var currentuser = await _userManager.GetUserAsync(HttpContext.User);
-            var listofpets = _favoriteRepository.GetFavoritePets(currentuser.Id);
+            var listofpets = _favoriteRepository.GetFavoritePets(HttpContext.Session.GetString("id"));
 
             FavoriteListViewModel FavoriteListViewModel = new FavoriteListViewModel()
             {
@@ -56,14 +56,14 @@ namespace PetFinder.Controllers
             return View(FavoriteListViewModel);
         }
 
-        public async Task<IActionResult> AddFavoriteAsync(int id)
+        public IActionResult AddFavorite(int id)
         {
 
 
             Pet pet = _petRepository.GetById(id);
-            var currentuser = await _userManager.GetUserAsync(HttpContext.User);
+            
 
-            var currentpet = _favoriteRepository.GetFavoritePet(currentuser.Id, pet.PetId);
+            var currentpet = _favoriteRepository.GetFavoritePet(HttpContext.Session.GetString("id"), pet.PetId);
             if (currentpet != null)
             {
                 _favoriteRepository.RemoveFavoritePet(currentpet);
@@ -73,8 +73,9 @@ namespace PetFinder.Controllers
 
                 NewFavoriteViewModel model = new NewFavoriteViewModel()
                 {
-                    ApplicationUser = currentuser,
-                    Pet = pet,
+                    ApplicationUserId = HttpContext.Session.GetString("id"),
+                    PetId = pet.PetId,
+                  
 
                 };
 

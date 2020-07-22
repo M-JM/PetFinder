@@ -20,10 +20,12 @@
                 <h4>@pet.Gender</h4>
 
                 <h4>@Html.Raw(System.Web.HttpUtility.HtmlDecode(pet.Description))</h4>
+
+
                 <h4>@pet.PetColor.Color</h4>
                 <h4>@pet.PetKind.AnimalType</h4>
                 <h4>@pet.Shelter.Name</h4>
-                <h4>@pet.Shelter.Description</h4>
+                <h4>@Html.Raw(pet.Shelter.Description)</h4>
 
             </div>
             <div class="row">
