@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -48,12 +49,14 @@ namespace PetFinder.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginAsync(LoginViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -87,6 +90,7 @@ namespace PetFinder.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             UserRegisterViewModel Registermodel = new UserRegisterViewModel
@@ -96,6 +100,7 @@ namespace PetFinder.Controllers
             return View(Registermodel);
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult ShelterRegister()
         {
             ShelterRegisterViewModel Registermodel = new ShelterRegisterViewModel
@@ -105,6 +110,7 @@ namespace PetFinder.Controllers
             return View(Registermodel);
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync(UserRegisterViewModel Registermodel)
         {
          
@@ -151,6 +157,7 @@ namespace PetFinder.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AdminRegister(UserRegisterViewModel model)
         {
@@ -187,6 +194,7 @@ namespace PetFinder.Controllers
 
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> ShelterRegisterAsync(ShelterRegisterViewModel Registermodel)
         {
 

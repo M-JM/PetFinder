@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -48,8 +49,8 @@ namespace PetFinder.Controllers
                 IEnumerable<Pet> petList = _petRepository.GetAllPets();
                 return View(petList);
             }
-            
-             catch (Exception ex)
+
+            catch (Exception ex)
             {
                 _logger.LogError(ex, $"When retrieving Pets List.");
                 throw;
@@ -58,69 +59,99 @@ namespace PetFinder.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateAsync()
+        [Authorize(Roles = "Admin,ShelterUser")]
+        public IActionResult Create()
         {
             // TODO 
             // Data validation on models
             // All forms 
             // pre-filled placeholders in fields - greyed out 
+            // Check if Int ShelterID given when creating pet is id from shelter
+            // implement usernotauthorized
 
-
-            ApplicationUser user = await _userManager.FindByEmailAsync(User.Identity.Name);
-            List<PetColor> PetColorList = _petRepository.GetPetColors();
-            List<PetRace> PetRaceList = _petRepository.GetPetRaces();
-            List<PetKind> PetKindList = _petRepository.GetPetKinds();
-           
-            PetCreateViewModel CreateModel = new PetCreateViewModel(PetColorList, PetKindList, PetRaceList)
+            try
             {
-        
-            };
-            return View(CreateModel);
+
+                List<PetColor> PetColorList = _petRepository.GetPetColors();
+                List<PetRace> PetRaceList = _petRepository.GetPetRaces();
+                List<PetKind> PetKindList = _petRepository.GetPetKinds();
+
+                PetCreateViewModel CreateModel = new PetCreateViewModel(PetColorList, PetKindList, PetRaceList)
+                {
+
+                };
+
+                return View(CreateModel);
+            }
+
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When getting the create pet form.");
+                throw;
+            }
+
+
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAsync( PetCreateViewModel createmodel)
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,ShelterUser")]
+        public async Task<IActionResult> CreateAsync(PetCreateViewModel createmodel)
         {
-            if(ModelState.IsValid)
+            try
+
             {
-                ApplicationUser user = await _userManager.FindByEmailAsync(User.Identity.Name);
-                int? shelterid = user.ShelterId;
-               
-                Pet newPet = new Pet
+                if (ModelState.IsValid)
                 {
-                    Name = createmodel.Name,
-                    Description = createmodel.Description,
-                    DOB = createmodel.DOB,
-                    Gender = createmodel.Gender,
-                    PetColorId = createmodel.PetColorId,
-                    PetKindId = createmodel.PetKindId,
-                    ShelterId = shelterid,
-                    Size = createmodel.Size,
-                    PetRaceId = createmodel.PetRaceId,
-                    Social = createmodel.Social
-                };
-                _petRepository.AddPet(newPet);
+                    ApplicationUser user = await _userManager.FindByEmailAsync(User.Identity.Name);
+                    int? shelterid = user.ShelterId;
 
-                if (createmodel.PetPictures != null ) {
-                    List<string> uniqueFilenames = ProcessUploadFile(createmodel);
-
-                    foreach (var picture in uniqueFilenames)
+                    Pet newPet = new Pet
                     {
-                        PetPicture newPicture = new PetPicture
+                        Name = createmodel.Name,
+                        Description = createmodel.Description,
+                        DOB = createmodel.DOB,
+                        Gender = createmodel.Gender,
+                        PetColorId = createmodel.PetColorId,
+                        PetKindId = createmodel.PetKindId,
+                        ShelterId = shelterid,
+                        Size = createmodel.Size,
+                        PetRaceId = createmodel.PetRaceId,
+                        Social = createmodel.Social
+                    };
+                    _petRepository.AddPet(newPet);
+
+                    if (createmodel.PetPictures != null)
+                    {
+                        List<string> uniqueFilenames = ProcessUploadFile(createmodel);
+
+                        foreach (var picture in uniqueFilenames)
                         {
-                            Pet = newPet,
-                            PhotoPath = picture
-                        };
-                        _petRepository.AddPetPicture(newPicture);
+                            PetPicture newPicture = new PetPicture
+                            {
+                                Pet = newPet,
+                                PhotoPath = picture
+                            };
+                            _petRepository.AddPetPicture(newPicture);
+                        }
+                    }
+                    else
+                    {
+                        return RedirectToAction("Details", new { id = newPet.PetId });
                     }
                 }
-                else { 
-                return RedirectToAction("Details", new { id = newPet.PetId });
-                }
+                return View(createmodel);
             }
-            return View(createmodel);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When trying to create pet.");
+                throw;
+            }
+
 
         }
         [HttpGet]
+        [Authorize(Roles = "Admin,ShelterUser")]
         public IActionResult Edit(int id)
         {
             Pet pet = _petRepository.GetById(id);
@@ -179,7 +210,7 @@ namespace PetFinder.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-         
+
             Pet pet = _petRepository.GetById(id);
             Debug.WriteLine(HttpContext.Session.GetString("id"));
             //var currentuser = await _userManager.GetUserAsync(HttpContext.User);
@@ -196,8 +227,8 @@ namespace PetFinder.Controllers
             return View(detailViewModel);
         }
 
-      
-                   
+
+
 
 
 
