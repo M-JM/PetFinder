@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "404 Error";
+}
+
+
+<div class="container-lg perfect-centering">
+    <div class="row text-center">
+        <div class="col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-12 p-3 error-main">
+            <div class="row">
+                <div class="col-lg-10 col-12 col-sm-10 offset-sm-1 offset-sm-1">
+                    <img src="~/images/NotAuthorized.jpg" style="height:auto;width:100%;" class="m-0" />
+                    <h3 class="mt-2">Not Authorized</h3>
+                    <h4>You do not have permission to view this ressource</h4>
+                    <h6>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-success">Back to overview</a>
+                        }
+                        else if (User.IsInRole("User"))
+                        {
+                            <a asp-action="UserIndex" asp-controller="Home" class="btn btn-success">Back to overview</a>
+                        }
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Design from taken from = https://www.nicesnippets.com/snippet/bootstrap-4-page-not-found-404-error-page-design*@
+
+@section Styles {
+    <link href="~/css/Error.css" rel="stylesheet" asp-append-version="true" />
+}

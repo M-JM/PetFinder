@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,21 +33,31 @@ namespace PetFinder
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-          
+
             services.AddDbContextPool<AppDbContext>(
               options =>
                   options.UseSqlServer(_config.GetConnectionString("PetDBConnection"))
           );
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.Password.RequiredLength = 10;
-                options.Password.RequiredUniqueChars = 3;
+             options.Password.RequiredLength = 10;
+             options.Password.RequiredUniqueChars = 3;
             }).AddEntityFrameworkStores<AppDbContext>();
-                services.AddSession(options => {
+            services.AddSession(options =>
+            {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
-             });
+            });
 
-            services.AddControllersWithViews().AddNewtonsoftJson(
+            services.AddControllersWithViews(
+                  config => {
+                      var policy = new AuthorizationPolicyBuilder()
+                                      .RequireAuthenticatedUser()
+                                      .Build();
+                      config.Filters.Add(new AuthorizeFilter(policy));
+                  }
+                )
+
+        .AddNewtonsoftJson(
         options => options.SerializerSettings.ReferenceLoopHandling =
         ReferenceLoopHandling.Ignore
     );
@@ -57,7 +69,7 @@ namespace PetFinder
             services.AddScoped<IAppointmentRepository, AppointmentRepository>();
             services.AddHttpClient<Controllers.AccountController>();
 
-        
+
 
         }
 
@@ -70,7 +82,7 @@ namespace PetFinder
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 app.UseStatusCodePagesWithReExecute("/Error/{0}");
             }
             app.UseStaticFiles();
@@ -78,8 +90,9 @@ namespace PetFinder
             app.UseRouting();
 
             app.UseAuthentication();
-           
+
             app.UseAuthorization();
+
             app.UseSession();
 
             /* Cookies vs Session
@@ -91,8 +104,6 @@ namespace PetFinder
             Sessions use cookies (see below).
             Sessions are safer than cookies, but not invulnarable.
             Expiration is reset when the user refreshes or loads a new page.
-
-            and you control when the data expires and becomes invalid. --> disputed information
             If it was all based on cookies, a user(or hacker) could manipulate their cookie data and then play requests to your site.
             */
             app.UseEndpoints(endpoints =>

@@ -229,7 +229,7 @@ namespace PetFinder.Controllers
 
         // ToDo
         // Make generic Viewmodel Interface for Location and user to make a Method who takes Generic Viewmodel to perform 
-        // Location and user creation ( avoiding DRY in both ShelterReg. and UserReg.
+        // Location and user creation - DRY in both ShelterReg. and UserReg.
 
         public Location AddLocation(RegisterViewModel model)
         {
