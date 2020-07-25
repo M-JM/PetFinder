@@ -117,7 +117,11 @@ namespace PetFinder.Controllers
                         ShelterId = shelterid,
                         Size = createmodel.Size,
                         PetRaceId = createmodel.PetRaceId,
-                        Social = createmodel.Social
+                        SocialWithCats = createmodel.SocialWithCats,
+                        SocialWithDogs = createmodel.SocialWithDogs,
+                        Appartmentfit = createmodel.Appartmentfit,
+                        KidsFriendly = createmodel.KidsFriendly
+                      
                     };
                     _petRepository.AddPet(newPet);
 
@@ -173,7 +177,7 @@ namespace PetFinder.Controllers
                 ShelterId = pet.ShelterId,
                 Size = pet.Size,
                 PetRaceId = pet.PetRaceId,
-                Social = pet.Social
+               
             };
             return View(editModel);
         }

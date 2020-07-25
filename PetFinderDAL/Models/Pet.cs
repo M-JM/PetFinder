@@ -6,6 +6,12 @@ using System.Text;
 
 namespace PetFinderDAL.Models
 {
+    public enum Tristate { 
+    Yes,
+    No,
+    Unkown
+    }
+
     public class Pet
     {
         public int PetId { get; set; }
@@ -20,11 +26,17 @@ namespace PetFinderDAL.Models
         [Required]
         public string Description { get; set; }
 
-        public string Social { get; set; }
-             
-             
+        public Tristate SocialWithDogs { get; set; }
+
+        public Tristate SocialWithCats { get; set; }
+
+        public Tristate Appartmentfit { get; set; }
+
+        public Tristate KidsFriendly { get; set; }
+
         //Social with kids,dogs,cats stored as comma separated String.
         //When retrieving the value to display , split(",") to get the values as Array.
+
 
         public List<PetPicture> PetPictures { get; set; }
 

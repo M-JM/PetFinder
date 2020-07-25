@@ -43,11 +43,52 @@
                 <textarea asp-for="Description" id="TextEditor" class="form-control"> </textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Social" class="control-label"></label>
-                <input asp-for="Social" class="form-control" />
-                <span asp-validation-for="Social" class="text-danger"></span>
+                <label asp-for="SocialWithDogs"></label>
+                @foreach (Tristate socialWithDogs in Enum.GetValues(typeof(Tristate)))
+                {
+                    <label>
+                        <input asp-for="SocialWithDogs" type="radio" value="@socialWithDogs" />
+                        @socialWithDogs
+                    </label>
+                }
             </div>
+
+            <div class="form-group">
+                <label asp-for="Appartmentfit"></label>
+                @foreach (Tristate appartmentfit in Enum.GetValues(typeof(Tristate)))
+                {
+                    <label>
+                        <input asp-for="Appartmentfit" type="radio" value="@appartmentfit" />
+                        @appartmentfit
+                    </label>
+                }
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SocialWithCats"></label>
+                @foreach (Tristate socialWithCats in Enum.GetValues(typeof(Tristate)))
+                {
+                    <label>
+                        <input asp-for="SocialWithCats" type="radio" value="@socialWithCats" />
+                        @socialWithCats
+                    </label>
+                }
+            </div>
+
+            <div class="form-group">
+                <label asp-for="KidsFriendly"></label>
+                @foreach (Tristate kidsFriendly in Enum.GetValues(typeof(Tristate)))
+                {
+                    <label>
+                        <input asp-for="KidsFriendly" type="radio" value="@kidsFriendly" />
+                        @kidsFriendly
+                    </label>
+                }
+            </div>
+
+        
 
             <div class="form-group">
                 <label asp-for="PetColorId" class="control-label">Color</label>
