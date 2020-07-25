@@ -3,14 +3,15 @@
 @{
     ViewData["Title"] = "Create";
 }
-    <link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.css" rel="stylesheet" />
+<link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.css" rel="stylesheet" />
+<link href="~/js/dropzone-5.7.0/dist/dropzone.css" rel="stylesheet" />
 <h1>Create</h1>
 
 <h4>Pet</h4>
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form enctype="multipart/form-data" method="post">
+        <form enctype="multipart/form-data" method="post" >
             <input type="hidden" asp-for="ShelterId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -46,6 +47,7 @@
 
             <div class="form-group">
                 <label asp-for="SocialWithDogs"></label>
+                <br />
                 @foreach (Tristate socialWithDogs in Enum.GetValues(typeof(Tristate)))
                 {
                     <label>
@@ -57,6 +59,7 @@
 
             <div class="form-group">
                 <label asp-for="Appartmentfit"></label>
+                <br />
                 @foreach (Tristate appartmentfit in Enum.GetValues(typeof(Tristate)))
                 {
                     <label>
@@ -68,6 +71,7 @@
 
             <div class="form-group">
                 <label asp-for="SocialWithCats"></label>
+                <br />
                 @foreach (Tristate socialWithCats in Enum.GetValues(typeof(Tristate)))
                 {
                     <label>
@@ -79,6 +83,7 @@
 
             <div class="form-group">
                 <label asp-for="KidsFriendly"></label>
+                <br />
                 @foreach (Tristate kidsFriendly in Enum.GetValues(typeof(Tristate)))
                 {
                     <label>
@@ -88,7 +93,7 @@
                 }
             </div>
 
-        
+
 
             <div class="form-group">
                 <label asp-for="PetColorId" class="control-label">Color</label>
@@ -110,6 +115,8 @@
                 </div>
             </div>
 
+            <div id="preview"></div>
+     
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -120,26 +127,54 @@
 
 
 @section Scripts {
+
+    <script src="~/js/dropzone-5.7.0/dist/dropzone.js"></script>
     <script>
-    $(document).ready(function () {
-            $('.custom-file-input').on("change", function () {
-                var fileLabel = $(this).next('.custom-file-label');
-                var files = $(this)[0].files;
-                if (files.length > 1) {
-                    fileLabel.html(files.length + ' files selected');
-                }
-                else if (files.length == 1) {
-                    fileLabel.html(files[0].name);
-                }
-            });
-        });</script>
+
+        $(document).ready(
+
+            function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileLabel = $(this).next('.custom-file-label');
+                    var files = $(this)[0].files;
+                    var $preview = $('#preview').empty();
+                    if (files.length > 1) {
+                        fileLabel.html(files.length + ' files selected');
+                    }
+                    else if (files.length == 1) {
+                        fileLabel.html(files[0].name);
+                    }
+
+                    if (this.files) $.each(this.files, readAndPreview);
+
+                    function readAndPreview(i, file) {
+
+                        if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                            return alert(file.name + " is not an image");
+                        } // else...
+
+                        var reader = new FileReader();
+
+                        $(reader).on("load", function () {
+                            $preview.append($("<img/>", { src: this.result, height: 100 }));
+                        });
+
+                        reader.readAsDataURL(file);
+
+                    }
+
+                    $('.custom-file-input').on("change", previewImages);
+
+                });
+
+
+            });</script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script src="~/lib/Trumbowyg-master/dist/trumbowyg.min.js"></script>
     <script>
-    $('#TextEditor').trumbowyg({
+        $('#TextEditor').trumbowyg({
             imageWidthModalEdit: true
         });</script>
 
-   
 }
