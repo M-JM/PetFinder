@@ -2,73 +2,92 @@
 @{
     ViewBag.Title = "User Registration";
 }
-<div class="row my-auto d-flex justify-content-center mt-lg-4">
-    <div class="col-md-4  text-center">
-        <h1>User Registration</h1>
-    </div>
-</div>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<link href="~/lib/fontawesome-free-5.14.0-web/css/all.css" rel="stylesheet" />
+<link href="~/lib/fontawesome-free-5.14.0-web/css/fontawesome.min.css" rel="stylesheet" />
+<link href="~/css/Account.css" rel="stylesheet" />
 
-<div class="row my-auto d-flex justify-content-center">
-    <div class="col-md-4">
-        <form asp-action="Register" method="post">
-            <h4 class=" text-center">Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="Street"></label>
-                <input asp-for="Street" class="form-control" />
-                <span asp-validation-for="Street" class="text-danger"></span>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card card-signin flex-row my-5">
+                <div class="card-img-left d-none d-md-flex">
+                    <!-- Background image for card set in CSS! -->
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">Register</h5>
 
-            <div class="form-group">
-                <label asp-for="HouseNumber"></label>
-                <input asp-for="HouseNumber" class="form-control" />
-                <span asp-validation-for="HouseNumber" class="text-danger"></span>
-            </div>
+                    <form asp-action="Register" method="post" class="form-signin">
 
-            <div class="form-group">
-                <label asp-for="City"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Zipcode"></label>
-                <input asp-for="Zipcode" class="form-control" />
-                <span asp-validation-for="Zipcode" class="text-danger"></span>
-            </div>
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-label-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" placeholder="Email address" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-label-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control" placeholder="Password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-label-group">
+                            <label asp-for="ConfirmPassword"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
 
-            <div class="form-group">
-                <label asp-for="Country"></label>
-                <input asp-for="Country" class="form-control" />
-                <span asp-validation-for="Country" class="text-danger"></span>
+                        <div class="form-label-group">
+                            <label asp-for="Street"></label>
+                            <input asp-for="Street" class="form-control" placeholder="Street" />
+                            <span asp-validation-for="Street" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-label-group">
+                            <label asp-for="HouseNumber"></label>
+                            <input asp-for="HouseNumber" class="form-control" placeholder="House Number" />
+                            <span asp-validation-for="HouseNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-label-group">
+                            <label asp-for="City"></label>
+                            <input asp-for="City" class="form-control" placeholder="City"  />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="form-label-group">
+                            <label asp-for="Zipcode"></label>
+                            <input asp-for="Zipcode" class="form-control" placeholder="Zip Code"  />
+                            <span asp-validation-for="Zipcode" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-label-group">
+                            <label asp-for="Country"></label>
+                            <input asp-for="Country" class="form-control" placeholder ="Country"  />
+                            <span asp-validation-for="Country" class="text-danger"></span>
+                        </div>
+
+                        
+
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" formaction='@Url.Action("AdminRegister","Account")'>Add new User</button>
+                            <a asp-action="ListUsers" asp-controller="Administration" class="btn btn-secondary">Back</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
+                        }
+
+
+
+                       
+                        <hr class="my-4">
+                        <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign up with Google</button>
+                        <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign up with Facebook</button>
+                    </form>
+                </div>
             </div>
-
-            @if (User.IsInRole("Admin"))
-            {
-                <button type="submit" formaction='@Url.Action("AdminRegister","Account")' class="btn btn-primary">Add new User</button>
-                <a asp-action="ListUsers" asp-controller="Administration" class="btn btn-secondary">Back</a>
-            }
-            else
-            {
-                <button type="submit" class="btn btn-primary">Register</button>
-            }
-
-        </form>
+        </div>
     </div>
 </div>
