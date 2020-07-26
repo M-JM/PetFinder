@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 <link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.css" rel="stylesheet" />
-<link href="~/js/dropzone-5.7.0/dist/dropzone.css" rel="stylesheet" />
+
 <h1>Create</h1>
 
 <h4>Pet</h4>
@@ -128,7 +128,7 @@
 
 @section Scripts {
 
-    <script src="~/js/dropzone-5.7.0/dist/dropzone.js"></script>
+
     <script>
 
         $(document).ready(
@@ -157,6 +157,7 @@
 
                         $(reader).on("load", function () {
                             $preview.append($("<img/>", { src: this.result, height: 100 }));
+
                         });
 
                         reader.readAsDataURL(file);

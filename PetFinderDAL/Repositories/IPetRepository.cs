@@ -1,7 +1,7 @@
 ﻿using PetFinderDAL.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+
 
 namespace PetFinderDAL.Repositories
 {
@@ -18,6 +18,8 @@ namespace PetFinderDAL.Repositories
         List<PetRace> GetPetRaces();
         List<PetKind> GetPetKinds();
         Pet GetById(int id);
+
+        IEnumerable<Pet> GetSearchedPets(SearchModel searchmodel);
 
         //Update
 

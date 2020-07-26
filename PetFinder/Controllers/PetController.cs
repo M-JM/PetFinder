@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using PetFinder.Models;
 using PetFinder.ViewModels;
-using PetFinder.ViewModels.FavoriteViewModel;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
 
@@ -60,6 +57,139 @@ namespace PetFinder.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin,ShelterUser")]
+        public IActionResult Search()
+        {
+            // TODO 
+            // Data validation on models
+            // All forms 
+            // pre-filled placeholders in fields - greyed out 
+            // Check if Int ShelterID given when creating pet is id from shelter
+            // implement usernotauthorized
+
+            try
+            {
+                IEnumerable<Pet> petList = _petRepository.GetAllPets();
+
+                List<PetColor> PetColorList = _petRepository.GetPetColors();
+                List<PetRace> PetRaceList = _petRepository.GetPetRaces();
+                List<PetKind> PetKindList = _petRepository.GetPetKinds();
+
+                SearchViewModel CreateModel = new SearchViewModel(PetColorList, PetKindList, PetRaceList)
+                {
+                    ListOfPets = petList,
+
+                };
+
+                return View(CreateModel);
+            }
+
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When getting the create pet form.");
+                throw;
+            }
+
+
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,ShelterUser")]
+        public IActionResult Search(SearchViewModel model)
+        {
+            // TODO 
+            // Data validation on models
+            // All forms 
+            // pre-filled placeholders in fields - greyed out 
+            // Check if Int ShelterID given when creating pet is id from shelter
+            // implement usernotauthorized
+
+            try
+            {
+                List<string> SizelistSearch = new List<string>();
+                List<int> SearchPetKindId = new List<int>();
+                List<int> SearchPetColorId = new List<int>();
+                List<int> SearchPetRaceId = new List<int>();
+                List<string> SearchGender = new List<string>();
+                List<string> SearchAge = new List<string>();
+
+                IEnumerable<Pet> petList = _petRepository.GetAllPets();
+
+                foreach (var item in model.SizeList)
+                {
+                    if (item.Selected)
+                    {
+                        SizelistSearch.Add(item.Value);
+
+                    }
+                };
+                foreach (var item in model.PetColorList)
+                {
+                    if (item.Selected)
+                    {
+                        SearchPetColorId.Add(Int32.Parse(item.Value));
+
+                    }
+                };
+
+                foreach (var item in model.PetKindList)
+                {
+                    if (item.Selected)
+                    {
+                        SearchPetKindId.Add(Int32.Parse(item.Value));
+
+                    }
+                };
+                foreach (var item in model.PetRaceList)
+                {
+                    if (item.Selected)
+                    {
+                        SearchPetRaceId.Add(Int32.Parse(item.Value));
+
+                    }
+                };
+                foreach (var item in model.Genderlist)
+                {
+                    if (item.Selected)
+                    {
+                        SearchGender.Add(item.Value);
+
+                    }
+                };
+
+
+
+                SearchModel searchModel = new SearchModel
+                {
+                  Gender = SearchGender,
+                  Size = SizelistSearch,
+                  PetColorId = SearchPetColorId,
+                  PetKindId = SearchPetKindId,
+                  PetRaceId = SearchPetRaceId,
+                  Appartmentfit = model.Appartmentfit,
+                  KidsFriendly = model.KidsFriendly,
+                  SocialWithCats = model.SocialWithCats,
+                  SocialWithDogs = model.SocialWithDogs,
+                };
+
+                var newpets = _petRepository.GetSearchedPets(searchModel);
+
+
+                return View(searchModel);
+            }
+
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When getting the create pet form.");
+                throw;
+            }
+
+
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,ShelterUser")]
         public IActionResult Create()
         {
             // TODO 
@@ -78,8 +208,8 @@ namespace PetFinder.Controllers
 
                 PetCreateViewModel CreateModel = new PetCreateViewModel(PetColorList, PetKindList, PetRaceList)
                 {
-
-                };
+                 
+            };
 
                 return View(CreateModel);
             }
@@ -233,8 +363,7 @@ namespace PetFinder.Controllers
         }
 
 
-
-
+       
 
 
         private List<string> ProcessUploadFile(PetCreateViewModel createmodel)

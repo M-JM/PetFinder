@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NinjaNye.SearchExtensions;
 using PetFinderDAL.Context;
 using PetFinderDAL.Models;
 using System;
@@ -139,6 +140,52 @@ namespace PetFinderDAL.Repositories
             return null;
 
         }
+
+        public IEnumerable<Pet> GetSearchedPets(SearchModel searchmodel)
+        {
+            //IEnumerable<Pet> pets = _context.Pets
+            //     .Include(p => p.PetColor)
+            //     .Include(p => p.PetRace)
+            //     .Include(p => p.PetKind)
+            //     .Include(p => p.PetPictures)
+            //     .Include(p => p.Shelter).Where(x => searchmodel.Size.Contains(x.Size)).ToList();
+
+
+            //return pets;
+            //https://weblogs.asp.net/zeeshanhirani/using-asqueryable-with-linq-to-objects-and-linq-to-sql
+            //https://stackoverflow.com/questions/33153932/filter-search-using-multiple-fields-asp-net-mvc
+
+
+            var result = _context.Pets.Include(p => p.PetColor)
+                 .Include(p => p.PetRace)
+                 .Include(p => p.PetKind)
+                 .Include(p => p.PetPictures)
+                 .Include(p => p.Shelter).AsQueryable();
+
+            if (searchmodel != null)
+            {
+                if(searchmodel.Appartmentfit != null)
+                    result = result.Where(x => x.Appartmentfit == searchmodel.Appartmentfit);
+                if (searchmodel.KidsFriendly != null)
+                    result = result.Where(x => x.KidsFriendly == searchmodel.KidsFriendly);
+                if (searchmodel.SocialWithCats != null)
+                    result = result.Where(x => x.SocialWithCats == searchmodel.SocialWithCats);
+                if (searchmodel.SocialWithDogs != null)
+                    result = result.Where(x => x.SocialWithDogs == searchmodel.SocialWithDogs);
+                if (searchmodel.Gender.Count != 0)
+                    result = result.Where(x => searchmodel.Gender.Contains(x.Gender));
+                if (searchmodel.PetColorId.Count != 0)
+                    result = result.Where(x => searchmodel.PetColorId.Contains(x.PetColorId));
+                if (searchmodel.PetKindId.Count != 0)
+                    result = result.Where(x => searchmodel.PetKindId.Contains(x.PetKindId));
+                if (searchmodel.PetRaceId.Count != 0)
+                    result = result.Where(x => searchmodel.PetRaceId.Contains(x.PetRaceId));
+                
+            }
+            return result.ToList();
+
+        }
+
 
         //public PetPicture RemovePetPicture(PetPicture petPicture)
         //{
