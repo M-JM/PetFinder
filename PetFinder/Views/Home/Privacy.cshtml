@@ -2,21 +2,28 @@
     ViewData["Title"] = "Privacy Policy";
 }
 
-<link href="~/css/MainStyle.css" rel="stylesheet" />
+
 
 <div id="layoutDefault">
     <div id="layoutDefault_content">
         <main>
-            <header class="page-header page-header-dark bg-gradient-primary-to-secondary">
+            <header class="page-header page-header-dark bg-gradient-primary-to-secondary" @*style=" padding-top:0px;padding-bottom:0px;"*@>
                 <div class="page-header-content pt-10">
                     <div class="container">
                         <div class="row align-items-center">
                             <div class="col-lg-6" data-aos="fade-up">
-                                <h1 class="page-header-title">Build your next project faster with SB UI Kit Pro</h1>
-                                <p class="page-header-text mb-5">Welcome to SB UI Kit Pro, a toolkit for building beautiful web interfaces, created by the developmet team at Start Bootstrap</p>
+                                <h1 class="page-header-title">Find you ideal life companion</h1>
+                                <p class="page-header-text mb-5">Welcome to Petfinder, a simple search away from your ideal companion</p>
                                 <a class="btn btn-teal btn-marketing rounded-pill lift lift-sm" href="index.html">View Pages<i class="fas fa-arrow-right ml-1"></i></a><a class="btn btn-link btn-marketing" href="https://docs.startbootstrap.com/sb-ui-kit-pro/quickstart">Documentation</a>
                             </div>
-                            <div class="col-lg-6 d-none d-lg-block" data-aos="fade-up" data-aos-delay="50"><img class="img-fluid" src="assets/img/drawkit/color/drawkit-content-man-color.svg" /></div>
+                            <div class="col-lg-6 d-none d-lg-block" data-aos="fade-up" data-aos-delay="50">
+                                <img class="img-fluid"
+
+                              src="~/assets/Animallogo.png" />
+
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -28,19 +35,25 @@
                 <div class="container">
                     <div class="row text-center">
                         <div class="col-lg-4 mb-5 mb-lg-0">
-                            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i data-feather="layers"></i></div>
-                            <h3>Built for developers</h3>
-                            <p class="mb-0">Our customizable, block-based build system makes creating your next project fast and easy!</p>
+                            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4" style="width:120px;height:120px">
+
+                                <img src="~/assets/Search.png"  />
+                               
+                            </div>
+                            <h3>Search your companion</h3>
+                            <p class="mb-0">Our expansive search criteria's makes it easy to find exactly the pet you are looking for</p>
                         </div>
                         <div class="col-lg-4 mb-5 mb-lg-0">
-                            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i data-feather="smartphone"></i></div>
-                            <h3>Modern responsive design</h3>
-                            <p class="mb-0">Featuring carefully crafted, mobile-first components, your end product will function beautifully on any device!</p>
+                            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4" style="width:120px;height:120px"> <img src="~/assets/appointment.png" /></div>
+                            <h3>Book your appointment</h3>
+                            <p class="mb-0">With the easy booking system , it has never been made easier to make an appointment </p>
                         </div>
                         <div class="col-lg-4">
-                            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i data-feather="code"></i></div>
-                            <h3>Complete documentation</h3>
-                            <p class="mb-0">All of the layouts, page sections, components, and utilities are fully covered in this products docs.</p>
+                            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4" style="width:120px;height:120px">
+                                <img src="~/assets/petsfound.png" />
+                            </div>
+                            <h3>Visit your pet at the shelter</h3>
+                            <p class="mb-0">All that is left is for you to go and visit your future ideal pet on the booked date</p>
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,11 @@
  * Copyright 2011-2019 The Bootstrap Authors
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ 
+
+    // CHROME CACHES JS/CSS files -> force refresh with CTRL + F5 to reload modified files
+    // else clear cache data manually.
+  
  */
 :root {
   --blue: #0061f2;
@@ -20102,14 +20107,21 @@ i-feather svg {
   -webkit-box-align: center;
           align-items: center;
   border-radius: 100%;
-  height: 2rem;
-  width: 2rem;
+  height: 4rem;
+  width: 4rem;
   font-size: 1rem;
   background-color: #eff3f9;
 }
 .icon-stack svg {
   height: 1rem;
   width: 1rem;
+}
+
+.resize-image-to50px {
+    height: auto;
+    width: auto;
+    max-width: 50px;
+    max-height: 50px;
 }
 
 .icon-stack-lg {
@@ -20123,14 +20135,14 @@ i-feather svg {
 }
 
 .icon-stack-xl {
-  height: 5rem;
-  width: 5rem;
-  font-size: 1.75rem;
+  height: 12rem;
+  width: 12rem;
+  font-size: 4.75rem;
 }
-.icon-stack-xl svg {
-  height: 1.75rem;
-  width: 1.75rem;
-}
+    .icon-stack-xl svg {
+        height: 12rem;
+        width: 12rem;
+    }
 
 .icon-list-social {
   display: -webkit-box;
@@ -20314,9 +20326,11 @@ section {
 }
 
 .page-header {
-  position: relative;
-  padding-top: 8rem;
-  padding-bottom: 8rem;
+    position: relative;
+    /*padding-top: 1rem;
+  padding-bottom: 1rem;*/
+    padding-top:0px;
+    padding-bottom:0px;
 }
 .page-header .page-header-content .page-header-title {
   font-size: 2.5rem;
@@ -20339,8 +20353,10 @@ section {
 }
 
 .page-header-dark {
-  color: #fff;
-  background-color: #1f2d41;
+    color: #fff;
+    background-color: #1f2d41;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 .page-header-dark .page-header-title {
   color: #fff;
