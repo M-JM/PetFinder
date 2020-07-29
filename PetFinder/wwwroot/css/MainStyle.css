@@ -510,7 +510,7 @@ mark,
 
 .img-fluid {
   max-width: 100%;
-  height: auto;
+  height: 300px;
 }
 
 .img-thumbnail {
@@ -17079,6 +17079,11 @@ button.bg-danger-soft:focus {
   color: #fff !important;
 }
 
+.text-gradientA {
+    color: #0061f2 !important;
+ 
+}
+
 .text-primary {
   color: #0061f2 !important;
 }
@@ -17643,6 +17648,22 @@ body {
   max-width:100%;
 }
     #layoutDefault #layoutDefault_content {
+        min-width: 0;
+        -webkit-box-flex: 1;
+        flex-grow: 1;
+        max-width: 100%;
+    }
+#layoutDefaultnav {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    min-height: 5vh;
+    max-width: 100%;
+}
+
+    #layoutDefaultnav #layoutDefault_contentnav {
         min-width: 0;
         -webkit-box-flex: 1;
         flex-grow: 1;
@@ -20125,8 +20146,8 @@ i-feather svg {
 }
 
 .icon-stack-lg {
-  height: 4rem;
-  width: 4rem;
+  height: 7rem;
+  width: 7rem;
   font-size: 1.5rem;
 }
 .icon-stack-lg svg {

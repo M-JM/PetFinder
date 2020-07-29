@@ -2,104 +2,210 @@
     ViewData["Title"] = "Home Page";
 }
 
-    <link href="~/css/Index.css" rel="stylesheet" />
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-<!-- Page Content -->
-<div class="container">
 
-    <!-- Portfolio Item Heading -->
-    <h1 class="my-4">
-        Page Heading
-        <small>Secondary Text</small>
-    </h1>
+<div id="layoutDefault">
+    <div id="layoutDefault_content">
+        <main>
+            <header class="page-header page-header-dark bg-gradient-primary-to-secondary" @*style=" padding-top:0px;padding-bottom:0px;"*@>
+                <div class="page-header-content pt-10">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6" data-aos="fade-up">
+                                <h1 class="page-header-title">Find you ideal life companion</h1>
+                                <p class="page-header-text mb-5">Welcome to Petfinder, a simple search away from your ideal companion</p>
+                            </div>
+                            <div class="col-lg-6 d-none d-lg-block" style=" text-align: center;" data-aos="fade-up" data-aos-delay="50">
+                                <img class="img-fluid"
+                                     src="~/assets/Animallogo.png" />
 
-    <!-- Portfolio Item Row -->
-    <div class="row">
 
-        <div class="col-md-8">
-            <img class="img-fluid" src="http://placehold.it/750x500" alt="">
-        </div>
 
-        <div class="col-md-4">
-            <h3 class="my-3">Project Description</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-            <h3 class="my-3">Project Details</h3>
-            <ul>
-                <li>Lorem Ipsum</li>
-                <li>Dolor Sit Amet</li>
-                <li>Consectetur</li>
-                <li>Adipiscing Elit</li>
-            </ul>
-        </div>
-
-    </div>
-    <!-- /.row -->
-    <!-- Related Projects Row -->
-    <h3 class="my-4">Related Projects</h3>
-
-    <div class="row">
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-                <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-                <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-                <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-                <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-            </a>
-        </div>
-
-    </div>
-    <!-- /.row -->
-
-</div>
-<!-- /.container -->
-
-<section id="home" class="section bg-green bg-overlay overflow-hidden d-flex align-items-center">
-            <div class="container">
-                <div class="row align-items-center">
-                    <!-- home Intro Start -->
-                    <div class="col-12 col-md-7 col-lg-6">
-                        <div class="home-intro">
-                            <h1 class="text-white">Find your ideal companion</h1>
-                            <p class="text-white my-4">Finding your ideal companion has never been made easier !</p>
-                            
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-5 col-lg-6">
-                        <!-- home Thumb -->
-                        <div class="home-thumb mx-auto">
-                            <img src="http://theme-land.com/sApp/demo/assets/img/welcome/welcome-mockup.png" alt="">
-                            
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Shape Bottom -->
-            <div class="shape-bottom">
-                <svg viewBox="0 0 1920 310" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svg replaced-svg">
-                    <title>Shape</title>
-                    <desc>Created with shape</desc>
-                    <defs></defs>
-                    <g id="Landing-Page" stroke="none" stroke-width="12" fill="none" fill-rule="evenodd">
-                        <g id="sApp-v1.0" transform="translate(0.000000, -554.000000)" fill="#ffffff">
-                            <path d="M-3,551 C186.257589,757.321118 319.044414,856.322454 395.360475,848.004007 C509.834566,835.526337 561.525143,796.329212 637.731734,765.961549 C713.938325,735.593886 816.980646,681.910577 1035.72208,733.065469 C1254.46351,784.220361 1511.54925,678.92359 1539.40808,662.398665 C1567.2669,645.87374 1660.9143,591.478574 1773.19378,597.641868 C1848.04677,601.75073 1901.75645,588.357675 1934.32284,557.462704 L1934.32284,863.183395 L-3,863.183395" id="v1.0"></path>
-                        </g>
-                    </g>
-                </svg>
-            </div>
-        </section>
+                <div class="svg-border-rounded text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor">
+                        <path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path>
+                    </svg>
+                </div>
+            </header>
+            <section class="bg-white py-10">
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col-lg-4 mb-5 mb-lg-0">
+                            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4" style="width:120px;height:120px">
+
+                                <img src="~/assets/Search.png" />
+
+                            </div>
+                            <h3>Search your companion</h3>
+                            <p class="mb-0">Our expansive search criteria's makes it easy to find exactly the pet you are looking for</p>
+                        </div>
+                        <div class="col-lg-4 mb-5 mb-lg-0">
+                            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4" style="width:120px;height:120px"> <img src="~/assets/appointment.png" /></div>
+                            <h3>Book your appointment</h3>
+                            <p class="mb-0">With the easy booking system , it has never been made easier to make an appointment </p>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4" style="width:120px;height:120px">
+                                <img src="~/assets/petsfound.png" />
+                            </div>
+                            <h3>Visit your pet at the shelter</h3>
+                            <p class="mb-0">All that is left is for you to go and visit your future ideal pet on the booked date</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="svg-border-rounded text-light">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+                </div>
+
+            </section>
+            <section class="bg-light py-10">
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-md-9 col-lg-6 order-1 order-lg-0" data-aos="fade-right">
+                            <div class="content-skewed content-skewed-right">
+                                <img class="content-skewed-item img-fluid shadow-lg rounded-lg"
+                                     src="~/assets/animal-shelter-logo-design.png" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 order-0 order-lg-1 mb-5 mb-lg-0" data-aos="fade-left">
+                            <div class="mb-5">
+                                <h2>Here's how we can help you</h2>
+                                <p class="lead">Petfinder is a search site for animals who need new homes. It is also host more then 300 animal shelters in Belgium.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <h6>Looking to adopt</h6>
+                                    <p class="mb-2 small"> Search across thousands of pets for your companion that best fits your needs. </p>
+                                    <a class="small text-arrow-icon" href="#!">Make your account now<i data-feather="arrow-right"></i></a>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <h6>Shelter</h6>
+                                    <p class="mb-2 small mb-0">
+                                        Our site allows you to display your pets to the largest public possible, increasing the public awereness of your adoptable pets.
+                                    </p>
+                                    <a class="small text-arrow-icon" href="#!">Register your shelter<i data-feather="arrow-right"></i></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="svg-border-rounded text-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+                </div>
+            </section>
+          
+            <section class="bg-dark py-10">
+               >
+                <div class="container-sm" style="text-align: center;"><h1 class="page-header-title text-white-75">Frequently Asked Questions</h1></div>
+                <div class="container">
+                    <div class="row my-10">
+                        <div class="col-lg-6 mb-5">
+                            <div class="d-flex h-100">
+                                <div class="icon-stack icon-stack-lg  flex-shrink-0 bg-gradient-primary-to-secondary text-white">
+                                    <img src="~/assets/dog.png" />
+                                </div>
+                                <div class="ml-4">
+                                    <h5 class="text-white">Can I adopt through Petfinder ?</h5>
+                                    <p class="text-white-50">No! We serve to facilate the search of your next companion, but are not involved in the actual adoption process.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-5">
+                            <div class="d-flex h-100">
+                                <div class="icon-stack icon-stack-lg  flex-shrink-0 bg-gradient-primary-to-secondary text-white">
+                                    <img src="~/assets/FreeIcon.png" />
+                                </div>
+                                <div class="ml-4">
+                                    <h5 class="text-white">Is this site free ?</h5>
+                                    <p class="text-white-50">Yes! No subscription is requested and no ads are displayed. We are a non-profit organisation run on donations.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-5 mb-lg-0">
+                            <div class="d-flex h-100">
+                                <div class="icon-stack icon-stack-lg  flex-shrink-0 bg-gradient-primary-to-secondary text-white">
+                                    <img src="~/assets/BookingIcon.png" />
+                                </div>
+                                <div class="ml-4">
+                                    <h5 class="text-white">How do i make an appointment ?</h5>
+                                    <p class="text-white-50">
+                                        Found the ideal pet ? Great ! On the profile page you will have the opportunity to book an appointment with the shelter directly.
+                                        The shelter will then confirm your appointment and all that is left is to present yourself on the agreed date
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="d-flex h-100">
+                                <div class="icon-stack icon-stack-lg  flex-shrink-0 bg-gradient-primary-to-secondary text-white">
+                                    <img src="~/assets/UpdateIcon.png" />
+                                </div>
+                                <div class="ml-4">
+                                    <h5 class="text-white">Are the available pets up to date ?</h5>
+                                    <p class="text-white-50">Each shelter manages the pets they make available, this makes the listing of pets pretty up to date. </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="svg-border-rounded text-light">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+                </div>
+            </section>
+
+
+            <header class="page-header page-header-dark bg-light">
+
+                <div class="page-header-content pt-5">
+                    <div class="container text-center">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <h1 class="page-header-title mb-3 text-dark">Contact us</h1>
+                                <h2 class="text-dark">Have questions? Want to Give Feedback ? We are here to listen !</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             
+            </header>
+            <section class="bg-light py-10">
+                <div class="container">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6"><label class="text-dark" for="inputName">Full name</label><input class="form-control py-4" id="inputName" type="text" placeholder="Full name" /></div>
+                            <div class="form-group col-md-6"><label class="text-dark" for="inputEmail">Email</label><input class="form-control py-4" id="inputEmail" type="email" placeholder="name@example.com" /></div>
+                        </div>
+                        <div class="form-group"><label class="text-dark" for="inputMessage">Message</label><textarea class="form-control py-3" id="inputMessage" type="text" placeholder="Enter your message..." rows="4"></textarea></div>
+                        <div class="text-center"><button class="btn btn-primary btn-marketing mt-4" type="submit">Submit Request</button></div>
+                    </form>
+                </div>
+                <div class="svg-border-rounded text-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</div>
+@section Scripts{
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/scripts.js"></script>
+
+    <script>
+        AOS.init({
+            disable: 'mobile',
+            duration: 600,
+            once: true
+        });</script>
+}
