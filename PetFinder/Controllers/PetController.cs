@@ -208,6 +208,7 @@ namespace PetFinder.Controllers
 
                 PetCreateViewModel CreateModel = new PetCreateViewModel(PetColorList, PetKindList, PetRaceList)
                 {
+                    DOB = DateTime.Now,
                  
             };
 

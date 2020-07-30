@@ -9,7 +9,7 @@ namespace PetFinderDAL.Models
     public enum Tristate { 
     Yes,
     No,
-    Unkown
+    Unknown
     }
 
     public class Pet
@@ -19,20 +19,20 @@ namespace PetFinderDAL.Models
         public string Name { get; set; }
         [Required]
         public string Gender { get; set; }
-
+  
         public  DateTime DOB { get; set; }
-
+        [Required]
         public string Size { get; set; }
         [Required]
         public string Description { get; set; }
 
-        public Tristate SocialWithDogs { get; set; }
+        public Tristate? SocialWithDogs { get; set; }
 
-        public Tristate SocialWithCats { get; set; }
+        public Tristate? SocialWithCats { get; set; }
 
-        public Tristate Appartmentfit { get; set; }
+        public Tristate? Appartmentfit { get; set; }
 
-        public Tristate KidsFriendly { get; set; }
+        public Tristate? KidsFriendly { get; set; }
 
         //Social with kids,dogs,cats stored as comma separated String.
         //When retrieving the value to display , split(",") to get the values as Array.

@@ -19,6 +19,9 @@
     // Activate Feather icons
     feather.replace();
 
+
+
+
     // Activate Bootstrap scrollspy for the sticky nav component
     $("body").scrollspy({
         target: "#stickyNav",
@@ -48,10 +51,10 @@
     // Collapse Navbar
     // Add styling fallback for when a transparent background .navbar-marketing is scrolled
     var navbarCollapse = function() {
-        if($(".navbar-marketing.bg-transparent.fixed-top").length === 0) {
+        if ($(".navbar.navbar-marketing.navbar-expand-lg.navbar-dark.bg-gradient-primary-to-secondary.fixed-top").length === 0) {
             return;
         }
-        if ($(".navbar-marketing.bg-transparent.fixed-top").offset().top > 0) {
+        if ($(".navbar.navbar-marketing.navbar-expand-lg.navbar-dark.bg-gradient-primary-to-secondary.fixed-top").offset().top > 0) {
             $(".navbar-marketing").addClass("navbar-scrolled");
         } else {
             $(".navbar-marketing").removeClass("navbar-scrolled");

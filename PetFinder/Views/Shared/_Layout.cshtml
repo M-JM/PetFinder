@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>@ViewData["Title"] - PetFinder</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/MainStyle.css" rel="stylesheet" />
+    <link href="~/lib/fontawesome-free-5.14.0-web/css/fontawesome.min.css" rel="stylesheet" />
+
     @RenderSection("Styles", required: false)
 </head>
 <body>
@@ -14,21 +15,22 @@
     <div>
         <partial name="_NavBar" />
     </div>
-    
+
     <div>
-       
-            @RenderBody()
-        
+        @RenderBody()
+
+        <partial name="_Footer" />
     </div>
 
-  
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/jquery.timepicker.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/fullcalendar/main.js"></script>
-
+    <script src="~/lib/fontawesome-free-5.14.0-web/js/fontawesome.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -14,6 +14,16 @@
     {
       "library": "fontawesome-iconpicker@3.2.0",
       "destination": "wwwroot/fontawesome-iconpicker/"
+    },
+    {
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/bootstrap-datepicker/",
+      "files": [
+        "js/bootstrap-datepicker.min.js",
+        "css/bootstrap-datepicker.css",
+        "css/bootstrap-datepicker.min.css",
+        "css/bootstrap-datepicker.standalone.min.css"
+      ]
     }
   ]
 }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace PetFinderDAL.Models
 {
     public class PetKind
     {
+        [Required(ErrorMessage = "Pet Kind is required")]
         public int PetKindId { get; set; }
 
         public string AnimalType { get; set; }

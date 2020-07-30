@@ -16,21 +16,40 @@ namespace PetFinder.ViewModels
         {
          //https://stackoverflow.com/questions/54237069/model-bound-complex-types-must-not-be-abstract-or-value-types-and-must-have-a-pa
         }
+        [Required]
+        public Tristate? SocialWithDogs { get; set; }
+        [Required]
+        public Tristate? SocialWithCats { get; set; }
+        [Required]
+        public Tristate? Appartmentfit { get; set; }
+        [Required]
+        public Tristate? KidsFriendly { get; set; }
 
-    
-        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Pet Kind is required")]
+        public int PetKindId { get; set; }
+
+        [Required(ErrorMessage = "Pet Color is required")]
+        public int PetColorId { get; set; }
+
+        [Required(ErrorMessage = "Pet Race is required")]
+        public int PetRaceId { get; set; }
+        [DataType(DataType.Text)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public new DateTime DOB { get; set; }
-
+  
         public List<SelectListItem> PetKindList { get; set; }
+   
         public List<SelectListItem> PetColorList { get; set; }
+    
         public List<SelectListItem> PetRaceList { get; set; }
         public List<IFormFile> PetPictures { get; set; }
-
+        [Required]
         public List<SelectListItem> Genderlist { get; } = new List<SelectListItem>
         {
             new SelectListItem { Value = "M", Text = "Male" },
             new SelectListItem { Value = "F", Text = "Female" },
         };
+        [Required]
         public List<SelectListItem> SizeList { get; } = new List<SelectListItem>
         {
             new SelectListItem { Value = "Small", Text = "Small" },
