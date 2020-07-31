@@ -499,10 +499,15 @@ mark,
   font-size: 1.25rem;
 }
 
+.previewImageClass{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .blockquote-footer {
-  display: block;
-  font-size: 0.875em;
-  color: #687281;
+    display: block;
+    font-size: 0.875em;
+    color: #687281;
 }
 .blockquote-footer::before {
   content: "— ";
