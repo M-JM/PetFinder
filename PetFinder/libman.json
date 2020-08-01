@@ -24,6 +24,14 @@
         "css/bootstrap-datepicker.min.css",
         "css/bootstrap-datepicker.standalone.min.css"
       ]
+    },
+    {
+      "library": "slick-carousel@1.8.1",
+      "destination": "wwwroot/slick-carousel/"
+    },
+    {
+      "library": "fotorama@4.6.4",
+      "destination": "wwwroot/fotorama/"
     }
   ]
 }

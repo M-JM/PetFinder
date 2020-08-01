@@ -5,67 +5,299 @@
     ViewData["Title"] = "Details";
     var pet = Model.Pet;
 }
-<div class="col-lg-8  justify-content-center">
-    <h1>Details</h1>
-</div>
-<div class="row justify-content-center m-1 mt-lg-2">
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-header">
-                <h1 class="text-center">@pet.Name</h1>
-            </div>
 
-            <div class="card-body text-center">
-                <h4>@pet.DOB</h4>
-                <h4>@pet.Gender</h4>
+<link href="~/fotorama/fotorama.css" rel="stylesheet" />
+<link href="~/bootstrap-datepicker/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" />
+<link href="~/js/jquery.timepicker.min.css" rel="stylesheet" />
 
-                <h4>@Html.Raw(System.Web.HttpUtility.HtmlDecode(pet.Description))</h4>
-
-
-                <h4>@pet.PetColor.Color</h4>
-                <h4>@pet.PetKind.AnimalType</h4>
-                <h4>@pet.Shelter.Name</h4>
-                <h4>@Html.Raw(pet.Shelter.Description)</h4>
-
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    @if (pet.PetPictures.Count > 0)
-                    {
-                        foreach (var picture in pet.PetPictures)
-                        {
-                            <h4>testing 2</h4>
-                            var imagepath = "~/images/" + picture.PhotoPath;
-                            <div class="thumbnail">
-                                <img class="imageThumbnail" src="@imagepath" asp-append-version="true" />
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <h4>Testing</h4>
-                        <div class="thumbnail">
-                            <img class="imageThumbnail" src="~/images/noimage.jpg" asp-append-version="true" />
-                        </div>
-                    }
-
-
+<header class="page-header page-header-dark bg-gradient-primary-to-secondary pt-15">
+    <div class="page-header-content pt-1">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="page-header-title mb-3"> @Model.Pet.Name is waiting for you.</h1>
 
                 </div>
-
             </div>
         </div>
-
     </div>
-</div>
-<a asp-action="Create" asp-controller="Appointment" asp-route-petid="@pet.PetId" class="btn btn-warning">Create new board</a>
+    <div class="svg-border-rounded text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+    </div>
+</header>
 
-@if (Model.Isfavorite)
-{
-    <a asp-action="AddFavorite" asp-controller="favorite" asp-route-id="@pet.PetId" class="btn btn-warning">Remove from Favorite</a>
-}
-else
-{
-    <a asp-action="AddFavorite" asp-controller="favorite" asp-route-id="@pet.PetId" class="btn btn-success">Add to Favorite</a>
+<div id="PlaceHolderHere"></div>
+
+<div class="container mt-3">
+
+    <div class="row">
+        <div class="col-md-8 mb-2">
+            <h1 style="font-size:200%;color:black;">Hi my name is @Model.Pet.Name</h1>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="fotorama"
+                         data-width="500"
+                         data-height="300"
+                         data-nav="thumbs"
+                         data-thumbwidth="120"
+                         data-thumbheight="120"
+                         data-fit="cover">
+
+                        @if (pet.PetPictures.Count > 0)
+                        {
+                            foreach (var picture in pet.PetPictures)
+                            {
+
+                                var imagepath = "~/images/" + picture.PhotoPath;
+
+                                <img src="@imagepath" asp-append-version="true" />
+
+                            }
+                        }
+                        else
+                        {
+
+                            <img src="~/images/noimage.jpg" asp-append-version="true" />
+
+                        }
+
+
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-12 mt-2 mb-2">
+                            <h2>
+                                My Details
+                            </h2>
+                        </div>
+                    </div>
+
+                    <table cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>Age:&nbsp;</td>
+                            <td>@Model.Pet.DOB</td>
+                        </tr>
+                        <tr>
+                            <td>Sex:&nbsp;</td>
+                            <td> @Model.Pet.Gender</td>
+                        </tr>
+                        <tr>
+                            <td>Breed:&nbsp;</td>
+                            <td>@Model.Pet.PetRace.RaceName</td>
+                        </tr>
+                        <tr>
+                            <td>Color:&nbsp;</td>
+                            <td>@Model.Pet.PetColor.Color</td>
+                        </tr>
+                        <tr>
+                            <td>Size:&nbsp;</td>
+                            <td>@Model.Pet.Size</td>
+                        </tr>
+
+                    </table>
+
+                    <div class="row">
+                        <div class="col-md-12 mt-2 mb-2">
+                            <h2>
+                                My Info
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mt-1 mb-1">
+
+
+                            @if (@Model.Pet.SocialWithCats.Value == Tristate.No)
+                            {
+                                <img src="~/assets/close.png" /> }
+                            else if (@Model.Pet.SocialWithCats.Value == Tristate.Yes)
+                            {<img src="~/assets/tick.png" />
+                            }
+                            else if (@Model.Pet.SocialWithCats.Value == Tristate.Unknown)
+                            {
+                                <img src="~/assets/question.png" />
+                            }
+                            Can live with cats
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mt-1 mb-1">
+                            @if (@Model.Pet.SocialWithDogs.Value == Tristate.No)
+                            {
+                                <img src="~/assets/close.png" /> }
+                            else if (@Model.Pet.SocialWithDogs.Value == Tristate.Yes)
+                            {<img src="~/assets/tick.png" />
+                            }
+                            else if (@Model.Pet.SocialWithDogs.Value == Tristate.Unknown)
+                            {
+                                <img src="~/assets/question.png" />
+                            }
+                            Can Live with dogs
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mt-1 mb-1">
+
+                            @if (@Model.Pet.Appartmentfit.Value == Tristate.No)
+                            {
+                                <img src="~/assets/close.png" /> }
+                            else if (@Model.Pet.Appartmentfit.Value == Tristate.Yes)
+                            {<img src="~/assets/tick.png" />
+                            }
+                            else if (@Model.Pet.Appartmentfit.Value == Tristate.Unknown)
+                            {
+                                <img src="~/assets/question.png" />
+                            }
+                            Is fit for an appatrment
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mt-1 mb-1">
+
+                            @if (@Model.Pet.KidsFriendly.Value == Tristate.No)
+                            {
+                                <img src="~/assets/close.png" /> }
+                            else if (@Model.Pet.KidsFriendly.Value == Tristate.Yes)
+                            {<img src="~/assets/tick.png" />
+                            }
+                            else if (@Model.Pet.KidsFriendly.Value == Tristate.Unknown)
+                            {
+                                <img src="~/assets/question.png" />
+                            }
+                            Is friendly with kids
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="row mt-3 mb-5">
+                    <h3>
+                        About myself
+                    </h3>
+                    <p>
+                        @Html.Raw(Model.Pet.Description)
+                    </p>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card border-light p-3">
+                        @if (Model.Isfavorite)
+                        {
+                            <a asp-action="AddFavorite" asp-controller="favorite" asp-route-id="@pet.PetId" class="btn btn-warning">Remove from Favorite</a>
+                        }
+                        else
+                        {
+                            <a asp-action="AddFavorite" asp-controller="favorite" asp-route-id="@pet.PetId" class="btn btn-success">Add to Favorite</a>
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card border-light p-3"><a asp-action="Create" asp-controller="Appointment" asp-route-petid="@pet.PetId" class="btn btn-warning">Book an appointment</a></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <h5 class="card-header">
+                            Card title
+                        </h5>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Card content
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            Card footer
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<button type="button" class="btn btn-primary" data-toggle="ajax-modal" date-target="#CreateAppointment" data-url="@Url.Action("Create","Appointment", new { petid = Model.Pet.PetId })">
+    Book appointment
+</button>
+
+@section scripts{
+
+    <script>
+        $(function () {
+            $("#datepicker").datepicker({
+                format: "dd/mm/yyyy",
+                "setDate": new Date(),
+                autohide: true,
+                "autoclose": true,
+                startDate: 'd'
+
+
+            });
+
+        }
+        );</script>
+
+    <script>
+        $(document).ready(function () {
+            $('.test').timepicker({
+                timeFormat: 'H:i:s',
+                step: '60',
+                minTime: '8',
+                maxTime: '6:00pm',
+                defaultTime: '8',
+                startTime: '8',
+                dynamic: true,
+                dropdown: true,
+                scrollbar: true
+            });
+            $('.test').on('changeTime', function () {
+                $('.test2').text($(this).val());
+            });
+        });
+    </script>
+
+<script>
+
+    $(function () {
+         
+        var PlaceHolderElement = $('#PlaceHolderHere');
+        $('button[data-toggle="ajax-modal"]').click(function (event) {
+
+            var url = $(this).data('url');
+            $.get(url).done(function (data){
+                PlaceHolderElement.html(data);
+                PlaceHolderElement.find('.modal').modal('show');
+            })
+
+        })
+
+    })
+
+</script>
 
 }

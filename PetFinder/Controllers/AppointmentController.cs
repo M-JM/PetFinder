@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -45,22 +46,22 @@ namespace PetFinder.Controllers
 
         }
         [HttpGet]
-        public async Task<IActionResult> CreateAsync(int petid)
+        public IActionResult Create(int petid)
         {
             Pet pet = _petRepository.GetById(petid);
-            var currentuser = await _userManager.GetUserAsync(HttpContext.User);
-
+           
             AppointmentCreateViewModel model = new AppointmentCreateViewModel()
             {
                 PetId = pet.PetId,
                 AppointmentStatusId = 1,
                 // Any appointment created has the automatic status of Pending
-                ApplicationUserId = currentuser.Id,
+                ApplicationUserId = HttpContext.Session.GetString("id"),
                 ShelterId = pet.Shelter.ShelterId,
+                Date = DateTime.Now,
             };
 
 
-            return View(model);
+            return PartialView("Create",model);
         }
 
         [HttpPost]
@@ -90,7 +91,7 @@ namespace PetFinder.Controllers
                 };
                 _appointmentRepository.AddAppointment(appointment);
 
-                return View(model);
+                return RedirectToAction("Details","Pet", new { id = appointment.PetId });
                 // change this into routing to Pet details or calendar.
 
             }
