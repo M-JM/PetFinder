@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -93,17 +94,37 @@ namespace PetFinder.Controllers
 
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Admin,ShelterUser")]
-        public IActionResult Search(SearchViewModel model)
-        {
-            // TODO 
-            // Data validation on models
-            // All forms 
-            // pre-filled placeholders in fields - greyed out 
-            // Check if Int ShelterID given when creating pet is id from shelter
-            // implement usernotauthorized
+        //[HttpPost]
+        //[Authorize(Roles = "Admin,ShelterUser")]
+        //public IActionResult Search(SearchViewModel model)
+        //{
+        //    TODO
+        //    Data validation on models
+        //    All forms
+        //     pre - filled placeholders in fields - greyed out 
+        //     Check if Int ShelterID given when creating pet is id from shelter
+        //     implement usernotauthorized
 
+        //    try
+        //    {
+
+        //        IEnumerable<Pet> petList = _petRepository.GetAllPets();
+
+        //        return View(petList);
+        //    }
+
+
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, $"When getting the create pet form.");
+        //        throw;
+        //    }
+
+
+        //}
+        [HttpPost]
+        public JsonResult GetSearchedPets(SearchViewModel model)
+        {
             try
             {
                 List<string> SizelistSearch = new List<string>();
@@ -161,21 +182,26 @@ namespace PetFinder.Controllers
 
                 SearchModel searchModel = new SearchModel
                 {
-                  Gender = SearchGender,
-                  Size = SizelistSearch,
-                  PetColorId = SearchPetColorId,
-                  PetKindId = SearchPetKindId,
-                  PetRaceId = SearchPetRaceId,
-                  Appartmentfit = model.Appartmentfit,
-                  KidsFriendly = model.KidsFriendly,
-                  SocialWithCats = model.SocialWithCats,
-                  SocialWithDogs = model.SocialWithDogs,
+                    Gender = SearchGender,
+                    Size = SizelistSearch,
+                    PetColorId = SearchPetColorId,
+                    PetKindId = SearchPetKindId,
+                    PetRaceId = SearchPetRaceId,
+                    Appartmentfit = model.Appartmentfit,
+                    KidsFriendly = model.KidsFriendly,
+                    SocialWithCats = model.SocialWithCats,
+                    SocialWithDogs = model.SocialWithDogs,
                 };
 
-                var newpets = _petRepository.GetSearchedPets(searchModel);
+                    IEnumerable<Pet> newpets = _petRepository.GetSearchedPets(searchModel);
+                
+                //if( !newpets.Any())
+                //{
+                //    string error = "No pets found";
+                //    return Json(error);
+                //}
 
-
-                return View(searchModel);
+                return Json(newpets);
             }
 
 
@@ -184,8 +210,7 @@ namespace PetFinder.Controllers
                 _logger.LogError(ex, $"When getting the create pet form.");
                 throw;
             }
-
-
+           
         }
 
         [HttpGet]

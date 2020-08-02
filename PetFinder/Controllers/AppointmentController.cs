@@ -92,7 +92,7 @@ namespace PetFinder.Controllers
                 _appointmentRepository.AddAppointment(appointment);
 
                 return RedirectToAction("Details","Pet", new { id = appointment.PetId });
-                // change this into routing to Pet details or calendar.
+                
 
             }
             return View(model);

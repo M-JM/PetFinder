@@ -180,7 +180,9 @@ namespace PetFinderDAL.Repositories
                     result = result.Where(x => searchmodel.PetKindId.Contains(x.PetKindId));
                 if (searchmodel.PetRaceId.Count != 0)
                     result = result.Where(x => searchmodel.PetRaceId.Contains(x.PetRaceId));
-                
+                if (searchmodel.Size.Count != 0)
+                    result = result.Where(x => searchmodel.Size.Contains(x.Size));
+
             }
             return result.ToList();
 
