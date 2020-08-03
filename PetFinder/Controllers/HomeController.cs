@@ -29,6 +29,11 @@ namespace PetFinder.Controllers
             return View();
         }
 
+        public IActionResult AdminIndex()
+        {
+            return View();
+        }
+
         public IActionResult test()
         {
             return View();

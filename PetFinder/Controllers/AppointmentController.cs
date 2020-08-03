@@ -89,11 +89,11 @@ namespace PetFinder.Controllers
 
 
                 };
-                _appointmentRepository.AddAppointment(appointment);
-
-                return RedirectToAction("Details","Pet", new { id = appointment.PetId });
                 
-
+               _appointmentRepository.AddAppointment(appointment);
+               
+               return RedirectToAction("Details","Pet", new { id = appointment.PetId });
+            
             }
             return View(model);
         }

@@ -215,8 +215,12 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-
-                    <div class="card border-light p-3"><a asp-action="Create" asp-controller="Appointment" asp-route-petid="@pet.PetId" class="btn btn-warning">Book an appointment</a></div>
+                   
+                    <div class="card border-light p-3">
+                        <button type="button" class="btn btn-primary" data-toggle="ajax-modal" date-target="#CreateAppointment" data-url="@Url.Action("Create","Appointment", new { petid = Model.Pet.PetId })">
+                            Book appointment
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -241,9 +245,7 @@
 
 </div>
 
-<button type="button" class="btn btn-primary" data-toggle="ajax-modal" date-target="#CreateAppointment" data-url="@Url.Action("Create","Appointment", new { petid = Model.Pet.PetId })">
-    Book appointment
-</button>
+
 
 @section scripts{
 
