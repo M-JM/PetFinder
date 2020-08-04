@@ -38,6 +38,8 @@ namespace PetFinder.ViewModels
 
         public string Age { get; set; }
 
+        public int[] PetKindIdfromForm { get; set; }
+
         public List<SelectListItem> PetKindList { get; set; }
         public List<SelectListItem> PetColorList { get; set; }
         public List<SelectListItem> PetRaceList { get; set; }

@@ -11,5 +11,7 @@ namespace PetFinder.ViewModels
         public Pet Pet { get; set; }
 
         public bool Isfavorite { get; set; }
-}
+
+        public string Age { get; set; }
+    }
 }

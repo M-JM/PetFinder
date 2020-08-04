@@ -32,6 +32,10 @@
     {
       "library": "fotorama@4.6.4",
       "destination": "wwwroot/fotorama/"
+    },
+    {
+      "library": "chosen@1.8.7",
+      "destination": "wwwroot/chosen/"
     }
   ]
 }

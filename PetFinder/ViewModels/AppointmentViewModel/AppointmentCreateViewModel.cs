@@ -12,5 +12,6 @@ namespace PetFinder.ViewModels.AppointmentViewModel
         [DataType(DataType.Text)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public new DateTime Date { get; set; }
-    }
+
+       }
 }

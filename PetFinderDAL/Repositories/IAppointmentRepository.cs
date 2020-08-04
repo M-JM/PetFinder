@@ -14,6 +14,8 @@ namespace PetFinderDAL.Repositories
 
         Appointment GetAppointment(int AppointmentId);
 
+        List<Appointment> GetHoursofAppointment(int PetId, DateTime Time);
+
         List<AppointmentStatus> GetStatus();
     }
 }

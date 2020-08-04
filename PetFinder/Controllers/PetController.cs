@@ -128,7 +128,7 @@ namespace PetFinder.Controllers
             try
             {
                 List<string> SizelistSearch = new List<string>();
-                List<int> SearchPetKindId = new List<int>();
+                List<int?> SearchPetKindId = new List<int?>();
                 List<int> SearchPetColorId = new List<int>();
                 List<int> SearchPetRaceId = new List<int>();
                 List<string> SearchGender = new List<string>();
@@ -144,23 +144,22 @@ namespace PetFinder.Controllers
 
                     }
                 };
-                foreach (var item in model.PetColorList)
-                {
-                    if (item.Selected)
+                if (model.PetKindIdfromForm != null) { 
+                    foreach (var item in model.PetKindIdfromForm)                   
                     {
-                        SearchPetColorId.Add(Int32.Parse(item.Value));
+                        SearchPetKindId.Add(item);
 
                     }
                 };
 
-                foreach (var item in model.PetKindList)
-                {
-                    if (item.Selected)
-                    {
-                        SearchPetKindId.Add(Int32.Parse(item.Value));
+                //foreach (var item in model.PetKindList)
+                //{
+                //    if (item.Selected)
+                //    {
+                //        SearchPetKindId.Add(Int32.Parse(item.Value));
 
-                    }
-                };
+                //    }
+                //};
                 foreach (var item in model.PetRaceList)
                 {
                     if (item.Selected)
@@ -194,12 +193,13 @@ namespace PetFinder.Controllers
                 };
 
                     IEnumerable<Pet> newpets = _petRepository.GetSearchedPets(searchModel);
-                
-                //if( !newpets.Any())
-                //{
-                //    string error = "No pets found";
-                //    return Json(error);
-                //}
+
+
+                if (!newpets.Any())
+                {
+                    string error = "No pets found";
+                    return Json(error);
+                }
 
                 return Json(newpets);
             }
@@ -377,10 +377,15 @@ namespace PetFinder.Controllers
             //var currentuser = await _userManager.GetUserAsync(HttpContext.User);
             bool isFavorite = _favoriteRepository.FavoriteExists(HttpContext.Session.GetString("id"), pet.PetId);
 
+            string age = CalculateAge(pet.DOB);
+
             PetDetailViewModel detailViewModel = new PetDetailViewModel()
             {
                 Pet = pet,
-                Isfavorite = isFavorite
+                Isfavorite = isFavorite,
+                Age = age,
+                
+                
 
 
             };
@@ -417,12 +422,41 @@ namespace PetFinder.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        // Private populate list method. ( parameter)
 
-        // TODO 
-        // Move getuser in seperate method to call only when required.
-        // Use session cookies as alternative to retrieve current user data. 
-        // Expiration date - key/value principles to add data
+        private static string CalculateAge(DateTime dateOfBirth)
+        {
+            string Age ;
 
+            string years = (DateTime.Now.Year - dateOfBirth.Year).ToString();
+            string months = (DateTime.Now.Month - dateOfBirth.Month).ToString();
+
+            if(years == "0")
+            {
+                Age = months + " months";
+            }
+            else if(years =="1")
+            {
+                Age = years + " year " + months + " months";
+            }
+            else
+            {
+                Age = years + " years " + months + " months";
+            }
+                      
+            return Age;
+
+            //Method to get Age as a string to pass to detail of pet viewmodel. takes DOB as parameter and perform simple substraction of Years and months based on date of today
+            // If else statement could be replace by switch/cases 
+      
+
+
+            // Private populate list method. ( parameter)
+
+            // TODO 
+            // Move getuser in seperate method to call only when required.
+            // Use session cookies as alternative to retrieve current user data. 
+            // Expiration date - key/value principles to add data
+
+        }
     }
 }

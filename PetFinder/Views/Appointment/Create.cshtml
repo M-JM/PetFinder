@@ -23,12 +23,12 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Date" class="control-label"></label>
-                        <input asp-for="Date" class="form-control" id="datepicker"  />
+                        <input asp-for="Date" class="form-control" id="datepicker" placeholder="DD-MM-YY" />
                         <span asp-validation-for="Date" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="StartTime" class="control-label"></label>
-                        <input asp-for="StartTime" class="form-control test" />
+                        <input asp-for="StartTime" class="form-control test" placeholder="HH-MM"/>
                         <span asp-validation-for="StartTime" class="text-danger"></span>
                     </div>
 
@@ -67,7 +67,7 @@
             step: '60',
             minTime: '8',
             maxTime: '6:00pm',
-            defaultTime: '8',
+            //defaultTime: '8:00am',
             startTime: '8',
             dynamic: true,
             dropdown: true,
@@ -85,7 +85,7 @@
     $(function () {
         $("#datepicker").datepicker({
             format: "dd/mm/yyyy",
-            "setDate": new Date(),
+            //"setDate": new Date(),
             autohide: true,
             "autoclose": true,
             startDate: '-1d'

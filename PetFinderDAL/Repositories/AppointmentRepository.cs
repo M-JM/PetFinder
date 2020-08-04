@@ -81,5 +81,14 @@ namespace PetFinderDAL.Repositories
             return statuses;
 
         }
+
+        public List<Appointment> GetHoursofAppointment(int PetId, DateTime Time)
+        {
+
+            var appointments = _context.Appointments.Where(x => x.PetId == PetId && x.Date == Time).ToList();
+
+                return appointments;
+
+        } 
     }
 }

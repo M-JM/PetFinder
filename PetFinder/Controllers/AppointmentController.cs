@@ -58,6 +58,14 @@ namespace PetFinder.Controllers
                 ApplicationUserId = HttpContext.Session.GetString("id"),
                 ShelterId = pet.Shelter.ShelterId,
                 Date = DateTime.Now,
+                StartTime = new TimeSpan(8, 00, 00),
+                // Date and Startime are set in the createviewModel to have initial values in inputfields
+                // Since both values are non-nullable C# automatically assign them a default value ( default(DateTime) & default(StartTime))
+                // Making them nullable will allow to put placeholders like DD-MM-YY & HH-MM in the inputfields to have be able to perform validation on model
+                // Currently if the user saves accidently the form without selecting their own values , it will pass validation of the POST method.
+                //THIS IS NOT ACCEPTABLE -> changing the Appointment model in DAL to nullable requires changes across all methods involved.
+                // by making it required i would still make sure no nulls value are saved in DB ( bad practice ?)
+                // maybe make a nullable in Viewmodel with other name and not direct property inherited from appointment would work.( bad pratice ??)
             };
 
 
@@ -147,5 +155,18 @@ namespace PetFinder.Controllers
 
             return Json(status);
         }
+
+        [HttpGet]
+
+        public JsonResult GetBlockHours(int PetId, DateTime date)
+        {
+
+           var appointments =  _appointmentRepository.GetHoursofAppointment(PetId, date);
+
+
+            return Json(appointments);
+
+        }
+
     }
 }

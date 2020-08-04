@@ -12,7 +12,7 @@ namespace PetFinderDAL.Models
 
         public List<int> PetRaceId { get; set; }
 
-        public List<int> PetKindId { get; set; }
+        public List<int?> PetKindId { get; set; }
 
         public Tristate? SocialWithDogs { get; set; }
 
