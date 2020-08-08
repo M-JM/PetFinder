@@ -8,7 +8,8 @@ namespace PetFinderDAL.Models
 {
     public class PetKind
     {
-        [Required(ErrorMessage = "Pet Kind is required")]
+       
+     
         public int PetKindId { get; set; }
 
         public string AnimalType { get; set; }

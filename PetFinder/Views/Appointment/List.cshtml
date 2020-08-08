@@ -8,25 +8,31 @@
 
 
 
-<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 50px; ">
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center"
+     style="min-height: 50px; ">
 
     <!-- Then put toasts within -->
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="succesalert" style="background-color:palegreen">
- 
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="succesalert"
+         style="background-color:palegreen">
+
         <div class="toast-body">
-Succesfully updated appointment  </div>
+            Succesfully updated appointment
+        </div>
     </div>
 </div>
 
-<div id='calendar'></div>
-
+<div class="container pt-15 pb-10" >
+    <div id='calendar'></div>
+</div>
 
 <div id="fullCalModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle" class="modal-title text-left"></h2>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span> <span class="sr-only">close</span>
+                </button>
             </div>
             <div id="modalBody" class="modal-body"></div>
             <div class="modal-footer">
@@ -73,7 +79,8 @@ Succesfully updated appointment  </div>
 
                     <div class="form-group">
                         <label asp-for="AppointmentStatusId" class="label">Status</label>
-                        <select asp-for="AppointmentStatusId" class="form-control" asp-items="Model.ListStatuses" id="appointmentstatusId"></select>
+                        <select asp-for="AppointmentStatusId" class="form-control" asp-items="Model.ListStatuses"
+                                id="appointmentstatusId"></select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -98,8 +105,8 @@ Succesfully updated appointment  </div>
                     selectedEvent = event;
 
                     $('#modalTitle').text('Appointment ' + event.event.title);
-                    $('#modalBody').html('<b>User: </b>' + event.event.extendedProps.user
-                        + '<br>' + '<b>Pet: </b>' + event.event.title +
+                    $('#modalBody').html('<b>User: </b>' + event.event.extendedProps.user +
+                        '<br>' + '<b>Pet: </b>' + event.event.title +
                         '<br>' + '<b>Appointment status: </b>' + event.event.extendedProps.status
                     );
                     $('#fullCalModal').modal();
@@ -152,8 +159,8 @@ Succesfully updated appointment  </div>
                 },
                 slotMinTime: "8:00:00",
                 slotMaxTime: "20:00:00",
-                initialView: 'dayGridMonth',
-                initialDate: '2020-06-12',
+                initialView: 'timeGridWeek',
+                initialDate: '2020-08-12',
                 //eventColor: 'green',
                 events: {
                     url: '/Appointment/GetAppointments',
@@ -174,7 +181,9 @@ Succesfully updated appointment  </div>
 
             });
             $('#btnEdit').click(function () {
-                var options = { hour12: false };
+                var options = {
+                    hour12: false
+                };
                 $('#fullCalModal').modal('hide');
                 $('#txtSubject').val(selectedEvent.event.title);
                 $('#txtStart').val(selectedEvent.event.start.toLocaleString('en-GB', options));
@@ -207,7 +216,10 @@ Succesfully updated appointment  </div>
                             console.log('testing');
                             calendar.refetchEvents();
                             $('#myModalSave').modal('hide');
-                            $('#succesalert').toast({delay: 3000}).toast('show').toast('hide');                        }
+                            $('#succesalert').toast({
+                                delay: 3000
+                            }).toast('show').toast('hide');
+                        }
                     },
                     error: function () {
                         alert('Failed');
@@ -217,8 +229,6 @@ Succesfully updated appointment  </div>
 
             calendar.render();
         });
-
-
     </script>
 
 }

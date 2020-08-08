@@ -31,10 +31,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" asp-action="Index" asp-controller="Pet">Pet List</a>
-                    </div>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" asp-action="Create" asp-controller="Pet">Register Pet</a>
                     </div>
+                 
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -54,11 +53,10 @@
                         Appointments
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" asp-action="" asp-controller="">Appointments</a>
+                        <a class="dropdown-item" asp-action="Detail" asp-controller="Appointment">Appointments</a>
+                        <a class="dropdown-item" asp-action="List" asp-controller="Appointment">Agenda</a>
                     </div>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" asp-action="" asp-controller="">Agenda</a>
-                    </div>
+                    
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"

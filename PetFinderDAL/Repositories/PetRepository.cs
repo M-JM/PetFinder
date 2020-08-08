@@ -165,13 +165,13 @@ namespace PetFinderDAL.Repositories
             if (searchmodel != null)
             {
                 if(searchmodel.Appartmentfit != null)
-                    result = result.Where(x => x.Appartmentfit == searchmodel.Appartmentfit);
+                    result = result.Where(x => searchmodel.Appartmentfit.Contains(x.Appartmentfit.Value));
                 if (searchmodel.KidsFriendly != null)
-                    result = result.Where(x => x.KidsFriendly == searchmodel.KidsFriendly);
+                    result = result.Where(x => searchmodel.KidsFriendly.Contains(x.KidsFriendly.Value));
                 if (searchmodel.SocialWithCats != null)
-                    result = result.Where(x => x.SocialWithCats == searchmodel.SocialWithCats);
+                    result = result.Where(x => searchmodel.SocialWithCats.Contains(x.SocialWithCats.Value));
                 if (searchmodel.SocialWithDogs != null)
-                    result = result.Where(x => x.SocialWithDogs == searchmodel.SocialWithDogs);
+                    result = result.Where(x => searchmodel.SocialWithDogs.Contains(x.SocialWithDogs.Value));
                 if (searchmodel.Gender.Count != 0)
                     result = result.Where(x => searchmodel.Gender.Contains(x.Gender));
                 if (searchmodel.PetColorId.Count != 0)

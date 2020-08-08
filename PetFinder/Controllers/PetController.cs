@@ -40,6 +40,13 @@ namespace PetFinder.Controllers
             _userManager = userManager;
         }
 
+        // TODO 
+        // Data validation on models
+        // All forms 
+        // pre-filled placeholders in fields - greyed out 
+        // Check if Int ShelterID given when creating pet is id from shelter
+        // implement usernotauthorized
+
         public IActionResult Index()
         {
             try
@@ -60,13 +67,7 @@ namespace PetFinder.Controllers
         [Authorize(Roles = "Admin,ShelterUser")]
         public IActionResult Search()
         {
-            // TODO 
-            // Data validation on models
-            // All forms 
-            // pre-filled placeholders in fields - greyed out 
-            // Check if Int ShelterID given when creating pet is id from shelter
-            // implement usernotauthorized
-
+            
             try
             {
                 IEnumerable<Pet> petList = _petRepository.GetAllPets();
@@ -78,50 +79,19 @@ namespace PetFinder.Controllers
                 SearchViewModel CreateModel = new SearchViewModel(PetColorList, PetKindList, PetRaceList)
                 {
                     ListOfPets = petList,
-
                 };
 
                 return View(CreateModel);
             }
 
-
             catch (Exception ex)
+
             {
                 _logger.LogError(ex, $"When getting the create pet form.");
                 throw;
             }
-
-
         }
 
-        //[HttpPost]
-        //[Authorize(Roles = "Admin,ShelterUser")]
-        //public IActionResult Search(SearchViewModel model)
-        //{
-        //    TODO
-        //    Data validation on models
-        //    All forms
-        //     pre - filled placeholders in fields - greyed out 
-        //     Check if Int ShelterID given when creating pet is id from shelter
-        //     implement usernotauthorized
-
-        //    try
-        //    {
-
-        //        IEnumerable<Pet> petList = _petRepository.GetAllPets();
-
-        //        return View(petList);
-        //    }
-
-
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, $"When getting the create pet form.");
-        //        throw;
-        //    }
-
-
-        //}
         [HttpPost]
         public JsonResult GetSearchedPets(SearchViewModel model)
         {
@@ -134,6 +104,7 @@ namespace PetFinder.Controllers
                 List<string> SearchGender = new List<string>();
                 List<string> SearchAge = new List<string>();
 
+
                 IEnumerable<Pet> petList = _petRepository.GetAllPets();
 
                 foreach (var item in model.SizeList)
@@ -141,31 +112,27 @@ namespace PetFinder.Controllers
                     if (item.Selected)
                     {
                         SizelistSearch.Add(item.Value);
-
                     }
                 };
                 if (model.PetKindIdfromForm != null) { 
                     foreach (var item in model.PetKindIdfromForm)                   
                     {
                         SearchPetKindId.Add(item);
-
                     }
                 };
 
-                //foreach (var item in model.PetKindList)
-                //{
-                //    if (item.Selected)
-                //    {
-                //        SearchPetKindId.Add(Int32.Parse(item.Value));
-
-                //    }
-                //};
+                foreach (var item in model.PetColorList)
+                {
+                    if (item.Selected)
+                    {
+                        SearchPetColorId.Add(Int32.Parse(item.Value));
+                    }
+                };
                 foreach (var item in model.PetRaceList)
                 {
                     if (item.Selected)
                     {
                         SearchPetRaceId.Add(Int32.Parse(item.Value));
-
                     }
                 };
                 foreach (var item in model.Genderlist)
@@ -173,11 +140,8 @@ namespace PetFinder.Controllers
                     if (item.Selected)
                     {
                         SearchGender.Add(item.Value);
-
                     }
                 };
-
-
 
                 SearchModel searchModel = new SearchModel
                 {
@@ -191,40 +155,29 @@ namespace PetFinder.Controllers
                     SocialWithCats = model.SocialWithCats,
                     SocialWithDogs = model.SocialWithDogs,
                 };
-
                     IEnumerable<Pet> newpets = _petRepository.GetSearchedPets(searchModel);
 
-
-                if (!newpets.Any())
-                {
-                    string error = "No pets found";
-                    return Json(error);
-                }
+                //if (!newpets.Any())
+                //{
+                //    string error = "No pets found";
+                //    return Json(error);
+                //}
 
                 return Json(newpets);
             }
 
-
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"When getting the create pet form.");
+                _logger.LogError(ex, $"When getting the results of the search pets method.");
                 throw;
-            }
-           
+            }         
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin,ShelterUser")]
         public IActionResult Create()
         {
-            // TODO 
-            // Data validation on models
-            // All forms 
-            // pre-filled placeholders in fields - greyed out 
-            // Check if Int ShelterID given when creating pet is id from shelter
-            // implement usernotauthorized
-
-            try
+          try
             {
 
                 List<PetColor> PetColorList = _petRepository.GetPetColors();
@@ -233,10 +186,8 @@ namespace PetFinder.Controllers
 
                 PetCreateViewModel CreateModel = new PetCreateViewModel(PetColorList, PetKindList, PetRaceList)
                 {
-                    DOB = DateTime.Now,
-                 
-            };
-
+                    DOB = DateTime.Now,          
+                };
                 return View(CreateModel);
             }
 
@@ -246,9 +197,8 @@ namespace PetFinder.Controllers
                 _logger.LogError(ex, $"When getting the create pet form.");
                 throw;
             }
-
-
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,ShelterUser")]
@@ -276,8 +226,7 @@ namespace PetFinder.Controllers
                         SocialWithCats = createmodel.SocialWithCats,
                         SocialWithDogs = createmodel.SocialWithDogs,
                         Appartmentfit = createmodel.Appartmentfit,
-                        KidsFriendly = createmodel.KidsFriendly
-                      
+                        KidsFriendly = createmodel.KidsFriendly,                                   
                     };
                     _petRepository.AddPet(newPet);
 
@@ -315,58 +264,85 @@ namespace PetFinder.Controllers
         [Authorize(Roles = "Admin,ShelterUser")]
         public IActionResult Edit(int id)
         {
-            Pet pet = _petRepository.GetById(id);
-            List<PetColor> PetColorList = _petRepository.GetPetColors();
-            List<PetRace> PetRaceList = _petRepository.GetPetRaces();
-            List<PetKind> PetKindList = _petRepository.GetPetKinds();
-
-
-            PetEditViewModel editModel = new PetEditViewModel(PetColorList, PetKindList, PetRaceList)
+            try
             {
+                Pet pet = _petRepository.GetById(id);
+                List<PetColor> PetColorList = _petRepository.GetPetColors();
+                List<PetRace> PetRaceList = _petRepository.GetPetRaces();
+                List<PetKind> PetKindList = _petRepository.GetPetKinds();
 
-                Name = pet.Name,
-                Description = pet.Description,
-                DOB = pet.DOB,
-                Gender = pet.Gender,
-                PetColorId = pet.PetColorId,
-                PetKindId = pet.PetKindId,
-                ShelterId = pet.ShelterId,
-                Size = pet.Size,
-                PetRaceId = pet.PetRaceId,
-               
-            };
-            return View(editModel);
+
+                PetEditViewModel editModel = new PetEditViewModel(PetColorList, PetKindList, PetRaceList)
+                {
+
+                    Name = pet.Name,
+                    Description = pet.Description,
+                    DOB = pet.DOB,
+                    Gender = pet.Gender,
+                    PetColorId = pet.PetColorId,
+                    PetKindId = pet.PetKindId,
+                    ShelterId = pet.ShelterId,
+                    Size = pet.Size,
+                    PetRaceId = pet.PetRaceId,
+                    SocialWithCats = pet.SocialWithCats,
+                    SocialWithDogs = pet.SocialWithDogs,
+                    KidsFriendly = pet.KidsFriendly,
+                    Appartmentfit = pet.Appartmentfit,
+
+                };
+                return View(editModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When trying to get the edit model for pet.");
+                throw;
+            }
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            Pet pet = _petRepository.GetById(id);
+            try
+            {
+                Pet pet = _petRepository.GetById(id);
 
-            return View(pet);
+                return View(pet);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         [HttpPost]
         public IActionResult DeleteSure(int PetId)
         {
-            Pet pet = _petRepository.GetById(PetId);
-            Pet response = _petRepository.RemovePet(pet);
-
-            if (response != null && response.PetId != 0)
+            try
             {
-                // the pictures are automatically deleted due to cascade in DB
-                //foreach( var picture in pet.PetPictures)
-                //{
-                //    _petRepository.RemovePetPicture(picture);
-                //}
+                Pet pet = _petRepository.GetById(PetId);
+                Pet response = _petRepository.RemovePet(pet);
+
+                if (response != null && response.PetId != 0)
+                {
+                    // the pictures are automatically deleted due to cascade in DB
+                    //foreach( var picture in pet.PetPictures)
+                    //{
+                    //    _petRepository.RemovePetPicture(picture);
+                    //}
+                    return RedirectToAction("Index");
+                }
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch (Exception)
+            {
+
+                throw;
+            }
 
         }
 
         //Asynchronous action methods are useful when an action must perform several independent long running operations.
         //Making a method asynchronous does not make it execute faster, and that is an important factor to understand and a misconception many people have.
-
 
         [HttpGet]
         public IActionResult Details(int id)
@@ -384,17 +360,10 @@ namespace PetFinder.Controllers
                 Pet = pet,
                 Isfavorite = isFavorite,
                 Age = age,
-                
-                
-
-
             };
 
             return View(detailViewModel);
         }
-
-
-       
 
 
         private List<string> ProcessUploadFile(PetCreateViewModel createmodel)
@@ -422,7 +391,6 @@ namespace PetFinder.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
         private static string CalculateAge(DateTime dateOfBirth)
         {
             string Age ;
@@ -448,8 +416,6 @@ namespace PetFinder.Controllers
             //Method to get Age as a string to pass to detail of pet viewmodel. takes DOB as parameter and perform simple substraction of Years and months based on date of today
             // If else statement could be replace by switch/cases 
       
-
-
             // Private populate list method. ( parameter)
 
             // TODO 

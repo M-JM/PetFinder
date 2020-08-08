@@ -9,6 +9,7 @@ namespace PetFinder.ViewModels
 {
     public class SearchViewModel : Pet
     {
+     
         public SearchViewModel()
         {
 
@@ -23,18 +24,15 @@ namespace PetFinder.ViewModels
         {
             new SelectListItem { Value = "Small", Text = "Small" },
             new SelectListItem { Value = "Medium", Text = "Medium" },
-             new SelectListItem { Value = "Large", Text = "Large" },
+            new SelectListItem { Value = "Large", Text = "Large" },
         };
 
         public List<string> SizeListSearch { get; set; }
 
-        public Tristate? SocialWithDogs { get; set; }
-
-        public Tristate? SocialWithCats { get; set; }
-
-        public Tristate? Appartmentfit { get; set; }
-
-        public Tristate? KidsFriendly { get; set; }
+        public Tristate[] SocialWithDogs { get; set; }
+        public Tristate[] Appartmentfit { get; set; }
+        public Tristate[] SocialWithCats { get; set; }
+        public Tristate[] KidsFriendly { get; set; }
 
         public string Age { get; set; }
 

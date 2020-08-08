@@ -1,77 +1,294 @@
 ﻿@model PetFinder.ViewModels.PetEditViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
 }
+<link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.css" rel="stylesheet" />
+<link href="~/bootstrap-datepicker/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" />
 
-<h1>Edit</h1>
+<header class="page-header page-header-dark bg-gradient-primary-to-secondary pt-10">
+    <div class="page-header-content pt-5">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="page-header-title mb-3">Register your Pet</h1>
 
-<h4>Pet</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form enctype="multipart/form-data" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <input asp-for="Gender" class="form-control" />
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DOB" class="control-label"></label>
-                <input asp-for="DOB" class="form-control" />
-                <span asp-validation-for="DOB" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Size" class="control-label"></label>
-                <input asp-for="Size" class="form-control" />
-                <span asp-validation-for="Size" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-         
-            <div class="form-group">
-                <label asp-for="ShelterId" class="control-label"></label>
-                <input asp-for="ShelterId" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="PetColorId" class="control-label"></label>
-                <select asp-for="PetColorId" class="form-control" asp-items="Model.PetColorList"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="PetRaceId" class="control-label"></label>
-                <select asp-for="PetRaceId" class="form-control" asp-items="Model.PetRaceList"></select>
-            </div>
-
-            <div class="form-group row">
-                <label asp-for="PetPictures" class="col-sm-2 col-form-label"></label>
-                <div class="col-sm-10">
-                    <div class="custom-file">
-                        <input multiple asp-for="PetPictures" class="form-control custom-file-input" placeholder="Photo" />
-                        <label class="custom-file-label">Choose File ...</label>
-                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="svg-border-rounded text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+    </div>
+</header>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+<div class="container mt-1">
+
+    <hr class="mt-0 mb-4" />
+    <div class="row">
+
+        <div class="col-xl-12">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Pet Creation</div>
+                <div class="card-body">
+                    <form enctype="multipart/form-data" method="post">
+                        <input type="hidden" asp-for="ShelterId" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="PetKindId" class="small mb-1 Label-text-form">Pet Kind</label>
+                                <select asp-for="PetKindId" class="form-control" asp-items="Model.PetKindList" style="color:black;">
+                                    <option value="">Please select one</option>
+                                </select>
+                                <span asp-validation-for="PetKindId" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="Name" class="small mb-1 Label-text-form">Name</label>
+                                <input asp-for="Name" class="form-control" placeholder="Enter Pet's Name" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!-- Form Row-->
+                        <div class="form-row">
+
+                            <div class="form-group col-md-4">
+                                <label asp-for="Size" class="small mb-1  Label-text-form">Size</label>
+                                <select asp-for="Size" class="form-control" asp-items="Model.SizeList" style="color:black;">
+                                    <option value="">Please select one</option>
+                                </select>
+                                <span asp-validation-for="Size" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="form-group col-md-4">
+                                <label asp-for="Gender" class=" small mb-1  Label-text-form">Gender</label>
+                                <select asp-for="Gender" class="form-control" asp-items="Model.Genderlist" style="color:black;">
+                                    <option value="">Please select one</option>
+                                </select>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label asp-for="DOB" class="small mb-1  Label-text-form">Date of Birth</label>
+                                <input asp-for="DOB" class="form-control" id="datepicker" data-date-end-date="0d" />
+                                <span asp-validation-for="DOB" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <!-- Form Row        -->
+                        <div class="form-row">
+
+                            <div class="form-group col-md-3">
+
+                                <label asp-for="SocialWithDogs" class="small mb-1  Label-text-form"> Good with Dogs ?</label>
+                                <br />
+                                @foreach (Tristate socialWithDogs in Enum.GetValues(typeof(Tristate)))
+                                {
+                                    <label>
+                                        <input asp-for="SocialWithDogs" type="radio" value="@socialWithDogs" class="form-check form-check-inline" style="color:black;" />
+                                        @socialWithDogs
+                                    </label>
+                                    <br />
+                                }
+
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="SocialWithCats" class="small mb-1  Label-text-form">Good with Cats ?</label>
+                                <br />
+                                @foreach (Tristate socialWithCats in Enum.GetValues(typeof(Tristate)))
+                                {
+                                    <label>
+                                        <input asp-for="SocialWithCats" type="radio" value="@socialWithCats" class="form-check form-check-inline" style="color:black;" />
+                                        @socialWithCats
+                                    </label>
+                                    <br />
+                                }
+                                <span asp-validation-for="SocialWithCats" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label asp-for="KidsFriendly" class="small mb-1  Label-text-form">Kids Friendly ?</label>
+                                <br />
+                                @foreach (Tristate kidsFriendly in Enum.GetValues(typeof(Tristate)))
+                                {
+                                    <label>
+                                        <input asp-for="KidsFriendly" type="radio" value="@kidsFriendly" class="form-check form-check-inline" style="color:black;" />
+                                        @kidsFriendly
+                                    </label>
+                                    <br />
+                                }
+                                <span asp-validation-for="KidsFriendly" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label asp-for="Appartmentfit" class="small mb-1  Label-text-form">Appartement fit ?</label>
+                                <br />
+                                @foreach (Tristate Appartmentfit in Enum.GetValues(typeof(Tristate)))
+                                {
+                                    <label>
+                                        <input asp-for="Appartmentfit" type="radio" value="@Appartmentfit" class="form-check form-check-inline" style="color:black;" />
+                                        @Appartmentfit
+                                    </label>
+                                    <br />
+                                }
+                                <span asp-validation-for="KidsFriendly" class="text-danger"></span>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="PetColorId" class="control-label small mb-1  Label-text-form">Color</label>
+                                <select asp-for="PetColorId" class="form-control" asp-items="Model.PetColorList" style="color:black;">
+                                    <option value="">Please select one</option>
+                                </select>
+                                <span asp-validation-for="PetColorId" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label asp-for="PetRaceId" class="control-label small mb-1  Label-text-form">Race</label>
+                                <select asp-for="PetRaceId" class="form-control" asp-items="Model.PetRaceList" style="color:black;">
+                                    <option value="">Please select one</option>
+                                </select>
+                                <span asp-validation-for="PetRaceId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-lg-12">
+                                <label asp-for="Description" class="control-label small mb-1  Label-text-form"></label>
+                                <textarea asp-for="Description" id="TextEditor" class="form-control"> </textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <div class="form-group col-lg-12">
+                                <label asp-for="PetPictures" class="control-label small mb-1  Label-text-form"></label>
+                                <div class="custom-file">
+                                    <input multiple asp-for="PetPictures" class="control-label small mb-1  Label-text-form custom-file-input" placeholder="Photo" />
+                                    <label class="custom-file-label">Choose File ...</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="form-group col-lg-12">
+                                <div id="preview">
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="submit" value="Create Pet" class="btn btn-primary" />
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
+
+
     </div>
 </div>
 
 
 
 
+
 @section Scripts {
+
+
+    <script>
+
+        $(document).ready(
+
+            function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileLabel = $(this).next('.custom-file-label');
+
+                    var files = $(this)[0].files;
+                    var $preview = $('#preview').empty();
+                    if (files.length > 1) {
+                        fileLabel.html(files.length + ' files selected');
+                    }
+                    else if (files.length == 1) {
+                        fileLabel.html(files[0].name);
+                    }
+
+                    if (this.files) $.each(this.files, readAndPreview);
+
+                    function readAndPreview(i, file) {
+
+                        if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                            return alert(file.name + " is not an image");
+                        } // else...
+
+                        var reader = new FileReader();
+
+                        $(reader).on("load", function () {
+                            $preview.append($("<img/>", { src: this.result }).css({
+                                "border": "1px solid #ddd",
+                                "border-radius": "4px",
+                                "padding": "5px",
+                                "width": "150px",
+                                "height": "100px",
+                                "margin-left": "5px",
+                                "margin-right": "5px",
+                                "margin-bottom": "5px",
+
+
+                            }));
+
+                        });
+
+                        reader.readAsDataURL(file);
+
+                    }
+
+                    $('.custom-file-input').on("change", previewImages);
+
+                });
+
+
+            }
+
+
+
+
+        );
+
+
+
+
+
+    </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/Trumbowyg-master/dist/trumbowyg.min.js"></script>
+    <script>
+        $('#TextEditor').trumbowyg({
+            imageWidthModalEdit: true
+        });</script>
+    <script>
+    $(function () {
+            $("#datepicker").datepicker({
+                format: "dd/mm/yyyy",
+                "setDate": new Date(),
+                autohide: true,
+                "autoclose": true,
+                startDate: '-7300d'
+
+
+            });
+
+        }
+        );</script>
+
+
 }

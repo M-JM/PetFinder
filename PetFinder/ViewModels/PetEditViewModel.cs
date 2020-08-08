@@ -8,6 +8,7 @@ namespace PetFinder.ViewModels
 {
     public class PetEditViewModel : PetCreateViewModel
     {
+        
         public PetEditViewModel(IEnumerable<PetColor> colors, IEnumerable<PetKind> petKinds, IEnumerable<PetRace> petRaces) : base(colors, petKinds, petRaces)
         {
         }

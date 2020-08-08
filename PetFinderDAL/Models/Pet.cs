@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -25,13 +26,15 @@ namespace PetFinderDAL.Models
         public string Size { get; set; }
         [Required]
         public string Description { get; set; }
-
+        [Required]
+        [DisplayName("Social With Dogs")]
         public Tristate? SocialWithDogs { get; set; }
-
+        [Required]
+        [DisplayName("Social With Cats")]
         public Tristate? SocialWithCats { get; set; }
-
+        [Required]
         public Tristate? Appartmentfit { get; set; }
-
+        [Required]
         public Tristate? KidsFriendly { get; set; }
 
         //Social with kids,dogs,cats stored as comma separated String.
@@ -56,6 +59,7 @@ namespace PetFinderDAL.Models
         public virtual PetRace PetRace { get; set; }
 
         [ForeignKey("PetKind")]
+        [DisplayName("Pet Kind")]
         public int PetKindId { get; set; }
 
         public virtual PetKind PetKind { get; set; }
