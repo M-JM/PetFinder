@@ -162,39 +162,50 @@ namespace PetFinder.Controllers
             if (ModelState.IsValid)
             {
                 var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-
-                if (signInResult.Succeeded)
+                var currentuser = await _userManager.FindByEmailAsync(model.Email);
+              
+                if(currentuser != null)
                 {
-                    if (string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    if (currentuser.EmailConfirmed == true)
                     {
-                        return Redirect(returnUrl);
+                        if (signInResult.Succeeded)
+                        {
+                            if (string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                            {
+                                return Redirect(returnUrl);
+                            }
+                            HttpContext.Session.SetString("Username", currentuser.Email);
+                            HttpContext.Session.SetString("id", currentuser.Id);
+
+                            if (await _userManager.IsInRoleAsync(currentuser, "Admin") && currentuser.EmailConfirmed == true)
+                            {
+                                return RedirectToAction("AdminIndex", "Home");
+                            }
+                            else if (await _userManager.IsInRoleAsync(currentuser, "User") && currentuser.EmailConfirmed == true)
+                            {
+                                return RedirectToAction("Index", "Home");
+                            }
+                         return RedirectToAction("Index", "Home");
+                        }
+                        model.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                        ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                        return View(model);
                     }
-                    var currentuser = await _userManager.FindByEmailAsync(model.Email);
-                    HttpContext.Session.SetString("Username", currentuser.Email);
-                    HttpContext.Session.SetString("id", currentuser.Id);
-
-                    //if (User.IsInRole("Admin"))
-
-                    if (await _userManager.IsInRoleAsync(currentuser, "Admin"))
-                    {
-                        return RedirectToAction("AdminIndex", "Home");
-                    }
-
-                    return RedirectToAction("Index", "Home");
+                    return View("Index", "Account");
                 }
-
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                return RedirectToAction("Register", "Account");
             }
-
             return View(model);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register()
+        public async Task<IActionResult> RegisterAsync()
         {
             UserRegisterViewModel Registermodel = new UserRegisterViewModel
             {
+                ExternalLogins =
+                 (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
             };
 
             return View(Registermodel);

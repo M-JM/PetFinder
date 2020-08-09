@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,8 @@ namespace PetFinder.ViewModels.AccountViewModel
         public virtual string Country { get; set; }
 
         public virtual string Description { get; set; }
+
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
     }
 }

@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="card-body">
-                    <h5 class="card-title text-center">Sign In</h5>
+                    <h5 class="card-title text-center" style="font-size: 2.5rem; font-weight:700">Sign In</h5>
                     <form class="form-signin" method="post">
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-label-group">
@@ -38,6 +38,8 @@
                             </label>
                         </div>
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+
+               
                     </form>
                     @*<hr class="my-4">
         <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
@@ -45,7 +47,7 @@
         </form>
 
                     *@
-                    <div class="card-body">
+                    <div class="card-body pl-0 pr-0">
                       
                             <form method="post" class="form-signin" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
                                 <div>
