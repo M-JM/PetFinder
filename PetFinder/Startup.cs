@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
 using Newtonsoft.Json;
 using PetFinderDAL.Context;
 using PetFinderDAL.Models;
@@ -42,11 +44,19 @@ namespace PetFinder
             {
              options.Password.RequiredLength = 10;
              options.Password.RequiredUniqueChars = 3;
-            }).AddEntityFrameworkStores<AppDbContext>();
+             options.SignIn.RequireConfirmedEmail = true;
+
+            }).AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+            ;
+
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(60);
             });
+
+     
+            services.AddMailKit(config => config.UseMailKit(_config.GetSection("Email").Get<MailKitOptions>()));
 
             services.AddControllersWithViews(
                   config => {
@@ -56,11 +66,22 @@ namespace PetFinder
                       config.Filters.Add(new AuthorizeFilter(policy));
                   }
                 )
-
         .AddNewtonsoftJson(
         options => options.SerializerSettings.ReferenceLoopHandling =
         ReferenceLoopHandling.Ignore
     );
+
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = "726402566617-57t94idan3sngmljvtduriiigvj1ei3h.apps.googleusercontent.com";
+                options.ClientSecret = "nDJVnERkydRqd9qmdAZVGM7A";
+            })
+           .AddFacebook(options =>
+           {
+                    options.AppId = "432890864337323";
+                    options.AppSecret = "84b81febad0d69babd3e51e41c440a35";
+                 });
+            
 
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();

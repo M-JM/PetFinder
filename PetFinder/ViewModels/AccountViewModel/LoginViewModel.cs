@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,5 +21,11 @@ namespace PetFinder.ViewModels.AccountViewModel
 
         [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
+
+        public string ReturnUrl { get; set; }
+
+
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
     }
 }

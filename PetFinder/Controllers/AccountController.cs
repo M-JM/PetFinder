@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NETCore.MailKit.Core;
 using Newtonsoft.Json;
 using PetFinder.ViewModels.AccountViewModel;
 using PetFinderDAL.Models;
@@ -24,19 +26,22 @@ namespace PetFinder.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly ILocationRepository _locationRepository;
         private readonly IShelterRepository _shelterRepository;
+        private readonly IEmailService _emailService;
         private const string _baseUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=a&key=";
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<AccountController> logger,
             ILocationRepository locationRepository,
-            IShelterRepository shelterRepository)
+            IShelterRepository shelterRepository,
+            IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _locationRepository = locationRepository;
             _shelterRepository = shelterRepository;
+            _emailService = emailService;
         }
 
         private async Task<string> GetGeoAsync()
@@ -47,12 +52,107 @@ namespace PetFinder.Controllers
             return reply;
         }
 
-
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string returnUrl)
         {
-            return View();
+            LoginViewModel model = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins =
+                 (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account",
+                                new { ReturnUrl = returnUrl });
+            var properties = _signInManager
+                .ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+
+            LoginViewModel loginViewModel = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins =
+                        (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+
+            if (remoteError != null)
+            {
+                ModelState
+                    .AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+
+                return View("Login", loginViewModel);
+            }
+
+            // Get the login information about the user from the external login provider
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                ModelState
+                    .AddModelError(string.Empty, "Error loading external login information.");
+
+                return View("Login", loginViewModel);
+            }
+
+            // If the user already has a login (i.e if there is a record in AspNetUserLogins
+            // table) then sign-in the user with this external login provider
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider,
+                info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+
+            if (signInResult.Succeeded)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            // If there is no record in AspNetUserLogins table, the user may not have
+            // a local account
+            else
+            {
+                // Get the email claim value
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+                if (email != null)
+                {
+                    // Create a new user without password if we do not have a user already
+                    var user = await _userManager.FindByEmailAsync(email);
+
+                    if (user == null)
+                    {
+                        user = new ApplicationUser
+                        {
+                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+
+                        };
+
+                        await _userManager.CreateAsync(user);
+                        await _userManager.AddToRoleAsync(user, "User");
+                    }
+
+                    // Add a login (i.e insert a row for the user in AspNetUserLogins table)
+                    await _userManager.AddLoginAsync(user, info);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    return LocalRedirect(returnUrl);
+                }
+
+                // If we cannot find the user email we cannot continue
+                ViewBag.ErrorTitle = $"Email claim not received from: {info.LoginProvider}";
+                ViewBag.ErrorMessage = "Please contact support on PetfinderInfo@gmail.com";
+
+                return View("Error");
+            }
         }
 
         [HttpPost]
@@ -96,7 +196,7 @@ namespace PetFinder.Controllers
             UserRegisterViewModel Registermodel = new UserRegisterViewModel
             {
             };
-            
+
             return View(Registermodel);
         }
         [HttpGet]
@@ -113,7 +213,7 @@ namespace PetFinder.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync(UserRegisterViewModel Registermodel)
         {
-         
+
             using HttpClient client = new HttpClient();
 
             //WORKING CODE
@@ -150,11 +250,31 @@ namespace PetFinder.Controllers
 
             if (resulting.Succeeded)
             {
-                return View();
+                // gen email conf.
+                string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                string link = Url.Action(nameof(VerifyEmail), "Account", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+
+               await _emailService.SendAsync(user.NormalizedEmail,"Email Verify",$"<a href=\"{link}\"> Verify your Email </a>",true);
+
+                return View("Index", "Home");
             }
 
             return View(Registermodel);
         }
+        [AllowAnonymous]
+        public async Task<IActionResult> VerifyEmail(string userId, string code)
+        {
+            var user =  await _userManager.FindByIdAsync(userId);
+
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded) {
+
+                return View("VerifyYourEmail", "Account");
+            }
+            return View("Index", "Home");
+
+        }
+
 
         [HttpPost]
         [AllowAnonymous]
@@ -198,9 +318,9 @@ namespace PetFinder.Controllers
         public async Task<IActionResult> ShelterRegisterAsync(ShelterRegisterViewModel Registermodel)
         {
 
-           Location location =  AddLocation(Registermodel);
+            Location location = AddLocation(Registermodel);
 
-             Shelter shelter = new Shelter
+            Shelter shelter = new Shelter
             {
                 Name = Registermodel.Name,
                 Email = Registermodel.Email,
@@ -212,7 +332,7 @@ namespace PetFinder.Controllers
             _shelterRepository.AddShelter(shelter);
 
             ApplicationUser user = AddUser(Registermodel, location, shelter.ShelterId);
-   
+
             IdentityResult resulting = await _userManager.CreateAsync(user, Registermodel.Password);
             ApplicationUser receivedUser = await _userManager.FindByEmailAsync(Registermodel.Email);
             await _userManager.AddToRoleAsync(receivedUser, "Admin");
@@ -256,7 +376,7 @@ namespace PetFinder.Controllers
             return Location;
         }
 
-        public ApplicationUser AddUser(RegisterViewModel model , Location location , int? shelterid )
+        public ApplicationUser AddUser(RegisterViewModel model, Location location, int? shelterid)
         {
 
             ApplicationUser user = new ApplicationUser
@@ -270,6 +390,7 @@ namespace PetFinder.Controllers
 
             return user;
         }
+
 
     }
 }
