@@ -14,6 +14,7 @@ namespace PetFinderDAL.Repositories
 
         //Read
         IEnumerable<Pet> GetAllPets();
+        IEnumerable<Pet> GetAllPetsFromShelter(int? shelterId);
         List<PetColor> GetPetColors();
         List<PetRace> GetPetRaces();
         List<PetKind> GetPetKinds();

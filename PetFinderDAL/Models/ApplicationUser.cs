@@ -5,6 +5,11 @@ namespace PetFinderDAL.Models
 {
     public class ApplicationUser : IdentityUser
     {
+    
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
         [ForeignKey("Location")]
         public int? LocationId { get; set; }
 

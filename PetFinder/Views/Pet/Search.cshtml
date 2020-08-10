@@ -4,19 +4,19 @@
     ViewData["Title"] = "Search";
 }
 <link href="~/chosen/chosen.css" rel="stylesheet" />
-
+<link href="~/css/AdminDashboard.css" rel="stylesheet" />
 
 <div class="container mt-10">
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-2">
 
             <div class="row">
 
                 <form enctype="multipart/form-data" method="post" id="MyForm">
 
                     <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label asp-for="PetKindList" class="small mb-1 Label-text-form">Pet Kind</label>
+                        <div class="form-group col-md-8">
+                            <label asp-for="PetKindList" class="control-label">Pet Kind</label>
                             <select asp-for="PetKindIdfromForm" multiple class="form-control-lg chosen-select" asp-items="Model.PetKindList">
                             </select>
                         </div>
@@ -24,16 +24,16 @@
 
 
                     @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-        <label asp-for="PetKindId" class="control-label">Pet Gender</label>
-        @for (var i = 0; i < Model.PetKindList.Count; i++)
-        {
-         <input type="checkbox" asp-for="@Model.PetKindList[i].Selected" />
-         <label asp-for="@Model.PetKindList[i].Selected">@Model.PetKindList[i].Text</label>
-         <input type="hidden" asp-for="@Model.PetKindList[i].Value" />
-         <input type="hidden" asp-for="@Model.PetKindList[i].Text" />
-        }
-        </div>*@
+                        <div class="form-group">
+                        <label asp-for="PetKindId" class="control-label">Pet Gender</label>
+                        @for (var i = 0; i < Model.PetKindList.Count; i++)
+                        {
+                         <input type="checkbox" asp-for="@Model.PetKindList[i].Selected" />
+                         <label asp-for="@Model.PetKindList[i].Selected">@Model.PetKindList[i].Text</label>
+                         <input type="hidden" asp-for="@Model.PetKindList[i].Value" />
+                         <input type="hidden" asp-for="@Model.PetKindList[i].Text" />
+                        }
+                        </div>*@
 
 
                     <div class="form-group ">
@@ -69,10 +69,11 @@
                     </div>
 
 
-                 
+
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label asp-for="SocialWithDogs" class="small mb-1 Label-text-form">Social with dogs</label>
+                            <label asp-for="SocialWithDogs" class="control-label">Social with dogs</label>
+                            <br />
                             <select asp-for="SocialWithDogs" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
                             </select>
                         </div>
@@ -80,29 +81,33 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label asp-for="SocialWithCats" class="small mb-1 Label-text-form">Social with cats</label>
+                            <label asp-for="SocialWithCats" class="control-label">Social with cats</label>
+                            <br />
                             <select asp-for="SocialWithCats" data-placeholder="Select criteria here" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
                             </select>
                         </div>
+                    </div>
 
-                        <div class="form-row">
+                    <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label asp-for="SocialWithDogs" class="small mb-1 Label-text-form">Social with kids</label>
-                                <select asp-for="SocialWithDogs" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label asp-for="KidsFriendly" class="small mb-1 Label-text-form">Fit for Appartment</label>
+                                <label asp-for="KidsFriendly" class="control-label">Social with kids</label>
+                                <br />
                                 <select asp-for="KidsFriendly" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
                                 </select>
                             </div>
                         </div>
 
-                    </div>
-                   
+                    <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label asp-for="Appartmentfit" class="control-label">Fit for Appartment</label>
+                                <br />
+                                <select asp-for="Appartmentfit" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
+                                </select>
+                            </div>
+                        </div>
+
+                 
+
 
                     <div class="form-group">
                         <label asp-for="PetColor" class="control-label">Pet color </label>
@@ -156,7 +161,7 @@
 
         </div>
 
-        <div class="col-lg-9 ">
+        <div class="col-lg-10 ">
 
 
             <div class="row result"></div>
@@ -213,23 +218,23 @@
             processData: false,
             success: function (result) {
                 $('.selecta').remove();
-               
-              
+
+
                 if (!$.trim(result)) {
                     $(".result").append(
                         '<div class="NoResult container">' +
                          '<h1>No results were found</h1>' +
                         '<p class="lead">There are currently no pets that fit your search criteria. Please try with less criteria or reset your filters </p>' +
                          '<div class="text-center">' +'<img src="/assets/no-pets-allowed.png" class="rounded">' +'</div>' +
-                        '</div>'  
-                       
+                        '</div>'
+
                     );
 
                    }
                 else {
                     albumAccordion(result);
                    }
-               
+
             },
             error: function (result) {
                 console.log("error");

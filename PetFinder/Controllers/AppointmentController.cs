@@ -106,9 +106,10 @@ namespace PetFinder.Controllers
             return View(model);
         }
 
-        public JsonResult GetAppointments()
+        public async Task<JsonResult> GetAppointmentsAsync()
         {
-            List<Appointment> appointments = _appointmentRepository.GetAppointments();
+            ApplicationUser user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            List<Appointment> appointments = _appointmentRepository.GetAppointments(user.ShelterId);
             List<CalendarEvents> Listevents = new List<CalendarEvents>();
 
 

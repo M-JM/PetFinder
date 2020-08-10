@@ -110,6 +110,14 @@ namespace PetFinderDAL.Repositories
 
         // Get - PetColors
 
+        public IEnumerable<Pet> GetAllPetsFromShelter(int? shelterId)
+        {
+            var listPets = _context.Pets.Where(x => x.ShelterId == shelterId).ToList();
+
+            return listPets;
+        }
+
+
         public List<PetColor> GetPetColors()
         {
             var PetcolorList = _context.PetColors.ToList();

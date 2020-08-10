@@ -10,7 +10,7 @@ namespace PetFinderDAL.Repositories
     {
         Appointment AddAppointment(Appointment appointment);
         Appointment UpdateAppointment(Appointment appointment);
-        List<Appointment> GetAppointments();
+        List<Appointment> GetAppointments(int? shelterId);
 
         Appointment GetAppointment(int AppointmentId);
 

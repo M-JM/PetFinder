@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NETCore.MailKit.Core;
-using Newtonsoft.Json;
+
 using PetFinder.ViewModels.AccountViewModel;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;

@@ -58,13 +58,17 @@ namespace PetFinderDAL.Repositories
 
         }
 
-        public List<Appointment> GetAppointments()
+        public List<Appointment> GetAppointments(int? shelterId)
         {
-           var appointments= _context.Appointments.Include(x => x.Pet).Include(x=>x.AppointmentStatus).Include(x => x.ApplicationUser).ToList();                 
+           var appointments= _context.Appointments.Include(x => x.Pet).Include(x=>x.AppointmentStatus).Include(x => x.ApplicationUser).
+                Where(x => x.ShelterId == shelterId)
+                .ToList();                 
 
             return appointments;
 
         }
+
+
 
         public Appointment GetAppointment(int AppointmentId)
         {

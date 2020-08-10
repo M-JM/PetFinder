@@ -64,7 +64,7 @@ namespace PetFinder.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,ShelterUser")]
+        [Authorize(Roles = "Admin,ShelterUser,User")]
         public IActionResult Search()
         {
             
@@ -424,6 +424,10 @@ namespace PetFinder.Controllers
             }
             return uniqueFilenames;
         }
+
+        //Move the CalculateAge Method in Viewmodel ? 
+        // This should be doable ... seperate concern (MVC pattern) -> View data representation goes in viewmodel not controller...
+
 
         private static string CalculateAge(DateTime dateOfBirth)
         {
