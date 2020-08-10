@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace PetFinder.ViewModels
 {
+   
     public class PetEditViewModel : PetCreateViewModel
     {
-        
+        public PetEditViewModel()
+        {
+          
+        }
+
         public PetEditViewModel(IEnumerable<PetColor> colors, IEnumerable<PetKind> petKinds, IEnumerable<PetRace> petRaces) : base(colors, petKinds, petRaces)
         {
+
         }
     }
 }

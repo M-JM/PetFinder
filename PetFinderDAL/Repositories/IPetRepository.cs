@@ -23,6 +23,8 @@ namespace PetFinderDAL.Repositories
 
         //Update
 
+        Pet EditPet(Pet pet);
+
         //Delete
 
         Pet RemovePet(Pet pet);

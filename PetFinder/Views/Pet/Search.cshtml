@@ -104,48 +104,6 @@
                     </div>
                    
 
-
-                    @*<div class="form-group">
-                        <label asp-for="Appartmentfit"></label>
-                        <br />
-                        @foreach (Tristate appartmentfit in Enum.GetValues(typeof(Tristate)))
-                        {
-                            <label>
-                                <input asp-for="Appartmentfit" type="radio" value="@appartmentfit" />
-                                @appartmentfit
-                            </label>
-                        }
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="SocialWithCats"></label>
-                        <br />
-                        @foreach (Tristate socialWithCats in Enum.GetValues(typeof(Tristate)))
-                        {
-                            <label>
-                                <input asp-for="SocialWithCats" type="radio" value="@socialWithCats" />
-                                @socialWithCats
-                            </label>
-                        }
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="KidsFriendly"></label>
-                        <br />
-                        @foreach (Tristate kidsFriendly in Enum.GetValues(typeof(Tristate)))
-                        {
-                            <label>
-                                <input asp-for="KidsFriendly" type="radio" value="@kidsFriendly" />
-                                @kidsFriendly
-                            </label>
-
-                        }
-                    </div>*@
-
-
-
-
-
                     <div class="form-group">
                         <label asp-for="PetColor" class="control-label">Pet color </label>
                         @for (var i = 0; i < Model.PetColorList.Count; i++)
@@ -259,10 +217,12 @@
               
                 if (!$.trim(result)) {
                     $(".result").append(
-                       '<div class="NoResult container">' +
-                       '<h1>No results were found</h1>' +
-                       '<p class="lead">There are currently no pets that fit your search criteria. Please try with less criteria or reset your filters </p>' +
-                       '</div>'
+                        '<div class="NoResult container">' +
+                         '<h1>No results were found</h1>' +
+                        '<p class="lead">There are currently no pets that fit your search criteria. Please try with less criteria or reset your filters </p>' +
+                         '<div class="text-center">' +'<img src="/assets/no-pets-allowed.png" class="rounded">' +'</div>' +
+                        '</div>'  
+                       
                     );
 
                    }

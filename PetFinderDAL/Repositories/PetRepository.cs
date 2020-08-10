@@ -42,6 +42,26 @@ namespace PetFinderDAL.Repositories
 
         }
 
+        //Update - Pet
+
+        public Pet EditPet(Pet pet)
+        {
+            var newPet = _context.Pets.Update(pet);
+
+            if (newPet != null && newPet.State == EntityState.Modified)
+            {
+                var affectedRows = _context.SaveChanges();
+
+                if (affectedRows > 0)
+                {
+                    return newPet.Entity;
+                }
+            }
+
+            return null;
+
+        }
+
         // Create - PetPictures
 
         public PetPicture AddPetPicture(PetPicture petPicture)

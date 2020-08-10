@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -14,8 +13,6 @@ using PetFinder.Models;
 using PetFinder.ViewModels;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PetFinder.Controllers
 {
@@ -40,10 +37,13 @@ namespace PetFinder.Controllers
             _userManager = userManager;
         }
 
+        //Asynchronous action methods are useful when an action must perform several independent long running operations. these happen on a seperate thread then the main thread.
+        //Making a method asynchronous does not make it execute faster, and that is an important factor to understand and a misconception many people have.
+
+
         // TODO 
         // Data validation on models
         // All forms 
-        // pre-filled placeholders in fields - greyed out 
         // Check if Int ShelterID given when creating pet is id from shelter
         // implement usernotauthorized
 
@@ -274,7 +274,8 @@ namespace PetFinder.Controllers
 
                 PetEditViewModel editModel = new PetEditViewModel(PetColorList, PetKindList, PetRaceList)
                 {
-
+                    
+                    PetId = pet.PetId,
                     Name = pet.Name,
                     Description = pet.Description,
                     DOB = pet.DOB,
@@ -299,7 +300,49 @@ namespace PetFinder.Controllers
             }
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin,ShelterUser")]
+        public IActionResult Edit(PetEditViewModel editModel)
+        {
+
+            try
+            {
+                Pet pet = _petRepository.GetById(editModel.PetId);
+                if (ModelState.IsValid)
+                {
+                    pet.Name = editModel.Name;
+                    pet.Description = editModel.Description;
+                    pet.DOB = editModel.DOB;
+                    pet.Gender = editModel.Gender;
+                    pet.PetColorId = editModel.PetColorId;
+                    pet.PetKindId = editModel.PetKindId;
+                    pet.Size = editModel.Size;
+                    pet.PetRaceId = editModel.PetRaceId;
+                    pet.SocialWithCats = editModel.SocialWithCats;
+                    pet.SocialWithDogs = editModel.SocialWithDogs;
+                    pet.KidsFriendly = editModel.KidsFriendly;
+                    pet.Appartmentfit = editModel.Appartmentfit;
+
+                    var response = _petRepository.EditPet(pet);
+
+                    if (response != null & response.PetId != 0)
+                    {
+                        return RedirectToAction("Details", new { id= pet.PetId});
+                    }
+
+                }
+                return View(editModel);
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When trying to get the edit model for pet.");
+                throw;
+            }
+        }
+
         [HttpGet]
+        [Authorize(Roles = "Admin,ShelterUser")]
         public IActionResult Delete(int id)
         {
             try
@@ -315,6 +358,7 @@ namespace PetFinder.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "Admin,ShelterUser")]
         public IActionResult DeleteSure(int PetId)
         {
             try
@@ -341,9 +385,6 @@ namespace PetFinder.Controllers
 
         }
 
-        //Asynchronous action methods are useful when an action must perform several independent long running operations.
-        //Making a method asynchronous does not make it execute faster, and that is an important factor to understand and a misconception many people have.
-
         [HttpGet]
         public IActionResult Details(int id)
         {
@@ -365,7 +406,6 @@ namespace PetFinder.Controllers
             return View(detailViewModel);
         }
 
-
         private List<string> ProcessUploadFile(PetCreateViewModel createmodel)
         {
             List<string> uniqueFilenames = new List<string>();
@@ -383,12 +423,6 @@ namespace PetFinder.Controllers
                 }
             }
             return uniqueFilenames;
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         private static string CalculateAge(DateTime dateOfBirth)

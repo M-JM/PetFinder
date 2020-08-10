@@ -182,14 +182,15 @@
 
 
             <div class="col-md-12">
-                <div class="row mt-3 mb-5">
+                <div class="row mt-3 mb-2">
                     <h3>
                         About myself
                     </h3>
-                    <br />
-                    <p>
-                        @Html.Raw(Model.Pet.Description)
-                    </p>
+                    <div>
+                        <p>
+                            @Html.Raw(Model.Pet.Description)
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -228,15 +229,16 @@
                 <div class="col-md-12">
                     <div class="card">
                         <h5 class="card-header">
-                            Card title
+                            @Model.Pet.Shelter.Name
                         </h5>
                         <div class="card-body">
                             <p class="card-text">
-                                Card content
+                                @Html.Raw(Model.Pet.Shelter.Description)
                             </p>
                         </div>
                         <div class="card-footer">
-                            Card footer
+                            @Model.Pet.Shelter.PhoneNumber
+                            @Model.Pet.Shelter.Email
                         </div>
                     </div>
                 </div>

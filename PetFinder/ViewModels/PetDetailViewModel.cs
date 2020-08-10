@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PetFinder.ViewModels
 {
+
     public class PetDetailViewModel 
     {
         public Pet Pet { get; set; }
