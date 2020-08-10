@@ -34,10 +34,8 @@ namespace PetFinder.Controllers
         public IActionResult List()
         {
             List<AppointmentStatus> statuses = _appointmentRepository.GetStatus();
-
             // this gives the values for statusesdropdown in View 
             // this is required so when the Edit Modal is called , the dropdown is populated with values from DB instead of hardcoding them in a select form-group.
-
             StatusViewModel updateModel = new StatusViewModel(statuses)
             {
             };
@@ -161,9 +159,7 @@ namespace PetFinder.Controllers
 
         public JsonResult GetBlockHours(int PetId, DateTime date)
         {
-
            var appointments =  _appointmentRepository.GetHoursofAppointment(PetId, date);
-
 
             return Json(appointments);
 

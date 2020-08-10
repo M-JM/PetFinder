@@ -10,17 +10,19 @@
     <div class="modal-dialog">
 
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title"> Book your appointment </h4>
+            <div class="modal-header align-content-center">
+
+                <div><img src="~/assets/Booking.png" /></div>
+                <h4 class="modal-title align-self-center"> Book your appointment </h4>
+                
                 <button type="button" class="close" data-dismiss="modal">
                     <span>x</span>
                 </button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body align-content-center">
 
                 <form asp-action="Create" asp-controller="Appointment">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Date" class="control-label"></label>
                         <input asp-for="Date" class="form-control" id="datepicker" placeholder="DD-MM-YY" />

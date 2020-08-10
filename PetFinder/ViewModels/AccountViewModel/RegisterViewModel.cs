@@ -9,11 +9,10 @@ namespace PetFinder.ViewModels.AccountViewModel
 {
     public abstract class RegisterViewModel
     {
-        [Required]
         public virtual string Name { get; set; }
-    
+        [Required]
         public virtual string FirstName { get; set; }
-
+        [Required]
         public virtual string LastName { get; set; }
         [Required]
         public virtual string Email { get; set; }

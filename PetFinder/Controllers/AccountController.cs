@@ -243,7 +243,7 @@ namespace PetFinder.Controllers
 
             //GoogleApi TestingJSONreslut = Newtonsoft.Json.JsonSerializer.Deserialize<GoogleApi>(result);
 
-
+            if (ModelState.IsValid) { 
 
             Location location = AddLocation(Registermodel);
             int? shelter = null;
@@ -266,6 +266,9 @@ namespace PetFinder.Controllers
                 return View("Index", "Home");
             }
 
+            return View(Registermodel);
+        }
+            Registermodel.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View(Registermodel);
         }
         [AllowAnonymous]

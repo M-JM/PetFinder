@@ -24,6 +24,7 @@ namespace PetFinderDAL.Repositories
         {
             var listPets = _context.FavoriteList
                 .Include(p => p.Pet).Include(p => p.Pet.PetPictures)
+                .Include(p =>p.Pet.Shelter)
                 .Where(x => x.ApplicationUser.Id == userId).ToList();
 
             return listPets;
