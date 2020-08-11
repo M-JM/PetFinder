@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NETCore.MailKit.Core;
 using PetFinder.ViewModels.AppointmentViewModel;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
@@ -18,17 +19,20 @@ namespace PetFinder.Controllers
         private readonly ILogger<PetController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IEmailService _emailService;
 
         public AppointmentController(
             IPetRepository petRepository,
             ILogger<PetController> logger,
             UserManager<ApplicationUser> userManager,
-            IAppointmentRepository appointmentRepository)
+            IAppointmentRepository appointmentRepository,
+            IEmailService emailService)
         {
             _petRepository = petRepository;
             _logger = logger;
             _userManager = userManager;
             _appointmentRepository = appointmentRepository;
+            _emailService = emailService;
         }
 
         public IActionResult List()
@@ -47,7 +51,6 @@ namespace PetFinder.Controllers
         public IActionResult Create(int petid)
         {
             Pet pet = _petRepository.GetById(petid);
-           
             AppointmentCreateViewModel model = new AppointmentCreateViewModel()
             {
                 PetId = pet.PetId,
@@ -71,10 +74,13 @@ namespace PetFinder.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(AppointmentCreateViewModel model)
+        public async Task<IActionResult> CreateAsync(AppointmentCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var pet = _petRepository.GetById(model.PetId);
+                var currentuser =  await _userManager.FindByIdAsync(HttpContext.Session.GetString("id"));
+                string emailbody = "Your Booking with " + pet.Name + " has been succesfully received";
 
                 // instead of adding 1 hour through built in method -> change into adding one hour to end date in form before post.
 
@@ -97,8 +103,11 @@ namespace PetFinder.Controllers
                 };
                 
                _appointmentRepository.AddAppointment(appointment);
-               
-               return RedirectToAction("Details","Pet", new { id = appointment.PetId });
+
+                await _emailService.SendAsync(currentuser.UserName, "Appointment - PetFinder", emailbody, true);
+
+
+                return RedirectToAction("Details","Pet", new { id = appointment.PetId });
             
             }
             return View(model);
@@ -140,16 +149,43 @@ namespace PetFinder.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveEvent(CalendarEvents Updatedevent)
+        public async Task<JsonResult> SaveEventAsync(CalendarEvents Updatedevent)
         {
             // the object given as parameter with SaveEvent comes from the AJAX call (post) with the data from the EditModal
             // change the status 
             // the return of this method is a JSON containing the value of the boleaan in order to check the succes function in the script of the view.
 
             Appointment appointment = _appointmentRepository.GetAppointment(Updatedevent.AppointmentId);
-            appointment.AppointmentStatusId = Updatedevent.appointmentstatusId;
+            ApplicationUser usertoreceiveEmail = await _userManager.FindByIdAsync(appointment.ApplicationUserId);
 
-            _appointmentRepository.UpdateAppointment(appointment);
+                appointment.AppointmentStatusId = Updatedevent.appointmentstatusId;
+            string emailbody ="";
+
+
+            var response = _appointmentRepository.UpdateAppointment(appointment);
+            
+            if( response != null)
+            {
+                switch (response.AppointmentStatusId) { 
+
+                    case 3:
+
+                        emailbody = "Your Appointment with " + appointment.Pet.Name + " at " + appointment.Shelter.Name + " on " + response.Date + " has been confirmed";
+
+                    break;
+
+                    case 2:
+
+                        emailbody = "Your Appointment with " + appointment.Pet.Name + " at " + appointment.Shelter.Name + " on " + response.Date + " has been Rejected";
+
+                        break;
+
+                }
+
+            }
+
+            await _emailService.SendAsync(usertoreceiveEmail.UserName, "Appointment - PetFinder", emailbody, true);
+
             Boolean status = true;
 
             return Json(status);

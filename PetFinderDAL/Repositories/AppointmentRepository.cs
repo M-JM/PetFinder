@@ -50,6 +50,7 @@ namespace PetFinderDAL.Repositories
 
                 if (affectedRows > 0)
                 {
+                  
                     return UpdateAppointment.Entity;
                 }
             }
@@ -72,7 +73,7 @@ namespace PetFinderDAL.Repositories
 
         public Appointment GetAppointment(int AppointmentId)
         {
-            var appointment = _context.Appointments.Where(x=>x.AppointmentId == AppointmentId).FirstOrDefault();
+            var appointment = _context.Appointments.Include(x => x.Pet).Include(x=>x.Shelter).Where(x=>x.AppointmentId == AppointmentId).FirstOrDefault();
 
             return appointment;
 
