@@ -24,7 +24,7 @@
             </div>
         </header>
         <!-- Main page content-->
-        <div class="container mt-n10 pt-10">
+        <div class="container mt-n10 pb-10">
             <div class="row">
                 <div class="col-xxl-12 col-xl-12 mb-4">
                     <div class="card h-100">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Example Colored Cards for Dashboard Demo-->
+
             <div class="row">
                 <div class="col-xxl-4 col-lg-4">
                     <div class="card bg-primary text-white mb-4">
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" asp-action="Detail" asp-controller="Appointment">View Appointments</a>
+                            <a class="small text-white stretched-link" asp-action="Overview" asp-controller="Appointment">View Appointments</a>
                             <div class="small text-white"><i><img src="~/assets/survey.png" /></i></div>
                         </div>
                     </div>
@@ -129,8 +129,9 @@
                                         <td>@employee.PhoneNumber</td>
                                         
                                         <td>
-                                            <button class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i><img src="~/assets/edit.png" /></i></button>
-                                            <button class="btn btn-datatable btn-icon btn-transparent-dark"><i><img src="~/assets/trash.png" /></i></button>
+
+                                            <a asp-action="Profile" asp-controller="Account" asp-route-id="@employee.UserName" class="btn btn-datatable btn-icon btn-transparent-dark"><i><img src="~/assets/edit.png" /></i></a>
+                                            <a asp-action="DeleteUser" asp-controller="Administration" asp-route-id="@employee.Id" class="btn btn-datatable btn-icon btn-transparent-dark"><i><img src="~/assets/trash.png" /></i></a>
                                         </td>
                                     </tr>
                                  

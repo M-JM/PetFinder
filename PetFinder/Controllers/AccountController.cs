@@ -75,7 +75,7 @@ namespace PetFinder.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
 
             LoginViewModel loginViewModel = new LoginViewModel
             {
@@ -92,7 +92,7 @@ namespace PetFinder.Controllers
                 return View("Login", loginViewModel);
             }
 
-            // Get the login information about the user from the external login provider
+            
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -102,8 +102,7 @@ namespace PetFinder.Controllers
                 return View("Login", loginViewModel);
             }
 
-            // If the user already has a login (i.e if there is a record in AspNetUserLogins
-            // table) then sign-in the user with this external login provider
+            
             var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider,
                 info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
 
@@ -111,8 +110,7 @@ namespace PetFinder.Controllers
             {
                 return LocalRedirect(returnUrl);
             }
-            // If there is no record in AspNetUserLogins table, the user may not have
-            // a local account
+            
             else
             {
                 // Get the email claim value
@@ -491,9 +489,13 @@ namespace PetFinder.Controllers
 
                 var result = await _userManager.UpdateAsync(user);
 
-                if (result.Succeeded)
+                if (result.Succeeded && User.IsInRole("User"))
                 {
                     return RedirectToAction("Index","Home") ;
+
+                } else if (result.Succeeded && User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("AdminIndex", "Home");
                 }
 
                 foreach (var error in result.Errors)

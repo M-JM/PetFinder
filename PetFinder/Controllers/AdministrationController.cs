@@ -36,5 +36,33 @@ namespace PetFinder.Controllers
           
             return View(users);
         }
+
+        
+        public async Task<IActionResult> DeleteUserAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+ 
+                return View("NotFound");
+            }
+
+            var identityResult = await _userManager.DeleteAsync(user);
+
+            if (identityResult.Succeeded)
+            {
+                return RedirectToAction("AdminIndex", "Home");
+            }
+
+            foreach (var error in identityResult.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return RedirectToAction("AdminIndex", "Home");
+        }
     }
+
+
 }
