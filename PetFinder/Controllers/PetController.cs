@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,8 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PetFinder.Models;
-using PetFinder.ViewModels;
 using PetFinder.ViewModels.PetViewModel;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
@@ -38,16 +35,39 @@ namespace PetFinder.Controllers
             _userManager = userManager;
         }
 
+        //INFO
+
+        /// Async methods 
         //Asynchronous action methods are useful when an action must perform several independent long running operations. these happen on a seperate thread then the main thread.
         //Making a method asynchronous does not make it execute faster, and that is an important factor to understand and a misconception many people have.
 
+        /// ANTIFORGERY -> Prevent Cross site request.
+        //MVC's anti-forgery support writes a unique value to an HTTP-only cookie and then the same value is written to the form.
+        //When the page is submitted, an error is raised if the cookie value doesn't match the form value.
 
-        // TODO 
-        // Data validation on models
-        // All forms 
-        // Check if Int ShelterID given when creating pet is id from shelter
-        // implement usernotauthorized
+        //TODO 
 
+        //From high priority to low 
+
+        ///1.Edit model must contain a method to delete existing photos from DB & WWWroot.
+        //   in html implement Ajax call to delete methode and call it on span/link item on each existing photo
+        //   the Method will take the photopath as parameter and retrieve the selected photo and delete it from DB and WWWROOT.
+
+        ///2. Move the CalculateAge Method in Viewmodel ? 
+        // This should be doable ... seperate concern (MVC pattern) -> View data representation goes in viewmodel not controller...
+
+        ///3. Log warning when triggering the notauthorized View call to log who tried to access the ressources ??
+
+        ///4. Check to encrypt and decrypt parameters being passed. 
+        // there are no known sensitive data being passed as parameters , but it might be good pratice to do this anyways.
+
+
+        ///5. Refactor the Search method. using Business layer (DTO) to map values from Viewmodel passed then as parameter to SearchModel and pass it to DAL
+        //   Search for a cleaner solution to pass values , ugly to loop over every property of viewmodel to map them searchmodel.
+        //   Can this be done in JQ ? and pass then through Ajax the data object to Method ??
+
+        ///6. Move Uploadfunctionality to a Service with an Iservice to inject it in controller where i would use this method ??
+       
         public IActionResult Index()
         {
             try
@@ -65,14 +85,13 @@ namespace PetFinder.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,ShelterUser,User")]
+        [Authorize(Roles = "Admin, User")]
         public IActionResult Search()
         {
             
             try
             {
                 IEnumerable<Pet> petList = _petRepository.GetAllPets();
-
                 List<PetColor> PetColorList = _petRepository.GetPetColors();
                 List<PetRace> PetRaceList = _petRepository.GetPetRaces();
                 List<PetKind> PetKindList = _petRepository.GetPetKinds();
@@ -94,6 +113,7 @@ namespace PetFinder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public JsonResult GetSearchedPets(SearchViewModel model)
         {
             try
@@ -158,12 +178,6 @@ namespace PetFinder.Controllers
                 };
                     IEnumerable<Pet> newpets = _petRepository.GetSearchedPets(searchModel);
 
-                //if (!newpets.Any())
-                //{
-                //    string error = "No pets found";
-                //    return Json(error);
-                //}
-
                 return Json(newpets);
             }
 
@@ -175,7 +189,7 @@ namespace PetFinder.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,ShelterUser")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
           try
@@ -192,17 +206,17 @@ namespace PetFinder.Controllers
                 return View(CreateModel);
             }
 
-
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"When getting the create pet form.");
-                throw;
+
+                return View("Error");
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,ShelterUser")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAsync(PetCreateViewModel createmodel)
         {
             try
@@ -262,88 +276,102 @@ namespace PetFinder.Controllers
 
         }
         [HttpGet]
-        [Authorize(Roles = "Admin,ShelterUser")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             try
             {
                 Pet pet = _petRepository.GetById(id);
-                List<PetColor> PetColorList = _petRepository.GetPetColors();
-                List<PetRace> PetRaceList = _petRepository.GetPetRaces();
-                List<PetKind> PetKindList = _petRepository.GetPetKinds();
-
-
-                PetEditViewModel editModel = new PetEditViewModel(PetColorList, PetKindList, PetRaceList)
+                
+                if (pet.ShelterId == Convert.ToInt32(HttpContext.Session.GetString("shelterid")))
                 {
-                    
-                    PetId = pet.PetId,
-                    Name = pet.Name,
-                    Description = pet.Description,
-                    DOB = pet.DOB,
-                    Gender = pet.Gender,
-                    PetColorId = pet.PetColorId,
-                    PetKindId = pet.PetKindId,
-                    ShelterId = pet.ShelterId,
-                    Size = pet.Size,
-                    PetRaceId = pet.PetRaceId,
-                    SocialWithCats = pet.SocialWithCats,
-                    SocialWithDogs = pet.SocialWithDogs,
-                    KidsFriendly = pet.KidsFriendly,
-                    Appartmentfit = pet.Appartmentfit,
+                    List<PetColor> PetColorList = _petRepository.GetPetColors();
+                    List<PetRace> PetRaceList = _petRepository.GetPetRaces();
+                    List<PetKind> PetKindList = _petRepository.GetPetKinds();
 
-                };
-                return View(editModel);
+
+                    PetEditViewModel editModel = new PetEditViewModel(PetColorList, PetKindList, PetRaceList)
+                    {
+
+                        PetId = pet.PetId,
+                        Name = pet.Name,
+                        Description = pet.Description,
+                        DOB = pet.DOB,
+                        Gender = pet.Gender,
+                        PetColorId = pet.PetColorId,
+                        PetKindId = pet.PetKindId,
+                        ShelterId = pet.ShelterId,
+                        Size = pet.Size,
+                        PetRaceId = pet.PetRaceId,
+                        SocialWithCats = pet.SocialWithCats,
+                        SocialWithDogs = pet.SocialWithDogs,
+                        KidsFriendly = pet.KidsFriendly,
+                        Appartmentfit = pet.Appartmentfit,
+
+                    };
+                    return View(editModel);
+                }
+                // implement logging warning when triggering "Not auhtorized" together with Id of user ??
+                                
+                return View("NotAuthorized");
+               
+
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"When trying to get the edit model for pet.");
-                throw;
+                return View("error");
             }
+           
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,ShelterUser")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(PetEditViewModel editModel)
         {
 
             try
             {
                 Pet pet = _petRepository.GetById(editModel.PetId);
-                if (ModelState.IsValid)
+                if (pet.ShelterId == Convert.ToInt32(HttpContext.Session.GetString("shelterid")))
                 {
-                    pet.Name = editModel.Name;
-                    pet.Description = editModel.Description;
-                    pet.DOB = editModel.DOB;
-                    pet.Gender = editModel.Gender;
-                    pet.PetColorId = editModel.PetColorId;
-                    pet.PetKindId = editModel.PetKindId;
-                    pet.Size = editModel.Size;
-                    pet.PetRaceId = editModel.PetRaceId;
-                    pet.SocialWithCats = editModel.SocialWithCats;
-                    pet.SocialWithDogs = editModel.SocialWithDogs;
-                    pet.KidsFriendly = editModel.KidsFriendly;
-                    pet.Appartmentfit = editModel.Appartmentfit;
-
-                    var response = _petRepository.EditPet(pet);
-
-                    if (response != null & response.PetId != 0)
+                    if (ModelState.IsValid)
                     {
-                        return RedirectToAction("Details", new { id= pet.PetId});
-                    }
+                        pet.Name = editModel.Name;
+                        pet.Description = editModel.Description;
+                        pet.DOB = editModel.DOB;
+                        pet.Gender = editModel.Gender;
+                        pet.PetColorId = editModel.PetColorId;
+                        pet.PetKindId = editModel.PetKindId;
+                        pet.Size = editModel.Size;
+                        pet.PetRaceId = editModel.PetRaceId;
+                        pet.SocialWithCats = editModel.SocialWithCats;
+                        pet.SocialWithDogs = editModel.SocialWithDogs;
+                        pet.KidsFriendly = editModel.KidsFriendly;
+                        pet.Appartmentfit = editModel.Appartmentfit;
 
+                        var response = _petRepository.EditPet(pet);
+
+                        if (response != null & response.PetId != 0)
+                        {
+                            return RedirectToAction("Details", new { id = pet.PetId });
+                        }
+                    }
+                    return View(editModel);
                 }
-                return View(editModel);
+                return View("NotAuthorized");
             }
 
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"When trying to get the edit model for pet.");
-                throw;
+                return View("error");
             }
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,ShelterUser")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             try
@@ -352,14 +380,16 @@ namespace PetFinder.Controllers
 
                 return View(pet);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                _logger.LogError(ex, $"When trying to get the delete page for pet.");
+                return View("error");
             }
         }
         [HttpPost]
-        [Authorize(Roles = "Admin,ShelterUser")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteSure(int PetId)
         {
             try
@@ -369,19 +399,14 @@ namespace PetFinder.Controllers
 
                 if (response != null && response.PetId != 0)
                 {
-                    // the pictures are automatically deleted due to cascade in DB
-                    //foreach( var picture in pet.PetPictures)
-                    //{
-                    //    _petRepository.RemovePetPicture(picture);
-                    //}
                     return RedirectToAction("Index");
                 }
                 return RedirectToAction("Index");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError(ex, $"When trying to delete a pet.");
+                return View("error");
             }
 
         }
@@ -390,21 +415,31 @@ namespace PetFinder.Controllers
         public IActionResult Details(int id)
         {
 
-            Pet pet = _petRepository.GetById(id);
-            Debug.WriteLine(HttpContext.Session.GetString("id"));
-            //var currentuser = await _userManager.GetUserAsync(HttpContext.User);
-            bool isFavorite = _favoriteRepository.FavoriteExists(HttpContext.Session.GetString("id"), pet.PetId);
-
-            string age = CalculateAge(pet.DOB);
-
-            PetDetailViewModel detailViewModel = new PetDetailViewModel()
+            try
             {
-                Pet = pet,
-                Isfavorite = isFavorite,
-                Age = age,
-            };
+                Pet pet = _petRepository.GetById(id);
+                if (pet == null)
+                {
+                    return View("Error");
+                }
+                bool isFavorite = _favoriteRepository.FavoriteExists(HttpContext.Session.GetString("id"), pet.PetId);
+                string age = CalculateAge(pet.DOB);
 
-            return View(detailViewModel);
+                PetDetailViewModel detailViewModel = new PetDetailViewModel()
+                {
+                    Pet = pet,
+                    Isfavorite = isFavorite,
+                    Age = age,
+                };
+
+                return View(detailViewModel);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, $"When trying to get the Detail for pet.");
+                return View("error");
+            }
         }
 
         private List<string> ProcessUploadFile(PetCreateViewModel createmodel)
@@ -426,8 +461,7 @@ namespace PetFinder.Controllers
             return uniqueFilenames;
         }
 
-        //Move the CalculateAge Method in Viewmodel ? 
-        // This should be doable ... seperate concern (MVC pattern) -> View data representation goes in viewmodel not controller...
+       
 
 
         private static string CalculateAge(DateTime dateOfBirth)

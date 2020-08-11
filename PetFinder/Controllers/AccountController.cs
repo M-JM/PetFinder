@@ -170,8 +170,9 @@ namespace PetFinder.Controllers
                             {
                                 return Redirect(returnUrl);
                             }
-                            HttpContext.Session.SetString("Username", currentuser.Email);
+                            HttpContext.Session.SetString("Username", currentuser.UserName);
                             HttpContext.Session.SetString("id", currentuser.Id);
+                            HttpContext.Session.SetString("shelterid", currentuser.ShelterId.ToString());
 
                             if (await _userManager.IsInRoleAsync(currentuser, "Admin") && currentuser.EmailConfirmed == true)
                             {

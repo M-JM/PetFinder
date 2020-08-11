@@ -60,6 +60,7 @@ namespace PetFinder.Controllers
                 ShelterId = pet.Shelter.ShelterId,
                 Date = DateTime.Now,
                 StartTime = new TimeSpan(8, 00, 00),
+
                 // Date and Startime are set in the createviewModel to have initial values in inputfields
                 // Since both values are non-nullable C# automatically assign them a default value ( default(DateTime) & default(StartTime))
                 // Making them nullable will allow to put placeholders like DD-MM-YY & HH-MM in the inputfields to have be able to perform validation on model
@@ -85,8 +86,6 @@ namespace PetFinder.Controllers
                 // instead of adding 1 hour through built in method -> change into adding one hour to end date in form before post.
 
                 TimeSpan endTime = model.StartTime.Add(new TimeSpan(1, 0, 0));
-
-                // necessary to make new Appointment ?? -> change into taking Appointment from model and add the missing values of properties not filled during form.
 
                 Appointment appointment = new Appointment
                 {

@@ -1,8 +1,5 @@
-﻿@model ExceptionDetail
-
-
-@{
-    ViewBag.Title = "Something went wrong";
+﻿@{
+    ViewBag.Title = "Naughty";
 }
 
 <header class="page-header page-header-dark bg-gradient-primary-to-secondary pt-10">
@@ -10,7 +7,7 @@
         <div class="container text-center">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <h1 class="page-header-title mb-3">Sorry this page does not exist</h1>
+                    <h1 class="page-header-title mb-3">You shouldn't be here</h1>
                 </div>
             </div>
         </div>
@@ -20,7 +17,6 @@
     </div>
 </header>
 
-
 <div id="layoutError">
     <div id="layoutError_content">
         <main>
@@ -28,10 +24,8 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <div class="text-center mt-4">
-                            <img class="img-fluid p-4"
-                                 src="~/assets/404-error-with-a-cute-animal-pana.svg" alt="" />
-                            <p class="lead">The request URL was not found.</p>
-
+                            <img class="img-fluid p-4"src="~/assets/401-error-unauthorized-pana.svg" alt="" />
+                            <p class="lead">Access to this resource is denied.</p>
                             @if (User.IsInRole("Admin"))
                             {
                                 <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-success">Back to overview</a>
@@ -48,4 +42,3 @@
         </main>
     </div>
 </div>
-

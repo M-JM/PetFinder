@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PetFinder.Models;
 using PetFinder.ViewModels.HomeViewModel;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
@@ -39,12 +35,8 @@ namespace PetFinder.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
         [HttpGet]
-        [Authorize(Roles = "Admin,ShelterUser")]
+        [Authorize(Roles ="Admin,ShelterUser")]
         public async Task<IActionResult> AdminIndexAsync()
         {
             ApplicationUser user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
@@ -64,15 +56,6 @@ namespace PetFinder.Controllers
             return View(viewmodel);
         }
 
-        public IActionResult test()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+       
     }
 }
