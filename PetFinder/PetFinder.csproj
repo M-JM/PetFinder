@@ -35,8 +35,4 @@
     <ProjectReference Include="..\PetFinderDAL\PetFinderDAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModels\PetViewModel\" />
-  </ItemGroup>
-
 </Project>

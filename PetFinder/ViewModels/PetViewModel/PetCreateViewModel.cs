@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PetFinder.ViewModels
+namespace PetFinder.ViewModels.PetViewModel
 {
     public class PetCreateViewModel : Pet
     {

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PetFinder.Models;
 using PetFinder.ViewModels;
+using PetFinder.ViewModels.PetViewModel;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
 
