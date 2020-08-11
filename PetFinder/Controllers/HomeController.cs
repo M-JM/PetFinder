@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,8 @@ namespace PetFinder.Controllers
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger,
+        public HomeController(
+            ILogger<HomeController> logger,
             IPetRepository petRepository,
             IAppointmentRepository appointmentRepository,
             UserManager<ApplicationUser> userManager
@@ -29,6 +31,14 @@ namespace PetFinder.Controllers
             _appointmentRepository = appointmentRepository;
             _userManager = userManager;
         }
+
+        //TODO 
+
+        //From high priority to low 
+
+        ///1.Pass Startweek and Endweek as parameters to Appointment repo instead of linq where statement on getallappointments.
+     
+
         [AllowAnonymous]
         public IActionResult Index()
         {
@@ -37,23 +47,37 @@ namespace PetFinder.Controllers
 
         [HttpGet]
         [Authorize(Roles ="Admin,ShelterUser")]
-        public async Task<IActionResult> AdminIndexAsync()
+        public  IActionResult AdminIndex()
         {
-            ApplicationUser user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-
-            IList<Pet> pets = _petRepository.GetAllPetsFromShelter(user.ShelterId).ToList();
-            IList<Appointment> appointments = _appointmentRepository.GetAppointments(user.ShelterId).ToList();
-            IList<ApplicationUser> users = _userManager.Users.Where(x => x.ShelterId == user.ShelterId).ToList();
-
-        AdminIndexViewModel viewmodel = new AdminIndexViewModel()
+            try
             {
-                appointments = appointments,
-                Pets = pets,
-                Employees = users
+                
+                int shelterid = Convert.ToInt32(HttpContext.Session.GetString("shelterid"));
+                DateTime startOfWeek = DateTime.Today;
+                int delta = DayOfWeek.Monday - startOfWeek.DayOfWeek;
+                startOfWeek = startOfWeek.AddDays(delta);
+                DateTime endOfWeek = startOfWeek.AddDays(7);
 
 
-            };
-            return View(viewmodel);
+                IList <Pet> pets = _petRepository.GetAllPetsFromShelter(shelterid).ToList();
+                IList<Appointment> appointments = _appointmentRepository.GetAppointments(shelterid).Where(x => x.Date >= startOfWeek && x.Date < endOfWeek).ToList();
+                IList<ApplicationUser> users = _userManager.Users.Where(x => x.ShelterId == shelterid).ToList();
+
+                AdminIndexViewModel viewmodel = new AdminIndexViewModel()
+                {
+                    appointments = appointments,
+                    Pets = pets,
+                    Employees = users
+
+
+                };
+                return View(viewmodel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When trying to get AdminIndex.");
+                return View("error");
+            }
         }
 
        

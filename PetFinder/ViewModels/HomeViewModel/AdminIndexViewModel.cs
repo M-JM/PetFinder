@@ -17,8 +17,9 @@ namespace PetFinder.ViewModels.HomeViewModel
 
         public int TotalUsers { get { return Employees.Count(); } }
 
-        public int TotalAppointmentPending { get { return appointments.Count(x => x.AppointmentStatus.StatusName == "Accepted"); } }
+        public int TotalAppointmentPending { get { return appointments.Count(x => x.AppointmentStatus.StatusName == "Pending"); } }
 
-        public int TotalAppointmentConfirmed { get { return appointments.Count(x => x.AppointmentStatus.StatusName == "Confirmed"); } }
+        public int TotalAppointmentConfirmed { get { return appointments.Count(x => x.AppointmentStatus.StatusName == "Accepted"); } }
+
     }
 }

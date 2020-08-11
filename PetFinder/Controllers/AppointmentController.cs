@@ -45,7 +45,7 @@ namespace PetFinder.Controllers
         // -> intresting is also "error monitoring service" i.e a tool (check out) 
 
         //Explicit and Implicit Typing
-        
+
         // There are situation where implicit Type is useful -> anonymous types and LINQ -> when type of variable is not known or does not exist (investigate further)
         // Else always use Explicit type of variable -> better readability and maintainability.
 
@@ -81,6 +81,9 @@ namespace PetFinder.Controllers
         // the exception is being logged though, so might not be to bad??
 
         ///6. Make a proper email body -> fix date to only show date and time correctly. -> add shelter info maybe.
+       
+        ///7. Is there any sense in having more then 3 categories of appointments ?.
+        // -> maybe for stat purpose ?
 
         public IActionResult List()
         {

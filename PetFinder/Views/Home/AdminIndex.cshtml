@@ -8,22 +8,23 @@
 
 <div id="layoutSidenav_content">
     <main>
-        <header class="page-header page-header-dark bg-gradient-primary-to-secondary pb-10 pt-10">
-            <div class="container">
-                <div class="page-header-content pt-4">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-auto mt-4">
-                            <h1 class="page-header-title">
-                                Your Overview
-                            </h1>
-                            <div class="page-header-subtitle">Welcome .... </div>
+        <header class="page-header page-header-dark bg-gradient-primary-to-secondary pt-10">
+            <div class="page-header-content pt-5">
+                <div class="container text-center">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <h1 class="page-header-title mb-3">Welcome</h1>
+
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="svg-border-rounded text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+            </div>
         </header>
         <!-- Main page content-->
-        <div class="container mt-n10">
+        <div class="container mt-n10 pt-10">
             <div class="row">
                 <div class="col-xxl-12 col-xl-12 mb-4">
                     <div class="card h-100">
@@ -55,7 +56,7 @@
                             </div>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="#">Got to list</a>
+                            <a class="small text-white stretched-link"  asp-action="Index" asp-controller="Pet">Go to list</a>
                             <div class="small text-white"><i> <img src="~/assets/dogImage.png" /></i></div>
                            
                         </div>
@@ -67,14 +68,14 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="mr-3">
-                                    <div class="text-white-75 large">Appointments to be confirmed</div>
+                                    <div class="text-white-75 large">Appointments to be confirmed this week</div>
                                     <div class="text-lg font-weight-bold">@Model.TotalAppointmentPending</div>
                                 </div>
                                
                             </div>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="#">View Appointments</a>
+                            <a class="small text-white stretched-link" asp-action="Detail" asp-controller="Appointment">View Appointments</a>
                             <div class="small text-white"><i><img src="~/assets/survey.png" /></i></div>
                         </div>
                     </div>
@@ -93,7 +94,7 @@
                             </div>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="#">View Calander</a>
+                            <a class="small text-white stretched-link"asp-action="List" asp-controller="Appointment">View Calendar</a>
                             <div class="small text-white"><i>  <img src="~/assets/monthly-calendar.png" /></i></div>
                           
                         </div>
@@ -101,8 +102,8 @@
                 </div>
             </div>
 
-            <!-- Example DataTable for Dashboard Demo-->
-            <div class="card mb-4">
+            
+            <div class="card mb-10">
                 <div class="card-header">Personnel Management</div>
                 <div class="card-body">
                     <div class="datatable">
