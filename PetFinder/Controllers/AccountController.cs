@@ -402,5 +402,106 @@ namespace PetFinder.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> Profile(string id)
+        {
+            Location location;
+
+            ApplicationUser user = await _userManager.FindByNameAsync(id);
+
+            if(user.LocationId == null) {
+                location = new Location()
+                {
+                    City = "",
+                    Street = "",
+                    Country = "",
+                    HouseNumber = 0,
+                };
+            }
+            else
+            {
+            location = _locationRepository.GetLocation(user.LocationId);
+            }
+
+
+            UserProfileViewModel model = new UserProfileViewModel
+            {
+               Id = user.Id,
+               LastName = user.LastName,
+               FirstName = user.FirstName,
+               Email = user.UserName,
+               Street = location.Street,
+               City = location.City,
+               Country = location.Country,
+               Zipcode = location.Zipcode,
+               HouseNumber = location.HouseNumber,
+               PhoneNumber = user.PhoneNumber
+
+               
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Profile(UserProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = await _userManager.FindByNameAsync(model.Id);
+                Location location = _locationRepository.GetLocation(user.LocationId);
+
+                
+                if (user == null)
+                {
+                    return View("NotFound");
+                }
+
+                         
+                if(location == null)
+                {
+                    location = new Location
+                    {
+                        Street = model.Street,
+                        HouseNumber = model.HouseNumber,
+                        City = model.City,
+                        Country = model.Country,
+                        Zipcode = model.Zipcode,
+                        Latitude = 1,
+                        Longitude = 1
+                    };
+                    _locationRepository.Addlocation(location);
+                }
+                else
+                {
+                    location.Street = model.Street;
+                    location.Zipcode = model.Zipcode;
+                    location.HouseNumber = model.HouseNumber;
+                    location.Country = model.Country;
+
+                    _locationRepository.Updatelocation(location);
+                };
+
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
+                user.LocationId = location.LocationtId;
+
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index","Home") ;
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
+        }
     }
 }

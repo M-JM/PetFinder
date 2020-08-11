@@ -12,9 +12,6 @@ namespace PetFinder.ViewModels.AccountViewModel
         [EmailAddress]
         public override string Email { get; set; }
 
-  
-
-
         [Required]
         [DataType(DataType.Password)]
         public override string Password { get; set; }

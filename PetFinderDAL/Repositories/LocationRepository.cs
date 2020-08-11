@@ -36,5 +36,31 @@ namespace PetFinderDAL.Repositories
             return null;
 
         }
+
+        public Location Updatelocation(Location location)
+        {
+            var newLocation = _context.Locations.Update(location);
+
+            if (newLocation != null && newLocation.State == EntityState.Modified)
+            {
+                var affectedRows = _context.SaveChanges();
+
+                if (affectedRows > 0)
+                {
+                    return newLocation.Entity;
+                }
+            }
+            _logger.LogError("There was an error during creation of Location");
+            return null;
+
+        }
+
+        public Location GetLocation(int? id)
+        {
+            Location location = _context.Locations.Find(id);
+
+            return location;
+        }
+
     }
 }

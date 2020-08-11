@@ -8,5 +8,9 @@ namespace PetFinderDAL.Repositories
     public interface ILocationRepository
     {
         Location Addlocation(Location location);
+
+        Location Updatelocation(Location location);
+
+        Location GetLocation(int? id);
     }
 }

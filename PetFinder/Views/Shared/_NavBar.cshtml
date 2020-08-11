@@ -33,7 +33,7 @@
                         <a class="dropdown-item" asp-action="Index" asp-controller="Pet">Pet List</a>
                         <a class="dropdown-item" asp-action="Create" asp-controller="Pet">Register Pet</a>
                     </div>
-                 
+
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -56,7 +56,7 @@
                         <a class="dropdown-item" asp-action="Detail" asp-controller="Appointment">Appointments</a>
                         <a class="dropdown-item" asp-action="List" asp-controller="Appointment">Agenda</a>
                     </div>
-                    
+
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -111,13 +111,20 @@
                         <a class="dropdown-item" asp-action="MyAppointments" asp-controller="">My Appointments</a>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Profile" asp-controller="Account" asp-route-id="@User.Identity.Name">My Settings</a>
+              
+       
+                </li>
+              
+                }
+            </ul>
 
-            }
-        </ul>
         <ul class="navbar-nav ml-auto">
             @if (signInManager.IsSignedIn(User))
             {
-                <li class="nav-item">
+          
+<li class="nav-item">
                     <form method="post" asp-action="Logout" asp-controller="Account">
                         <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
                             Logout: @User.Identity.Name

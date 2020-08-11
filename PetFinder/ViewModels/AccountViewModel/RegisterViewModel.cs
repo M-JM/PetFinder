@@ -24,7 +24,7 @@ namespace PetFinder.ViewModels.AccountViewModel
         public virtual string Street { get; set; }
         [Required]
         public virtual int HouseNumber { get; set; }
-        [Required]
+        [Required(ErrorMessage = "You must provide a phone number")]
         public virtual string PhoneNumber { get; set; }
         [Required]
         public virtual string City { get; set; }
