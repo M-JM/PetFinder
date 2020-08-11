@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
 using PetFinder.ViewModels.FavoriteViewModel;
 using Microsoft.AspNetCore.Http;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace PetFinder.Controllers
 {
@@ -15,71 +14,74 @@ namespace PetFinder.Controllers
     {
         private readonly IFavoriteRepository _favoriteRepository;
         private readonly IPetRepository _petRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<FavoriteController> _logger;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public FavoriteController(IFavoriteRepository favoriteRepository,
+        public FavoriteController
+        (
+            IFavoriteRepository favoriteRepository,
             IPetRepository petRepository,
-            IWebHostEnvironment WebHostEnvironment,
-             ILogger<FavoriteController> logger,
-              UserManager<ApplicationUser> userManager)
+            ILogger<FavoriteController> logger
+        )
         {
             _favoriteRepository = favoriteRepository;
             _petRepository = petRepository;
-            _webHostEnvironment = WebHostEnvironment;
             _logger = logger;
-            _userManager = userManager;
         }
 
-    
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //TODO 
+
+        //From high priority to low 
 
         [HttpGet]
+        [Authorize(Roles = "User")]
         public IActionResult FavoriteList()
         {
-
-            var listofpets = _favoriteRepository.GetFavoritePets(HttpContext.Session.GetString("id"));
-
-            FavoriteListViewModel FavoriteListViewModel = new FavoriteListViewModel()
+            try
             {
-                FavoriteLists = listofpets
-            };
+                List<FavoriteList> listofpets = _favoriteRepository.GetFavoritePets(HttpContext.Session.GetString("id"));
 
-            return View(FavoriteListViewModel);
+                FavoriteListViewModel FavoriteListViewModel = new FavoriteListViewModel()
+                {
+                    FavoriteLists = listofpets
+                };
+
+                return View(FavoriteListViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When trying to retrieve Favorite list.");
+                return View("error");
+            }
         }
 
         public IActionResult AddFavorite(int id)
         {
-
-
-            Pet pet = _petRepository.GetById(id);
-            
-
-            var currentpet = _favoriteRepository.GetFavoritePet(HttpContext.Session.GetString("id"), pet.PetId);
-            if (currentpet != null)
+            try
             {
-                _favoriteRepository.RemoveFavoritePet(currentpet);
-            }
-            else
-            {
+                Pet pet = _petRepository.GetById(id);
 
-                NewFavoriteViewModel model = new NewFavoriteViewModel()
+                FavoriteList currentpet = _favoriteRepository.GetFavoritePet(HttpContext.Session.GetString("id"), pet.PetId);
+                if (currentpet != null)
                 {
-                    ApplicationUserId = HttpContext.Session.GetString("id"),
-                    PetId = pet.PetId,
-                  
-
-                };
-
-                _favoriteRepository.AddFavoritePet(model);
+                    _favoriteRepository.RemoveFavoritePet(currentpet);
+                }
+                else
+                {
+                    NewFavoriteViewModel model = new NewFavoriteViewModel()
+                    {
+                        ApplicationUserId = HttpContext.Session.GetString("id"),
+                        PetId = pet.PetId,
+                    };
+                    _favoriteRepository.AddFavoritePet(model);
+                }
+                return RedirectToAction("Details", "Pet", new { id });
             }
-            return RedirectToAction("Details","Pet", new { id });
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"When trying to add to favoritelist.");
+
+                return View("error");
+            }
         }
-
-
     }
 }
