@@ -205,6 +205,7 @@ namespace PetFinder.Controllers
 
             return View(Registermodel);
         }
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ShelterRegister()
@@ -215,6 +216,7 @@ namespace PetFinder.Controllers
 
             return View(Registermodel);
         }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync(UserRegisterViewModel Registermodel)
@@ -270,6 +272,7 @@ namespace PetFinder.Controllers
             Registermodel.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View(Registermodel);
         }
+
         [AllowAnonymous]
         public async Task<IActionResult> VerifyEmail(string userId, string code)
         {
@@ -283,7 +286,6 @@ namespace PetFinder.Controllers
             return View("Index", "Home");
 
         }
-
 
         [HttpPost]
         [AllowAnonymous]
@@ -321,7 +323,6 @@ namespace PetFinder.Controllers
             return View("Error"); // global expection
         }
 
-
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> ShelterRegisterAsync(ShelterRegisterViewModel Registermodel)
@@ -357,6 +358,7 @@ namespace PetFinder.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Logout()
         {
             HttpContext.Session.Clear();
@@ -364,11 +366,7 @@ namespace PetFinder.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // ToDo
-        // Make generic Viewmodel Interface for Location and user to make a Method who takes Generic Viewmodel to perform 
-        // Location and user creation - DRY in both ShelterReg. and UserReg.
-
-        public Location AddLocation(RegisterViewModel model)
+        private Location AddLocation(RegisterViewModel model)
         {
             Location Location = new Location
             {
@@ -385,7 +383,7 @@ namespace PetFinder.Controllers
             return Location;
         }
 
-        public ApplicationUser AddUser(RegisterViewModel model, Location location, int? shelterid)
+        private ApplicationUser AddUser(RegisterViewModel model, Location location, int? shelterid)
         {
 
             ApplicationUser user = new ApplicationUser
@@ -400,8 +398,8 @@ namespace PetFinder.Controllers
             return user;
         }
 
-
         [HttpGet]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Profile(string id)
         {
             Location location;
@@ -442,6 +440,7 @@ namespace PetFinder.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Profile(UserProfileViewModel model)
         {
             if (ModelState.IsValid)
@@ -506,7 +505,6 @@ namespace PetFinder.Controllers
 
             return View(model);
         }
-
 
         [HttpGet]
         [AllowAnonymous]

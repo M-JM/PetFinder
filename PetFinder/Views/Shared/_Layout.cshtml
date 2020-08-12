@@ -4,25 +4,26 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>@ViewData["Title"] - PetFinder</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
     <link href="~/css/MainStyle.css" rel="stylesheet" />
-
     @RenderSection("Styles", required: false)
 </head>
+
 <body>
-    <div style=" position: relative; min-height: 100vh;">
-        <div>
-            <partial name="_NavBar" />
+    <div id="page-containerx">
+        <div id="content-wrapx">
+            <div>
+                <partial name="_NavBar" />
+            </div>
+            <div>
+                @RenderBody()
+            </div>
         </div>
-
-        <div>
-            @RenderBody()
-        </div>
-
-        <div style="position: absolute; bottom: 0; width: 100%; height: 2.5rem;">
+        <footer id="footerx">
             <partial name="_Footer" />
-        </div>
-        </div>
+        </footer>
+    </div>
+
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/js/jquery.timepicker.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

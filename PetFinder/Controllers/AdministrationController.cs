@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PetFinderDAL.Models;
 
 namespace PetFinder.Controllers
@@ -12,11 +13,16 @@ namespace PetFinder.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<AdministrationController> _logger;
 
-        public AdministrationController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public AdministrationController(
+            RoleManager<IdentityRole> roleManager,
+            UserManager<ApplicationUser> userManager,
+            ILogger<AdministrationController> logger)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -40,27 +46,35 @@ namespace PetFinder.Controllers
         
         public async Task<IActionResult> DeleteUserAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-
-            if (user == null)
+            try
             {
- 
-                return View("NotFound");
-            }
+                var user = await _userManager.FindByIdAsync(id);
 
-            var identityResult = await _userManager.DeleteAsync(user);
+                if (user == null)
+                {
+                    return View("NotFound");
+                }
 
-            if (identityResult.Succeeded)
-            {
+                var identityResult = await _userManager.DeleteAsync(user);
+
+                if (identityResult.Succeeded)
+                {
+                    return RedirectToAction("AdminIndex", "Home");
+                }
+
+                foreach (var error in identityResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
                 return RedirectToAction("AdminIndex", "Home");
             }
-
-            foreach (var error in identityResult.Errors)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+                _logger.LogError(ex, $"When deleting an user.");
 
-            return RedirectToAction("AdminIndex", "Home");
+                return View("Error");
+            }
         }
     }
 

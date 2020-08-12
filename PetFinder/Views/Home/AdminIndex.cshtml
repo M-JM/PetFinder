@@ -5,6 +5,8 @@
 }
 
 
+<link href="~/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" />
+
 
 <div id="layoutSidenav_content">
     <main>
@@ -36,7 +38,7 @@
                                         <p class="text-gray-700 mb-0">Here you will find an overview of the shelter's information</p>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -52,13 +54,13 @@
                                     <div class="text-white-75 large"># pets</div>
                                     <div class="text-lg font-weight-bold">@Model.TotalPets</div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link"  asp-action="Index" asp-controller="Pet">Go to list</a>
+                            <a class="small text-white stretched-link" asp-action="Index" asp-controller="Pet">Go to list</a>
                             <div class="small text-white"><i> <img src="~/assets/dogImage.png" /></i></div>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -71,7 +73,7 @@
                                     <div class="text-white-75 large">Appointments to be confirmed this week</div>
                                     <div class="text-lg font-weight-bold">@Model.TotalAppointmentPending</div>
                                 </div>
-                               
+
                             </div>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
@@ -90,19 +92,19 @@
                                     <div class="text-white-75 large">Appointments confirmed this week</div>
                                     <div class="text-lg font-weight-bold">@Model.TotalAppointmentConfirmed</div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link"asp-action="List" asp-controller="Appointment">View Calendar</a>
+                            <a class="small text-white stretched-link" asp-action="List" asp-controller="Appointment">View Calendar</a>
                             <div class="small text-white"><i>  <img src="~/assets/monthly-calendar.png" /></i></div>
-                          
+
                         </div>
                     </div>
                 </div>
             </div>
 
-            
+
             <div class="card mb-10">
                 <div class="card-header">Personnel Management</div>
                 <div class="card-body">
@@ -115,10 +117,10 @@
                                     <th>Last Name</th>
                                     <th>Phone number</th>
                                     <th>Actions</th>
-                                  
+
                                 </tr>
                             </thead>
-                   
+
                             <tbody>
                                 @foreach (var employee in Model.Employees)
                                 {
@@ -127,14 +129,14 @@
                                         <td>@employee.FirstName</td>
                                         <td>@employee.LastName</td>
                                         <td>@employee.PhoneNumber</td>
-                                        
+
                                         <td>
 
                                             <a asp-action="Profile" asp-controller="Account" asp-route-id="@employee.UserName" class="btn btn-datatable btn-icon btn-transparent-dark"><i><img src="~/assets/edit.png" /></i></a>
                                             <a asp-action="DeleteUser" asp-controller="Administration" asp-route-id="@employee.Id" class="btn btn-datatable btn-icon btn-transparent-dark"><i><img src="~/assets/trash.png" /></i></a>
                                         </td>
                                     </tr>
-                                 
+
                                 }
 
                             </tbody>
@@ -146,3 +148,20 @@
     </main>
 
 </div>
+
+@section scripts{
+
+    <script src="~/datatables/js/jquery.dataTables.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+        });
+
+        $(document).ready(function () {
+            $('#dataTableActivity').DataTable({
+                "order": [[0, 'desc']]
+            });
+        });
+    </script>
+}

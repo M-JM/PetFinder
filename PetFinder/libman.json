@@ -40,6 +40,17 @@
     {
       "library": "feather-icons@4.28.0",
       "destination": "wwwroot/feather-icons/"
+    },
+    {
+      "library": "datatables@1.10.21",
+      "destination": "wwwroot/datatables/",
+      "files": [
+        "js/jquery.dataTables.min.js",
+        "css/dataTables.jqueryui.css",
+        "css/dataTables.jqueryui.min.css",
+        "css/jquery.dataTables.css",
+        "css/jquery.dataTables.min.css"
+      ]
     }
   ]
 }

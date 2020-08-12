@@ -275,6 +275,7 @@ namespace PetFinder.Controllers
 
 
         }
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
@@ -387,6 +388,7 @@ namespace PetFinder.Controllers
                 return View("error");
             }
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -460,9 +462,6 @@ namespace PetFinder.Controllers
             }
             return uniqueFilenames;
         }
-
-       
-
 
         private static string CalculateAge(DateTime dateOfBirth)
         {

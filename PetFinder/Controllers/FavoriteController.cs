@@ -54,6 +54,7 @@ namespace PetFinder.Controllers
             }
         }
 
+        [Authorize(Roles = "User")]
         public IActionResult AddFavorite(int id)
         {
             try
