@@ -9,6 +9,11 @@ namespace PetFinder.ViewModels.AccountViewModel
     public class UserRegisterViewModel : RegisterViewModel
     {
         [Required]
+        public override string FirstName { get; set; }
+        [Required]
+        public override string LastName { get; set; }
+
+        [Required]
         [EmailAddress]
         public override string Email { get; set; }
 

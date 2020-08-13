@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NETCore.MailKit.Core;
-
+using Newtonsoft.Json;
 using PetFinder.ViewModels.AccountViewModel;
 using PetFinderDAL.Models;
 using PetFinderDAL.Repositories;
@@ -23,7 +23,8 @@ namespace PetFinder.Controllers
         private readonly ILocationRepository _locationRepository;
         private readonly IShelterRepository _shelterRepository;
         private readonly IEmailService _emailService;
-        private const string _baseUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=a&key=";
+        private const string _baseUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+        private const string _apiKey = "&key=AIzaSyCr0pt_xuJO0N8VFX_OB2iV6nOlee9_d1I";
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -40,13 +41,7 @@ namespace PetFinder.Controllers
             _emailService = emailService;
         }
 
-        private async Task<string> GetGeoAsync()
-        {
-            using HttpClient client = new HttpClient();
-            HttpResponseMessage responseBody = await client.GetAsync(_baseUrl);
-            var reply = await responseBody.Content.ReadAsStringAsync();
-            return reply;
-        }
+      
 
         [HttpGet]
         [AllowAnonymous]
@@ -212,6 +207,7 @@ namespace PetFinder.Controllers
         {
             ShelterRegisterViewModel Registermodel = new ShelterRegisterViewModel
             {
+            
             };
 
             return View(Registermodel);
@@ -222,14 +218,8 @@ namespace PetFinder.Controllers
         public async Task<IActionResult> RegisterAsync(UserRegisterViewModel Registermodel)
         {
 
-            using HttpClient client = new HttpClient();
+          
 
-            //WORKING CODE
-            //var testingasstring= await client.GetAsync(_baseUrl);
-            //var result = testingasstring.Content.ReadAsStringAsync().Result;
-            //GoogleApi.Rootobject google = JsonConvert.DeserializeObject<GoogleApi.Rootobject>(result);
-            //var testing = google.results.FirstOrDefault();
-            // ENDWORKING CODE
 
             //Seperate document ->store API key local ( no push to Git) .
 
@@ -244,7 +234,9 @@ namespace PetFinder.Controllers
 
             //GoogleApi TestingJSONreslut = Newtonsoft.Json.JsonSerializer.Deserialize<GoogleApi>(result);
 
-            if (ModelState.IsValid) { 
+            if (ModelState.IsValid) {
+
+               
 
             Location location = AddLocation(Registermodel);
             int? shelter = null;
@@ -350,7 +342,12 @@ namespace PetFinder.Controllers
 
             if (resulting.Succeeded)
             {
-                return View();
+                string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                string link = Url.Action(nameof(VerifyEmail), "Account", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+
+                await _emailService.SendAsync(user.NormalizedEmail, "Email Verify", $"<a href=\"{link}\"> Verify your Email </a>", true);
+
+                return View("Index", "Home");
             }
 
             return View(Registermodel);
@@ -366,8 +363,29 @@ namespace PetFinder.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+
+
+        private async Task<GoogleApi.Result> GetGeoAsync(string address)
+        {
+            using HttpClient client = new HttpClient();
+            string response = _baseUrl + address + _apiKey;
+            HttpResponseMessage responseBody = await client.GetAsync(response);
+            string result = responseBody.Content.ReadAsStringAsync().Result;
+            GoogleApi.Rootobject google = JsonConvert.DeserializeObject<GoogleApi.Rootobject>(result);
+            GoogleApi.Result apiCallResult = google.results.FirstOrDefault();
+
+            return apiCallResult;
+
+        }
+
+
+
         private Location AddLocation(RegisterViewModel model)
         {
+            string address = model.Street +" " + model.HouseNumber +" "+ model.Zipcode +" " + model.Country;
+            Task<GoogleApi.Result> googleApiResult = GetGeoAsync(address);
+
             Location Location = new Location
             {
                 Street = model.Street,
@@ -375,8 +393,8 @@ namespace PetFinder.Controllers
                 City = model.City,
                 Country = model.Country,
                 Zipcode = model.Zipcode,
-                Latitude = 1,
-                Longitude = 1
+                Latitude = googleApiResult.Result.geometry.location.lat,
+                Longitude = googleApiResult.Result.geometry.location.lng,
             };
             _locationRepository.Addlocation(Location);
 
