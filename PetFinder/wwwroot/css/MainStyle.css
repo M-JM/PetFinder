@@ -136,14 +136,14 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 }
 
 body {
-  margin: 0;
-  font-family: "Metropolis", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 1.1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #687281;
-  text-align: left;
-  background-color: #fff;
+    margin: 0;
+    font-family: "Metropolis", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #687281;
+    text-align: left;
+    background-color: #e6e6fa;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -18212,13 +18212,20 @@ pre code {
         font-style: italic !important;
     }
 
-    .text-white {
-        color: #fff !important;
-    }
+.text-white {
+    color: #fff !important;
+}
 
-    .text-gradientA {
-        color: #0061f2 !important;
-    }
+
+.text-indexpage {
+    color: #eff3f9 !important;
+}
+
+
+
+.text-gradientA {
+    color: #0061f2 !important;
+}
 
     .text-primary {
         color: #0061f2 !important;
@@ -18292,9 +18299,13 @@ pre code {
         color: black !important;
     }
 
-    .text-white {
-        color: #fff !important;
-    }
+.text-white {
+    color: #fff !important;
+}
+
+.text-lavender {
+    color: #e6e6fa !important;
+}
 
     a.text-white:hover, a.text-white:focus {
         color: #d9d9d9 !important;

@@ -72,7 +72,7 @@ namespace PetFinder.Controllers
         {
             try
             {
-                IEnumerable<Pet> petList = _petRepository.GetAllPets();
+                IEnumerable<Pet> petList = _petRepository.GetAllPetsFromShelter(Convert.ToInt32(HttpContext.Session.GetString("shelterid")));
                 return View(petList);
             }
 

@@ -6,13 +6,25 @@
 <link href="~/fullcalendar/main.css" rel="stylesheet" />
 <link href="~/fontawesome-iconpicker/css/fontawesome-iconpicker.css" rel="stylesheet" />
 
+<header class="page-header page-header-dark bg-gradient-primary-to-secondary pt-10">
+    <div class="page-header-content pt-5">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="page-header-title mb-3">Manage your appointments</h1>
 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="svg-border-rounded text-lavender">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+    </div>
+</header>
 
-
-
-<div class="container pt-15 pb-10">
+<div class="container mt-2 pt-5 mb-5" style="background-color:white;">
     <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center"
-         style="min-height: 50px; ">
+         style="min-height: 30px; ">
 
         <!-- Then put toasts within -->
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="succesalert"
@@ -23,7 +35,7 @@
             </div>
         </div>
     </div>
-    <div id='calendar'></div>
+    <div id='calendar' style="max-width: 1200px; margin: 20px auto;"></div>
 </div>
 
 <div id="fullCalModal" class="modal fade">
@@ -101,6 +113,7 @@
             var calendarEl = document.getElementById('calendar');
             var selectedEvent = null;
             var calendar = new FullCalendar.Calendar(calendarEl, {
+                contentHeight: 700,
                 dayMaxEvents: true,
                 eventClick: function (event) {
                     selectedEvent = event;
@@ -126,6 +139,7 @@
                     weekday: 'short',
                     hour12: false,
                     meridiem: false,
+                    allDaySlot: false,
                 },
                 slotLabelFormat: {
                     hour: 'numeric',
@@ -134,27 +148,32 @@
                     meridiem: false,
                 },
                 allDayDefault: false,
+                allDaySlot: false,
 
                 views: {
                     timelineDay: {
                         slotLabelFormat: ['H:mm'],
                         meridiem: false,
                         hour12: false,
+                        allDaySlot: false,
                     },
                     agenda: {
                         timeFormat: 'H(:mm)',
                         meridiem: false,
                         hour12: false,
+                        allDaySlot: false,
                     },
                     week: {
                         timeFormat: 'H(:mm)',
                         meridiem: false,
                         hour12: false,
+                        allDaySlot: false,
                     },
                     day: {
                         timeFormat: 'H(:mm)',
                         meridiem: false,
                         hour12: false,
+                        allDaySlot: false,
                     }
 
                 },

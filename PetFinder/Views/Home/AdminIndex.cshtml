@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-            <div class="svg-border-rounded text-white">
+            <div class="svg-border-rounded text-lavender">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
             </div>
         </header>
@@ -106,7 +106,10 @@
 
 
             <div class="card mb-10">
-                <div class="card-header">Personnel Management</div>
+                <div class="card-header">
+                    Personnel Management
+                    <a asp-action="Register" asp-controller="Account" class="btn btn-success" style="position: absolute; right: 0;">Create new user</a>
+                </div>
                 <div class="card-body">
                     <div class="datatable">
                         <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
@@ -144,6 +147,8 @@
                     </div>
                 </div>
             </div>
+
+        
         </div>
     </main>
 
@@ -163,5 +168,7 @@
                 "order": [[0, 'desc']]
             });
         });
+
+
     </script>
 }

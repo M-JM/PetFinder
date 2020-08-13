@@ -255,6 +255,31 @@ namespace PetFinder.Controllers
             return Json(status);
         }
 
+
+        public IActionResult Overview()
+        {
+
+            try
+            {
+                List<Appointment> appointments = _appointmentRepository.GetAppointments(Convert.ToInt32(HttpContext.Session.GetString("shelterid")));
+
+                AppointmentListViewModel model = new AppointmentListViewModel()
+                {
+                    Appointments = appointments,
+                };
+
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, $"When trying to retrieve appointments.");
+                throw;
+            }
+        }
+
+
         // Non Functional see-> TODO
         [HttpGet]
         public JsonResult GetBlockHours(int PetId, DateTime date)
@@ -264,6 +289,8 @@ namespace PetFinder.Controllers
             return Json(appointments);
 
         }
+
+
 
     }
 }

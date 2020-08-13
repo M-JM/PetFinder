@@ -1,5 +1,163 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model AppointmentListViewModel
+
 @{
+    ViewData["Title"] = "Admin Pet page";
 }
+
+
+<link href="~/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" />
+
+
+<div id="layoutSidenav_content">
+    <main>
+        <header class="page-header page-header-dark bg-gradient-primary-to-secondary pt-10">
+            <div class="page-header-content pt-5">
+                <div class="container text-center">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <h1 class="page-header-title mb-3">Manage your appointments</h1>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="svg-border-rounded text-lavender">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+            </div>
+        </header>
+        <!-- Main page content-->
+        <div class="container mt-n10 pb-10">
+            <div class="row">
+                <div class="col-xxl-12 col-xl-12 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body h-100 d-flex flex-column justify-content-center py-5 py-xl-4">
+                            <div class="row align-items-center">
+                                <div class="col-xl-12 col-xxl-12">
+                                    <div class="text-center px-4 mb-4 mb-xl-0 mb-xxl-4">
+                                        <h1 class="text-primary">Welcome </h1>
+                                        <p class="text-gray-700 mb-0">Here you will find an overview of all your appointments</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+            </div>
+
+            <div class="card mb-10">
+                <div class="card-header">
+                    Appointment Management.
+                </div>
+                <div class="card-body">
+                    <div class="datatable">
+                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+
+                            <thead>
+                                <tr>
+
+                                    <th>Name of visitor</th>
+                                    <th>Pet</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+
+                                </tr>
+                            </thead>
+
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+
+                            <tbody>
+                                @foreach (var appointment in Model.Appointments)
+                                {
+                                    <tr>
+                                        <td>@appointment.ApplicationUser.FirstName + @appointment.ApplicationUser.LastName</td>
+                                        <td>@appointment.Pet.Name</td>
+                                        <td>@String.Format("{0:dd-MM-yyyy}", appointment.Date)</td>
+                                        <td>@String.Format("{0:HH:mm}", appointment.StartTime)</td>
+                                        <td style="background-color: @appointment.AppointmentStatus.Color;opacity:0.8; "
+                                            >@appointment.AppointmentStatus.StatusName</td>
+                                        
+                                        <td>
+
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</div>
+
+@section scripts{
+
+    <script src="~/datatables/js/jquery.dataTables.js"></script>
+    <script>
+
+
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                initComplete: function () {
+                    this.api().columns([1, 2, 3]).every(function () {
+                        var column = this;
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#dataTableActivity').DataTable({
+                "order": [[2, 'desc']]
+            });
+        });
+
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -112,7 +112,10 @@ namespace PetFinderDAL.Repositories
 
         public IEnumerable<Pet> GetAllPetsFromShelter(int? shelterId)
         {
-            var listPets = _context.Pets.Where(x => x.ShelterId == shelterId).ToList();
+            var listPets = _context.Pets
+                .Include(x => x.PetKind)
+                .Include(x=>x.PetRace)
+                .Where(x => x.ShelterId == shelterId).ToList();
 
             return listPets;
         }
