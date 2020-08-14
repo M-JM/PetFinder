@@ -45,6 +45,11 @@ namespace PetFinder.Controllers
             return View();
         }
 
+        public IActionResult Details()
+        {
+            return View();
+        }
+
         [HttpGet]
         [Authorize(Roles ="Admin,ShelterUser")]
         public  IActionResult AdminIndex()
@@ -68,8 +73,7 @@ namespace PetFinder.Controllers
                     appointments = appointments,
                     Pets = pets,
                     Employees = users
-
-
+                    
                 };
                 return View(viewmodel);
             }

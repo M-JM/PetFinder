@@ -225,7 +225,6 @@ namespace PetFinder.Controllers
 
             //var testingasJson = await client.GetFromJsonAsync<GoogleApi>(_baseUrl);
             //var test = await testingasstring.Content.ReadAsStringAsync();
-
             // Entire API call to google needs to be rewritten into a service with method accepting Concatnated Address parameter
             // In case the address return no object -> use City ZIP CODE to get at least approx. geocoding
             // Update the Location class with ZIP CODE property
@@ -466,7 +465,9 @@ namespace PetFinder.Controllers
                 ApplicationUser user = await _userManager.FindByNameAsync(model.Id);
                 Location location = _locationRepository.GetLocation(user.LocationId);
 
-                
+                string address = model.Street + " " + model.HouseNumber + " " + model.Zipcode + " " + model.Country;
+                Task<GoogleApi.Result> googleApiResult = GetGeoAsync(address);
+
                 if (user == null)
                 {
                     return View("NotFound");
@@ -482,8 +483,8 @@ namespace PetFinder.Controllers
                         City = model.City,
                         Country = model.Country,
                         Zipcode = model.Zipcode,
-                        Latitude = 1,
-                        Longitude = 1
+                        Latitude = googleApiResult.Result.geometry.location.lat,
+                        Longitude = googleApiResult.Result.geometry.location.lng,
                     };
                     _locationRepository.Addlocation(location);
                 }
@@ -493,13 +494,15 @@ namespace PetFinder.Controllers
                     location.Zipcode = model.Zipcode;
                     location.HouseNumber = model.HouseNumber;
                     location.Country = model.Country;
+                    location.Latitude = googleApiResult.Result.geometry.location.lat;
+                    location.Longitude = googleApiResult.Result.geometry.location.lng;
 
                     _locationRepository.Updatelocation(location);
                 };
 
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
-                user.Email = model.Email;
+                user.Email = model.Id;
                 user.PhoneNumber = model.PhoneNumber;
                 user.LocationId = location.LocationtId;
 

@@ -3,7 +3,7 @@
     ViewBag.Title = "User Registration";
 }
 <link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.css" rel="stylesheet" />
-<div class="row my-auto d-flex justify-content-center mt-lg-4">
+@*<div class="row my-auto d-flex justify-content-center mt-lg-4">
     <div class="col-md-4  text-center">
         <h1>Shelter Registration</h1>
     </div>
@@ -14,7 +14,7 @@
         <form asp-action="ShelterRegister" method="post">
             <h4 class=" text-center">Register a Shelter</h4>
             <hr />
-          
+
             <div class="form-group">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" />
@@ -81,12 +81,109 @@
 
         </form>
     </div>
+</div>*@
+
+
+
+
+
+
+<link href="~/css/Account.css" rel="stylesheet" />
+
+
+<div class="container-sm pt-10">
+
+    <div class="col-md-10 col-md-9 mx-auto">
+        <div class="card card-signin flex-row my-5">
+            <div class="card-img-left d-none d-md-flex">
+
+            </div>
+            <div class="card-body">
+                <h5 class="card-title text-center" style="font-size: 2.5rem; font-weight:700">Shelter Register</h5>
+
+                <form asp-action="Register" method="post" class="form-signin">
+
+                    <div class="form-label-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" placeholder="Email address" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-label-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-label-group">
+                        <label asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="form-label-group col-8">
+                            <label asp-for="Street"></label>
+                            <input asp-for="Street" class="form-control" placeholder="Street" />
+                            <span asp-validation-for="Street" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-label-group col-4">
+                            <label asp-for="HouseNumber"></label>
+                            <input asp-for="HouseNumber" class="form-control" placeholder="House Number" />
+                            <span asp-validation-for="HouseNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-label-group col-6">
+                            <label asp-for="City"></label>
+                            <input asp-for="City" class="form-control" placeholder="City" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="form-label-group col-6">
+                            <label asp-for="Zipcode"></label>
+                            <input asp-for="Zipcode" class="form-control" placeholder="Zip Code" />
+                            <span asp-validation-for="Zipcode" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-label-group col-6">
+                            <label asp-for="Country"></label>
+                            <input asp-for="Country" class="form-control" placeholder="Country" />
+                            <span asp-validation-for="Country" class="text-danger"></span>
+                        </div>
+                        <div class="form-label-group col-6">
+                            <label asp-for="PhoneNumber"></label>
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label asp-for="Description"></label>
+                            <textarea asp-for="Description" id="TextEditor" class="form-control"> </textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
+
+                  
+
+                </form>
+
+       
+
+            </div>
+        </div>
+    </div>
 </div>
+
 @section Scripts {
 
-<script src="~/lib/Trumbowyg-master/dist/trumbowyg.min.js"></script>
-<script>$('#TextEditor').trumbowyg({
-    imageWidthModalEdit: true
-});</script> 
+    <script src="~/lib/Trumbowyg-master/dist/trumbowyg.min.js"></script>
+    <script>
+        $('#TextEditor').trumbowyg({
+            imageWidthModalEdit: true
+        });</script>
 
 }
+

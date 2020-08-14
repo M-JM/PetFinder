@@ -94,7 +94,7 @@ namespace PetFinderDAL.Repositories
                 .Include(p => p.PetRace)
                 .Include(p => p.PetKind)
                 .Include(p => p.PetPictures)
-                .Include(p => p.Shelter).FirstOrDefault(m => m.PetId == id);
+                .Include(p => p.Shelter).ThenInclude(x => x.Location).FirstOrDefault(m => m.PetId == id);
 
             return pet;
         }

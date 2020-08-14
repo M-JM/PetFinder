@@ -1,0 +1,30 @@
+﻿
+
+
+
+<div id="canvas" style="height:500px;width:500px"></div>
+ 
+
+@section scripts{
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr0pt_xuJO0N8VFX_OB2iV6nOlee9_d1I&callback=initMap&libraries=&v=weekly"
+            defer></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+    <script>
+        let map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("canvas"), {
+                center: {
+                    lat: -34.397,
+                    lng: 150.644
+                },
+                zoom: 8
+            });
+        }
+
+     
+    </script>
+}

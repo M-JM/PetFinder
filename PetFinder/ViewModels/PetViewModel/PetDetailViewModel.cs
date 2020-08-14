@@ -14,5 +14,9 @@ namespace PetFinder.ViewModels.PetViewModel
         public bool Isfavorite { get; set; }
 
         public string Age { get; set; }
+
+        public string Lat { get; set; }
+
+        public string Long { get; set; }
     }
 }

@@ -432,6 +432,8 @@ namespace PetFinder.Controllers
                     Pet = pet,
                     Isfavorite = isFavorite,
                     Age = age,
+                    Lat = pet.Shelter.Location.Latitude.ToString(),
+                    Long = pet.Shelter.Location.Longitude.ToString(),
                 };
 
                 return View(detailViewModel);

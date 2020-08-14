@@ -38,7 +38,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="row">
                 <div class="col-md-7">
                     <div class="fotorama"
@@ -189,15 +189,16 @@
                     <div>
                         <p>
                             @Html.Raw(Model.Pet.Description)
+
                         </p>
                     </div>
                 </div>
             </div>
-
+            
 
 
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="row">
                 <div class="col-md-12">
 
@@ -217,7 +218,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                   
+
                     <div class="card border-light p-3">
                         <button type="button" class="btn btn-primary" data-toggle="ajax-modal" date-target="#CreateAppointment" data-url="@Url.Action("Create","Appointment", new { petid = Model.Pet.PetId })">
                             Book appointment
@@ -229,12 +230,11 @@
                 <div class="col-md-12">
                     <div class="card">
                         <h5 class="card-header">
-                           I'm currently residing at @Model.Pet.Shelter.Name
+                            I'm currently residing at @Model.Pet.Shelter.Name
                         </h5>
-                        <div class="card-body">
-                            <p class="card-text">
-                                @Html.Raw(Model.Pet.Shelter.Description)
-                            </p>
+                        <div class="card-body" id="canvas" style="height:500px">
+                          
+                           
                         </div>
                         <div class="card-footer">
                             @Model.Pet.Shelter.PhoneNumber
@@ -246,11 +246,15 @@
         </div>
     </div>
 
-</div>
+   </div>
 
 
 
 @section scripts{
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr0pt_xuJO0N8VFX_OB2iV6nOlee9_d1I&callback=initMap&libraries=&v=weekly"
+     defer></script>
+
 
     <script>
         $(function () {
@@ -286,23 +290,73 @@
         });
     </script>
 
-<script>
+    <script>
 
-    $(function () {
-         
-        var PlaceHolderElement = $('#PlaceHolderHere');
-        $('button[data-toggle="ajax-modal"]').click(function (event) {
+        $(function () {
 
-            var url = $(this).data('url');
-            $.get(url).done(function (data){
-                PlaceHolderElement.html(data);
-                PlaceHolderElement.find('.modal').modal('show');
+            var PlaceHolderElement = $('#PlaceHolderHere');
+            $('button[data-toggle="ajax-modal"]').click(function (event) {
+
+                var url = $(this).data('url');
+                $.get(url).done(function (data) {
+                    PlaceHolderElement.html(data);
+                    PlaceHolderElement.find('.modal').modal('show');
+                })
+
             })
 
         })
 
-    })
+    </script>
 
-</script>
+    <script>
 
+     "use strict";
+    var lat = parseFloat(('@Model.Pet.Shelter.Location.Latitude').replace(',','.'));
+    var long = parseFloat(('@Model.Pet.Shelter.Location.Longitude').replace(',','.'));
+  console.log(long);
+    console.log(lat);
+    // In this example, we center the map, and add a marker, using a LatLng object
+    // literal instead of a google.maps.LatLng object. LatLng object literals are
+    // a convenient way to add a LatLng coordinate and, in most cases, can be used
+    // in place of a google.maps.LatLng object.
+    let map;
+
+    function initMap() {
+    const mapOptions = {
+    zoom: 14,
+    center: {lat: lat,
+        lng: long
+        },
+  mapTypeControl: false,
+  streetViewControl: false,
+  fullscreenControl: false
+
+        };
+   
+    map = new google.maps.Map(document.getElementById("canvas"), mapOptions);
+    const marker = new google.maps.Marker({
+    // The below line is equivalent to writing:
+    // position: new google.maps.LatLng(-34.397, 150.644)
+    position: {
+    lat: lat,
+    lng: long
+    },
+    map: map
+    });
+      
+    // You can use a LatLng literal in place of a google.maps.LatLng object when
+    // creating the Marker object. Once the Marker object is instantiated, its
+    // position will be available as a google.maps.LatLng object. In this case,
+    // we retrieve the marker's position using the
+    // google.maps.LatLng.getPosition() method.
+
+    const infowindow = new google.maps.InfoWindow({
+    content: "<p>Marker Location:" + marker.getPosition() + "</p>"
+    });
+    google.maps.event.addListener(marker, "click", () => {
+    infowindow.open(map, marker);
+    });
+    }
+    </script>
 }
