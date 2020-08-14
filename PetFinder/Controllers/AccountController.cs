@@ -218,21 +218,7 @@ namespace PetFinder.Controllers
         public async Task<IActionResult> RegisterAsync(UserRegisterViewModel Registermodel)
         {
 
-          
-
-
-            //Seperate document ->store API key local ( no push to Git) .
-
-            //var testingasJson = await client.GetFromJsonAsync<GoogleApi>(_baseUrl);
-            //var test = await testingasstring.Content.ReadAsStringAsync();
-            // Entire API call to google needs to be rewritten into a service with method accepting Concatnated Address parameter
-            // In case the address return no object -> use City ZIP CODE to get at least approx. geocoding
-            // Update the Location class with ZIP CODE property
-            // Temporarly removed key so no Unauthorized calls (add this as const. parameter in service)
-
-
-            //GoogleApi TestingJSONreslut = Newtonsoft.Json.JsonSerializer.Deserialize<GoogleApi>(result);
-
+       
             if (ModelState.IsValid) {
 
                
@@ -295,11 +281,11 @@ namespace PetFinder.Controllers
 
                     IdentityResult result = await _userManager.CreateAsync(user, model.Password);
                     ApplicationUser receivedUser = await _userManager.FindByEmailAsync(model.Email);
-                    await _userManager.AddToRoleAsync(receivedUser, "ShelterUser");
+                    await _userManager.AddToRoleAsync(receivedUser, "Admin");
                     // If user is successfully created
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("ListUsers", "Administration");
+                        return RedirectToAction("AdminIndex", "Home");
                     }
                     // If there are any errors, add them to the ModelState object
                     // which will be displayed by the validation summary tag helper
@@ -362,9 +348,6 @@ namespace PetFinder.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
-
-
         private async Task<GoogleApi.Result> GetGeoAsync(string address)
         {
             using HttpClient client = new HttpClient();
@@ -377,8 +360,6 @@ namespace PetFinder.Controllers
             return apiCallResult;
 
         }
-
-
 
         private Location AddLocation(RegisterViewModel model)
         {
@@ -408,8 +389,11 @@ namespace PetFinder.Controllers
                 UserName = model.Email,
                 Email = model.Email,
                 LocationId = location.LocationtId,
-                ShelterId = shelterid
-
+                ShelterId = shelterid,
+                LastName = model.LastName,
+                FirstName = model.FirstName,
+                PhoneNumber = model.PhoneNumber,
+                
             };
 
             return user;

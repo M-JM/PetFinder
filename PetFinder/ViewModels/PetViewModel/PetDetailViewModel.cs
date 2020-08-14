@@ -15,8 +15,5 @@ namespace PetFinder.ViewModels.PetViewModel
 
         public string Age { get; set; }
 
-        public string Lat { get; set; }
-
-        public string Long { get; set; }
     }
 }

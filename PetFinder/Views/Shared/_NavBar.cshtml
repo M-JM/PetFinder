@@ -31,30 +31,19 @@
                             Pets
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" asp-action="Index" asp-controller="Pet">Pet List</a>
+                            <a class="dropdown-item" asp-action="PetList" asp-controller="Pet">Pet List</a>
                             <a class="dropdown-item" asp-action="Create" asp-controller="Pet">Register Pet</a>
                         </div>
 
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Manage
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" asp-action="ListUsers" asp-controller="Administration"> Manage Shelter Users</a>
-                            <a class="dropdown-item" asp-action="Register" asp-controller="Account"> Create Shelter Users</a>
-                        </div>
-
-                    </li>
+                   
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Appointments
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" asp-action="Detail" asp-controller="Appointment">Appointments</a>
+                            <a class="dropdown-item" asp-action="Overview" asp-controller="Appointment">Appointments</a>
                             <a class="dropdown-item" asp-action="List" asp-controller="Appointment">Agenda</a>
                         </div>
 

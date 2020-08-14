@@ -68,7 +68,7 @@ namespace PetFinder.Controllers
 
         ///6. Move Uploadfunctionality to a Service with an Iservice to inject it in controller where i would use this method ??
        
-        public IActionResult Index()
+        public IActionResult PetList()
         {
             try
             {
@@ -432,8 +432,6 @@ namespace PetFinder.Controllers
                     Pet = pet,
                     Isfavorite = isFavorite,
                     Age = age,
-                    Lat = pet.Shelter.Location.Latitude.ToString(),
-                    Long = pet.Shelter.Location.Longitude.ToString(),
                 };
 
                 return View(detailViewModel);

@@ -104,9 +104,22 @@
                                     </div>
                                 </div>
 
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Home" asp-action="AdminIndex" class="btn btn-info">Back</a>
+                                }
+                                else
+                                {
+
+                                    <a asp-controller="Home" asp-action="Index" class="btn btn-info">Back</a>
+
+                                }
+
                                 <button class="btn btn-primary" type="submit">Save changes</button>
 
-                                <a asp-controller="Index" asp-action="Home" class="btn btn-info">Back</a>
+
+
+
 
                             </form>
                         </div>

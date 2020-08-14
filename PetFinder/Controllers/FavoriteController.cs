@@ -15,9 +15,10 @@ namespace PetFinder.Controllers
         private readonly IFavoriteRepository _favoriteRepository;
         private readonly IPetRepository _petRepository;
         private readonly ILogger<FavoriteController> _logger;
-
+       
         public FavoriteController
         (
+
             IFavoriteRepository favoriteRepository,
             IPetRepository petRepository,
             ILogger<FavoriteController> logger

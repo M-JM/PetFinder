@@ -52,7 +52,7 @@
             <div class="card mb-10">
                 <div class="card-header">
                     Pet Management
-                    <a asp-action="Create" asp-controller="Pet" class="btn btn-success" style="position: absolute; right: 0;">Add Pet</a>
+                    <a asp-action="Create" asp-controller="Pet" class="btn btn-success mr-1" style="position: absolute; right: 0;">Add Pet</a>
                 </div>
                 <div class="card-body">
                     <div class="datatable">
@@ -94,8 +94,8 @@
 
                                         <td>
 
-                                            <a asp-action="Details" asp-controller="Pet" asp-route-id="@pets.PetId" class="btn btn-datatable btn-icon btn-transparent-dark"><i><img src="~/assets/edit.png" /></i></a>
-                                            <a asp-action="Edit" asp-controller="Pet" asp-route-id="@pets.PetId" class="btn btn-warning">Edit</a>
+                                            <a asp-action="Details" asp-controller="Pet" asp-route-id="@pets.PetId" class="btn btn-datatable btn-icon btn-transparent-dark"><i><img src="~/assets/survey.png" /></i></a>
+                                            <a asp-action="Edit" asp-controller="Pet" asp-route-id="@pets.PetId" class="btn btn-datatable btn-icon btn-transparent-dark"><i><img src="~/assets/edit.png" /></i></a>
                                             <a asp-action="Delete" asp-controller="Pet" asp-route-id="@pets.PetId" class="btn btn-datatable btn-icon btn-transparent-dark"><i><img src="~/assets/trash.png" /></i></a>
 
                                         </td>

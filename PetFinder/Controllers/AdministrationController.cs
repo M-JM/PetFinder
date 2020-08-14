@@ -61,6 +61,7 @@ namespace PetFinder.Controllers
                 {
                     return RedirectToAction("AdminIndex", "Home");
                 }
+               
 
                 foreach (var error in identityResult.Errors)
                 {

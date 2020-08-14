@@ -85,6 +85,8 @@ namespace PetFinder.Controllers
         ///7. Is there any sense in having more then 3 categories of appointments ?.
         // -> maybe for stat purpose ?
 
+        ///8. Make it that if booking date < DateTime.Now() => automatic assign of category so they do not appear as accepted anymore ?
+        
         public IActionResult List()
         {
             // this gives the values for statusesdropdown in View 
@@ -229,7 +231,12 @@ namespace PetFinder.Controllers
 
                     case 3:
 
-                        emailbody = "Your Appointment with " + appointment.Pet.Name + " at " + appointment.Shelter.Name + " on " + response.Date + " has been confirmed";
+                      emailbody ="<html><body><p>Dear,</p>" +
+                      "<p>We hereby confirm your appointment with " + appointment.Pet.Name + ".</p>"
+                      +"<p>Please present yourself on " + response.Date.ToShortDateString() + " at " + response.StartTime + "</p>"
+                     +"<p>Sincerely,<br>Petfinder Team</br></p> </body> </html>";
+
+                        //"Your Appointment with " + appointment.Pet.Name + " at " + appointment.Shelter.Name + " on " + response.Date + " has been confirmed";
 
                         break;
 
