@@ -4,7 +4,6 @@
     ViewData["Title"] = "Search";
 }
 <link href="~/chosen/chosen.css" rel="stylesheet" />
-@*<link href="~/css/AdminDashboard.css" rel="stylesheet" />*@
 
 <header class="page-header page-header-dark bg-gradient-primary-to-secondary pt-10">
     <div class="page-header-content pt-5">
@@ -26,151 +25,145 @@
     <div class="row">
         <div class="col-lg-2">
 
-            <div class="row">
+            <div class="row" style="background-color:LavenderBlush">
 
                 <form enctype="multipart/form-data" method="post" id="MyForm">
 
-                    <div class="form-row">
-                        <div class="form-group col-md-8">
-                            <label asp-for="PetKindList" class="control-label">Pet Kind</label>
-                            <select asp-for="PetKindIdfromForm" multiple class="form-control-lg chosen-select" asp-items="Model.PetKindList">
-                            </select>
-                        </div>
+                    <div class="form-group" id="Target">
+                        <input type="reset" value="Reset criteria's" class="Target btn btn-primary" />
                     </div>
 
+          
+                <div class="form-group">
+                    <label asp-for="PetKindId" class="control-label">Pet Type</label>
+                    @for (var i = 0; i < Model.PetKindList.Count; i++)
+                    {
+                <div class="checkboxes">
+                  
+                    <label asp-for="@Model.PetKindList[i].Selected">
+                        <input type="checkbox" asp-for="@Model.PetKindList[i].Selected" />
+                        @Model.PetKindList[i].Text
+                    </label>
+                    <input type="hidden" asp-for="@Model.PetKindList[i].Value" />
+                    <input type="hidden" asp-for="@Model.PetKindList[i].Text" />
+                </div>
+                            }
+                        </div>
 
-                    @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                        <label asp-for="PetKindId" class="control-label">Pet Gender</label>
-                        @for (var i = 0; i < Model.PetKindList.Count; i++)
-                        {
-                         <input type="checkbox" asp-for="@Model.PetKindList[i].Selected" />
-                         <label asp-for="@Model.PetKindList[i].Selected">@Model.PetKindList[i].Text</label>
-                         <input type="hidden" asp-for="@Model.PetKindList[i].Value" />
-                         <input type="hidden" asp-for="@Model.PetKindList[i].Text" />
-                        }
-                        </div>*@
+
+                        <div class="form-group ">
+                            <label asp-for="Gender" class="control-label">Pet Gender</label>
+                            @for (var i = 0; i < Model.Genderlist.Count; i++)
+                            {
+                                <div class="checkboxes">
+
+                                    <label asp-for="@Model.Genderlist[i].Selected">
+                                        <input type="checkbox" asp-for="@Model.Genderlist[i].Selected" />
+                                        @Model.Genderlist[i].Text
+                                    </label>
+                                    <input type="hidden" asp-for="@Model.Genderlist[i].Value" />
+                                    <input type="hidden" asp-for="@Model.Genderlist[i].Text" />
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group checkboxes">
+                            <label asp-for="Size" class="control-label">Size </label>
+                            @for (var i = 0; i < Model.SizeList.Count; i++)
+                            {
+                                <div class="checkboxes">
+
+                                    <label asp-for="@Model.SizeList[i].Selected">
+                                        <input type="checkbox" asp-for="@Model.SizeList[i].Selected" />
+                                        @Model.SizeList[i].Text
+                                    </label>
+                                    <input type="hidden" asp-for="@Model.SizeList[i].Value" />
+                                    <input type="hidden" asp-for="@Model.SizeList[i].Text" />
+                                </div>
+                            }
+                        </div>
 
 
-                    <div class="form-group ">
-                        <label asp-for="Gender" class="control-label">Pet Gender</label>
-                        @for (var i = 0; i < Model.Genderlist.Count; i++)
-                        {
-                            <div class="checkboxes">
 
-                                <label asp-for="@Model.Genderlist[i].Selected">
-                                    <input type="checkbox" asp-for="@Model.Genderlist[i].Selected" />
-                                    @Model.Genderlist[i].Text
-                                </label>
-                                <input type="hidden" asp-for="@Model.Genderlist[i].Value" />
-                                <input type="hidden" asp-for="@Model.Genderlist[i].Text" />
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label asp-for="SocialWithDogs" class="control-label">Social with dogs</label>
+                                <br />
+                                <select asp-for="SocialWithDogs" data-placeholder="Select criteria here" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
+                                </select>
                             </div>
-                        }
-                    </div>
+                        </div>
 
-                    <div class="form-group checkboxes">
-                        <label asp-for="Size" class="control-label">Size </label>
-                        @for (var i = 0; i < Model.SizeList.Count; i++)
-                        {
-                            <div class="checkboxes">
-
-                                <label asp-for="@Model.SizeList[i].Selected">
-                                    <input type="checkbox" asp-for="@Model.SizeList[i].Selected" />
-                                    @Model.SizeList[i].Text
-                                </label>
-                                <input type="hidden" asp-for="@Model.SizeList[i].Value" />
-                                <input type="hidden" asp-for="@Model.SizeList[i].Text" />
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label asp-for="SocialWithCats" class="control-label">Social with cats</label>
+                                <br />
+                                <select asp-for="SocialWithCats" data-placeholder="Select criteria here" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
+                                </select>
                             </div>
-                        }
-                    </div>
-
-
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label asp-for="SocialWithDogs" class="control-label">Social with dogs</label>
-                            <br />
-                            <select asp-for="SocialWithDogs" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
-                            </select>
                         </div>
-                    </div>
 
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label asp-for="SocialWithCats" class="control-label">Social with cats</label>
-                            <br />
-                            <select asp-for="SocialWithCats" data-placeholder="Select criteria here" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
+                        <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label asp-for="KidsFriendly" class="control-label">Social with kids</label>
                                 <br />
-                                <select asp-for="KidsFriendly" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
+                                <select asp-for="KidsFriendly" data-placeholder="Select criteria here" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
                                 </select>
                             </div>
                         </div>
 
-                    <div class="form-row">
+                        <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label asp-for="Appartmentfit" class="control-label">Fit for Appartment</label>
                                 <br />
-                                <select asp-for="Appartmentfit" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
+                                <select asp-for="Appartmentfit" data-placeholder="Select criteria here" multiple class="form-control-lg chosen-select" asp-items="Html.GetEnumSelectList<Tristate>()">
                                 </select>
                             </div>
                         </div>
 
-                 
 
 
-                    <div class="form-group">
-                        <label asp-for="PetColor" class="control-label">Pet color </label>
-                        @for (var i = 0; i < Model.PetColorList.Count; i++)
-                        {
-                            <div class="checkboxes">
 
-                                <label asp-for="@Model.PetColorList[i].Selected">
-                                    <input type="checkbox" asp-for="@Model.PetColorList[i].Selected" />
-                                    <span style="height: 15px;width: 15px;background-color: @Model.PetColorList[i].Text;border-radius: 50%;display: inline-block;border:1px solid black;"></span>
-                                    @Model.PetColorList[i].Text
-                                </label>
-                                <input type="hidden" asp-for="@Model.PetColorList[i].Value" />
-                                <input type="hidden" asp-for="@Model.PetColorList[i].Text" />
+                        <div class="form-group">
+                            <label asp-for="PetColor" class="control-label">Pet color </label>
+                            @for (var i = 0; i < Model.PetColorList.Count; i++)
+                            {
+                                <div class="checkboxes">
 
-                            </div>
+                                    <label asp-for="@Model.PetColorList[i].Selected">
+                                        <input type="checkbox" asp-for="@Model.PetColorList[i].Selected" />
+                                        <span style="height: 15px;width: 15px;background-color: @Model.PetColorList[i].Text;border-radius: 50%;display: inline-block;border:1px solid black;"></span>
+                                        @Model.PetColorList[i].Text
+                                    </label>
+                                    <input type="hidden" asp-for="@Model.PetColorList[i].Value" />
+                                    <input type="hidden" asp-for="@Model.PetColorList[i].Text" />
 
-
-                        }
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="PetRace" class="control-label">Race</label>
-                        @for (var i = 0; i < Model.PetRaceList.Count; i++)
-                        {
-                            <div class="checkboxes">
-
-                                <label asp-for="@Model.PetRaceList[i].Selected">
-                                    <input type="checkbox" asp-for="@Model.PetRaceList[i].Selected" />
-                                    @Model.PetRaceList[i].Text
-                                </label>
-                                <input type="hidden" asp-for="@Model.PetRaceList[i].Value" />
-                                <input type="hidden" asp-for="@Model.PetRaceList[i].Text" />
-                            </div>
-
-                        }
-                    </div>
+                                </div>
 
 
-                    <div class="form-group">
-                        <input type="submit" value="submit" class="btn btn-primary" />
-                    </div>
-                    <div class="form-group" id="Target">
-                        <input type="reset" value="Reset" class="Target btn btn-primary" />
-                    </div>
+                            }
+                        </div>
 
-                </form>
+                        <div class="form-group">
+                            <label asp-for="PetRace" class="control-label">Race</label>
+                            @for (var i = 0; i < Model.PetRaceList.Count; i++)
+                            {
+                                <div class="checkboxes">
+
+                                    <label asp-for="@Model.PetRaceList[i].Selected">
+                                        <input type="checkbox" asp-for="@Model.PetRaceList[i].Selected" />
+                                        @Model.PetRaceList[i].Text
+                                    </label>
+                                    <input type="hidden" asp-for="@Model.PetRaceList[i].Value" />
+                                    <input type="hidden" asp-for="@Model.PetRaceList[i].Text" />
+                                </div>
+
+                            }
+                        </div>
+
+
+
+</form>
 
             </div>
 
@@ -262,30 +255,34 @@
             $(':input','#MyForm')
             .prop('checked', false)
             .prop('selected', false);
+            $(".chosen-select").val('').trigger("chosen:updated");
+
         }
 
     let albumAccordion = function (result) {
             $('#selecta').remove();
             $('.selecta').remove();
             $(this).parent("#selecta").remove();
-      $.each(result, function (k, v) {
+        $.each(result, function (k, v) {
+            console.log(result);
           $(".result").append(
               '<div class="selecta col-md-6 col-xl-4 mb-5 ">' +
               '<a class="card post-preview lift h-100" href="/Pet/Details/?id=' + v.petId +'">' +
               '<img class="card-img-top" src=/images/' + v.petPictures[0].photoPath + '>' +
               '<div class="card-body">' +
-              '<h5 class="card-title">' +
+              '<h3 class="card-title">' +
               v.name +
-              '</h5>' +
+              '</h3>' +
               '<p class="card-text">' +
+              '<p>Race : ' +
+              v.petRace.raceName
+              +
               '</p>' +
-              '</div>' +
-              '<div class="card-footer">' +
-              '<div class="post-preview-meta">' +
-              '<div class="post-preview-meta-details">' +
-              '<div class="post-preview-meta-details-name">' +
-              '</div>' +
-              '<div class="post-preview-meta-details-date">' +
+               '<p>Size : ' +
+              v.size
+              +
+              '</p>' +
+              '</p>' +
               '</div>' +
               '</div>' +
               '</div>' +

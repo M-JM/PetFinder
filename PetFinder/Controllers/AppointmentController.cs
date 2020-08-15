@@ -262,13 +262,18 @@ namespace PetFinder.Controllers
             return Json(status);
         }
 
-
+        [HttpGet]
+        [Authorize(Roles = "User,Admin")]
         public IActionResult Overview()
         {
 
             try
             {
-                List<Appointment> appointments = _appointmentRepository.GetAppointments(Convert.ToInt32(HttpContext.Session.GetString("shelterid")));
+                List<Appointment> appointments = new List<Appointment>();
+           
+              appointments = _appointmentRepository.GetAppointments(Convert.ToInt32(HttpContext.Session.GetString("shelterid")));
+
+
 
                 AppointmentListViewModel model = new AppointmentListViewModel()
                 {
@@ -285,6 +290,45 @@ namespace PetFinder.Controllers
                 throw;
             }
         }
+
+
+        [HttpGet]
+        [Authorize(Roles = "User,Admin")]
+        public IActionResult MyAppointments()
+        {
+
+            try
+            {
+                List<Appointment> appointments = new List<Appointment>();
+
+                if (User.IsInRole("User") && User != null)
+                {
+                    appointments = _appointmentRepository.GetAppointmentsUsers(HttpContext.Session.GetString("id"));
+
+                }
+                else
+                {
+                    return View("Error");
+                }
+              
+
+                AppointmentListViewModel model = new AppointmentListViewModel()
+                {
+                    Appointments = appointments,
+                };
+
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, $"When trying to retrieve appointments.");
+                throw;
+            }
+        }
+
+
 
 
         // Non Functional see-> TODO

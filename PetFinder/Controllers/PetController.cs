@@ -135,11 +135,14 @@ namespace PetFinder.Controllers
                         SizelistSearch.Add(item.Value);
                     }
                 };
-                if (model.PetKindIdfromForm != null) { 
-                    foreach (var item in model.PetKindIdfromForm)                   
+              
+                    foreach (var item in model.PetKindList)                   
                     {
-                        SearchPetKindId.Add(item);
+                    if (item.Selected)
+                    {
+                        SearchPetKindId.Add(Int32.Parse(item.Value));
                     }
+                
                 };
 
                 foreach (var item in model.PetColorList)

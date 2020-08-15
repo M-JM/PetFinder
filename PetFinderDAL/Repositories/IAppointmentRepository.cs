@@ -12,6 +12,8 @@ namespace PetFinderDAL.Repositories
         Appointment UpdateAppointment(Appointment appointment);
         List<Appointment> GetAppointments(int? shelterId);
 
+        List<Appointment> GetAppointmentsUsers(string userId);
+
         Appointment GetAppointment(int AppointmentId);
 
         List<Appointment> GetHoursofAppointment(int PetId, DateTime Time);
