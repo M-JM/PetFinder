@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -593,6 +594,75 @@ namespace PetFinder.Controllers
             }
             return View(model);
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult ShelterProfile()
+        {
+            Location location;
+
+            Shelter shelter = _shelterRepository.GetShelterById(Convert.ToInt32(HttpContext.Session.GetString("shelterid")));                  
+            location = _locationRepository.GetLocation(shelter.LocationId);
+            
+
+            ShelterProfileViewModel model = new ShelterProfileViewModel
+            {
+                Id = shelter.ShelterId,              
+                Email = shelter.Email,
+                Street = location.Street,
+                City = location.City,
+                Country = location.Country,
+                Zipcode = location.Zipcode,
+                HouseNumber = location.HouseNumber,
+                PhoneNumber = shelter.PhoneNumber,
+                Description = shelter.Description
+
+
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult ShelterProfile(ShelterProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Shelter shelter = _shelterRepository.GetShelterById(Convert.ToInt32(HttpContext.Session.GetString("shelterid")));
+                Location location = _locationRepository.GetLocation(shelter.LocationId);
+
+                string address = model.Street + " " + model.HouseNumber + " " + model.Zipcode + " " + model.Country;
+                Task<GoogleApi.Result> googleApiResult = GetGeoAsync(address);
+
+                       
+                    location.Street = model.Street;
+                    location.Zipcode = model.Zipcode;
+                    location.HouseNumber = model.HouseNumber;
+                    location.Country = model.Country;
+                    location.Latitude = googleApiResult.Result.geometry.location.lat;
+                    location.Longitude = googleApiResult.Result.geometry.location.lng;
+
+                    _locationRepository.Updatelocation(location);
+               
+           
+                shelter.Email = model.Email;
+                shelter.PhoneNumber = model.PhoneNumber;
+                shelter.LocationId = location.LocationtId;
+
+
+               _shelterRepository.UpdateShelter(shelter);
+
+               
+                    return RedirectToAction("AdminIndex", "Home");
+
+
+              
+            }
+
+            return View(model);
+        }
+
+
 
     }
 }

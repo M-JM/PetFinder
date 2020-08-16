@@ -36,6 +36,24 @@ namespace PetFinderDAL.Repositories
 
         }
 
+        public Shelter UpdateShelter(Shelter shelter)
+        {
+            var newShelter = _context.Shelters.Update(shelter);
+
+            if (newShelter != null && newShelter.State == EntityState.Modified)
+            {
+                var affectedRows = _context.SaveChanges();
+
+                if (affectedRows > 0)
+                {
+                    return newShelter.Entity;
+                }
+            }
+            _logger.LogError("There was an error during creation of Shelter");
+            return null;
+
+        }
+
         public Shelter GetShelterById(int? id)
         {
             Shelter shelter =_context.Shelters.Find(id);

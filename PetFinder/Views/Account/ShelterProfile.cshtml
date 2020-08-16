@@ -1,0 +1,142 @@
+﻿@model ShelterProfileViewModel
+
+@{
+    ViewData["Title"] = "Your Shelter Profile";
+}
+
+<link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.css" rel="stylesheet" />
+
+<div id="layoutSidenav_content">
+    <main>
+        <header class="page-header page-header-dark bg-gradient-primary-to-secondary pt-10">
+            <div class="page-header-content pt-5">
+                <div class="container text-center">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <h1 class="page-header-title mb-3">Shelter Profile</h1>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="svg-border-rounded text-lavender">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor"><path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path></svg>
+            </div>
+        </header>
+        <!-- Main page content-->
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Account page navigation-->
+                <div class="col-lg-4">
+                    <!-- Profile picture card-->
+
+                    <img src="~/assets/avatar-admin.png" style="width:100%" />
+                </div>
+
+
+                <div class="col-lg-8">
+
+                    <div class="card mb-4">
+                        <div class="card-header">Account Details</div>
+                        <div class="card-body">
+
+                            <form method="post">
+                                <input type="hidden" asp-for="Id" />
+
+                                <div class="form-group">
+                                    <label asp-for="Email" class="small mb-1 Label-text-form">Email</label>
+                                    <input  asp-for="Email" class="form-control" readonly/>
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="Street" class="small mb-1 Label-text-form">Street</label>
+                                        <input asp-for="Street" class="form-control" placeholder="Enter your street" />
+                                        <span asp-validation-for="Street" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="HouseNumber" class="small mb-1 Label-text-form">House Number</label>
+                                        <input asp-for="HouseNumber" class="form-control" placeholder="Enter your house number" />
+                                        <span asp-validation-for="HouseNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="City" class="small mb-1 Label-text-form">City</label>
+                                        <input asp-for="City" class="form-control" placeholder="Enter City" />
+                                        <span asp-validation-for="City" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="Zipcode" class="small mb-1 Label-text-form">Zipcode</label>
+                                        <input asp-for="Zipcode" class="form-control" placeholder="Enter ZipCode" />
+                                        <span asp-validation-for="Zipcode" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="Country" class="small mb-1 Label-text-form">Country</label>
+                                        <input asp-for="Country" class="form-control" placeholder="Enter Country" />
+                                        <span asp-validation-for="Country" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="PhoneNumber" class="small mb-1 Label-text-form">Phone Number</label>
+                                        <input asp-for="PhoneNumber" class="form-control" placeholder="Enter your phoneNumber" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-lg-12">
+                                        <label asp-for="Description" class="control-label small mb-1  Label-text-form"></label>
+                                        <textarea asp-for="Description" id="TextEditor" class="form-control"> </textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Home" asp-action="AdminIndex" class="btn btn-info">Back</a>
+                                }
+                                else
+                                {
+
+                                    <a asp-controller="Home" asp-action="Index" class="btn btn-info">Back</a>
+
+                                }
+
+                                <button class="btn btn-primary" type="submit">Save changes</button>
+
+
+
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </main>
+</div>
+@section scripts{
+
+    <script src="~/lib/Trumbowyg-master/dist/trumbowyg.min.js"></script>
+    <script>
+        $('#TextEditor').trumbowyg({
+            imageWidthModalEdit: true
+        });</script>
+
+
+}
+

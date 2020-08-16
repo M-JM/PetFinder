@@ -9,5 +9,7 @@ namespace PetFinderDAL.Repositories
     {
         Shelter AddShelter(Shelter Shelter);
         Shelter GetShelterById(int? id);
+
+        Shelter UpdateShelter(Shelter shelter);
     }
 }

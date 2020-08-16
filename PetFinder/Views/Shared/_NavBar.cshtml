@@ -55,12 +55,9 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" asp-action="" asp-controller="">Shelter profile</a>
+                            <a class="dropdown-item" asp-action="ShelterProfile" asp-controller="Account"> Shelter profile</a>
                         </div>
 
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" asp-action="" asp-controller=""> Edit Shelter profile</a>
-                        </div>
                     </li>
                 }
                 @if (signInManager.IsSignedIn(User) && User.IsInRole("User"))

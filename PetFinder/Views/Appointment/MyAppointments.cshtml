@@ -1,7 +1,7 @@
 ﻿@model AppointmentListViewModel
 
 @{
-    ViewData["Title"] = "Admin Pet page";
+    ViewData["Title"] = "My Appointments page";
 }
 
 
@@ -71,7 +71,7 @@
                                         <td>@appointment.Pet.Name</td>
                                         <td>@String.Format("{0:dd-MM-yyyy}", appointment.Date)</td>
                                         <td>@appointment.StartTime</td>
-                                        <td style="background-color: @appointment.AppointmentStatus.Color;opacity:0.8; "
+                                        <td style="background-color: @appointment.AppointmentStatus.Color;opacity:0.8;color:black; "
                                             >@appointment.AppointmentStatus.StatusName</td>
                                                                                 
                                     </tr>
