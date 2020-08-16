@@ -100,6 +100,7 @@ namespace PetFinder.Controllers
 
             return View(updateModel);
         }
+
         [HttpGet]
         [Authorize(Roles = "User")]
         public IActionResult Create(int petid)
@@ -168,15 +169,16 @@ namespace PetFinder.Controllers
                 return View("error");
             }
         }
+
+        [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<JsonResult> GetAppointmentsAsync()
+        public JsonResult GetAppointments()
         {
             try
             {
-                ApplicationUser user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-                List<Appointment> appointments = _appointmentRepository.GetAppointments(user.ShelterId);
-                List<CalendarEvents> Listevents = new List<CalendarEvents>();
 
+                List<Appointment> appointments = _appointmentRepository.GetAppointments(Convert.ToInt32(HttpContext.Session.GetString("shelterid")));
+                List<CalendarEvents> Listevents = new List<CalendarEvents>();
 
                 foreach (Appointment appointment in appointments)
                 {
@@ -188,25 +190,23 @@ namespace PetFinder.Controllers
                         User = appointment.ApplicationUser.Email,
                         BackgroundColor = appointment.AppointmentStatus.Color,
                         Status = appointment.AppointmentStatus.StatusName,
+                        appointmentstatusId = appointment.AppointmentStatus.AppointmentStatusId,
                         Start = appointment.Date + appointment.StartTime,
                         End = appointment.Date + appointment.EndTime,
                         allDay = false,
                     };
                     Listevents.Add(events);
                 };
-
-                //  var json = JsonConvert.SerializeObject(appointments);
-                // Avoid doing the above  and passing the json in the JSON method return, as JSON() already serialize the object given as parameter.
-                // having two serialization causes the JSON structure to be different Array of Array with Index and value(array of objects )thus requires unnecessary long pathing to get to values of properties 
-
+                                
                 return Json(Listevents);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"When trying to retrieve appointments / post method.");
+                _logger.LogError(ex, $"When trying to retrieve appointments.");
                 throw;
             }
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<JsonResult> SaveEventAsync(CalendarEvents Updatedevent)
@@ -291,7 +291,6 @@ namespace PetFinder.Controllers
             }
         }
 
-
         [HttpGet]
         [Authorize(Roles = "User,Admin")]
         public IActionResult MyAppointments()
@@ -327,9 +326,6 @@ namespace PetFinder.Controllers
                 throw;
             }
         }
-
-
-
 
         // Non Functional see-> TODO
         [HttpGet]

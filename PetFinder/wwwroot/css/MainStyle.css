@@ -81,9 +81,15 @@
   box-sizing: border-box;
 }
 
+.centerdiv {
+    margin: auto;
+    width: 40%;
+    padding: 10px;
+}
+
 #page-containerx {
     position: relative;
-    min-height: 50vh;
+    min-height: 70vh;
 }
 
 #content-wrapx {

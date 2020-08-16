@@ -181,7 +181,7 @@
                 slotMaxTime: "20:00:00",
                 initialView: 'timeGridWeek',
                 initialDate: '2020-08-12',
-                //eventColor: 'green',
+                
                 events: {
                     url: '/Appointment/GetAppointments',
                     method: 'GET',
@@ -210,7 +210,8 @@
                 $('#txtEnd').val(selectedEvent.event.end.toLocaleString('en-GB', options));
                 $('#txtDescription').val(selectedEvent.event.extendedProps.user);
                 $('#appointmentid').val(selectedEvent.event.extendedProps.appointmentId);
-
+                $('#appointmentStatusId').val(selectedEvent.event.extendedProps.appointmentStatusId);
+                console.log(selectedEvent.event.extendedProps.appointmentStatusId);
                 $('#myModalSave').modal();
             });
 
@@ -233,7 +234,7 @@
                     data: data,
                     success: function (status) {
                         if (status) {
-                            console.log('testing');
+                            console.log('Post was succesfull');
                             calendar.refetchEvents();
                             $('#myModalSave').modal('hide');
                             $('#succesalert').toast({

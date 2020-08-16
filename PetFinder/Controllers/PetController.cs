@@ -381,32 +381,38 @@ namespace PetFinder.Controllers
             try
             {
                 Pet pet = _petRepository.GetById(id);
+                if (pet == null)
+                {
+                    return View("Error");
+                }
+               
 
                 return View(pet);
             }
             catch (Exception ex)
             {
 
-                _logger.LogError(ex, $"When trying to get the delete page for pet.");
+                _logger.LogError(ex, $"When trying to get the delete for pet.");
                 return View("error");
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+      
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteSure(int PetId)
+        public IActionResult DeleteSure(int id)
         {
             try
             {
-                Pet pet = _petRepository.GetById(PetId);
-                Pet response = _petRepository.RemovePet(pet);
+               
+                Pet pet = _petRepository.GetById(id);
+              
 
-                if (response != null && response.PetId != 0)
+                if (pet != null && pet.ShelterId == Convert.ToInt32(HttpContext.Session.GetString("shelterid")))
                 {
-                    return RedirectToAction("Index");
+                    Pet response = _petRepository.RemovePet(pet);
+                    return RedirectToAction("PetList");
                 }
-                return RedirectToAction("Index");
+                return View("NotAuthorized");
             }
             catch (Exception ex)
             {
