@@ -139,8 +139,19 @@ namespace PetFinder.Controllers
                 {
                     Pet pet = _petRepository.GetById(model.PetId);
                     ApplicationUser currentuser = await _userManager.FindByIdAsync(HttpContext.Session.GetString("id"));
-                    string emailbody = "Your Booking with " + pet.Name + " has been succesfully received";
+                    string emailbodyUser = 
+                   "<html><body><p>Dear,</p>" +
+                   "Your Booking with " + pet.Name + " has been succesfully received by shelter :  " + pet.Shelter.Name + "."
+                    + "<p>Upon confirmation of the shelter , you will receive an email or you can monitor the status in your appointment overview </p>"
+                    + "<p>Sincerely,<br>Petfinder Team</br></p>" +
+                    "</br><p>this is an automated email , do not reply - for more info contact the shelter at "+ pet.Shelter.Email + "</p>" + " </body> </html>";
 
+                    string emailbodyAdmin =
+                "<html><body><p>Dear,</p>" +
+                "<p>There is a new booking request that is waiting for approval.</p>"
+                + "<p>Sincerely,<br>Petfinder Team</br></p> </body> </html>";
+        
+                    
                     TimeSpan endTime = model.StartTime.Add(new TimeSpan(1, 0, 0));
 
                     Appointment appointment = new Appointment
@@ -156,7 +167,8 @@ namespace PetFinder.Controllers
 
                     _appointmentRepository.AddAppointment(appointment);
 
-                    await _emailService.SendAsync(currentuser.UserName, "Appointment - PetFinder", emailbody, true);
+                    await _emailService.SendAsync(currentuser.UserName, "Appointment - Receipt - PetFinder", emailbodyUser, true);
+                    await _emailService.SendAsync(pet.Shelter.Email, "Appointment - Pending Approval - PetFinder", emailbodyAdmin, true);
 
                     return RedirectToAction("Details", "Pet", new { id = appointment.PetId });
 
