@@ -244,8 +244,8 @@ namespace PetFinder.Controllers
 
                 return View("Index", "Home");
             }
-
-            return View(Registermodel);
+                Registermodel.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                return View(Registermodel);
         }
             Registermodel.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View(Registermodel);
@@ -286,6 +286,9 @@ namespace PetFinder.Controllers
                     // If user is successfully created
                     if (result.Succeeded)
                     {
+                        string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        string link = Url.Action(nameof(VerifyEmail), "Account", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+                        await _emailService.SendAsync(user.NormalizedEmail, "Email Verify", $"<a href=\"{link}\"> Verify your Email </a>", true);
                         return RedirectToAction("AdminIndex", "Home");
                     }
                     // If there are any errors, add them to the ModelState object
@@ -316,6 +319,9 @@ namespace PetFinder.Controllers
                 PhoneNumber = Registermodel.PhoneNumber,
                 LocationId = location.LocationtId,
             };
+
+            Registermodel.FirstName = Registermodel.Name;
+            Registermodel.LastName = Registermodel.FirstName;
 
             _shelterRepository.AddShelter(shelter);
 
@@ -662,7 +668,21 @@ namespace PetFinder.Controllers
             return View(model);
         }
 
+        [AcceptVerbs("Get", "Post")]
+        [AllowAnonymous]
+        public async Task<IActionResult> IsEmailInUseAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
 
+            if (user == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Email {email} is already in use.");
+            }
+        }
 
     }
 }

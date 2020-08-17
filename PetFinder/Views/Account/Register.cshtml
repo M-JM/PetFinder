@@ -91,7 +91,7 @@
                     @if (User.IsInRole("Admin"))
                     {
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" formaction='@Url.Action("AdminRegister","Account")'>Add new User</button>
-                        <a asp-action="ListUsers" asp-controller="Administration" class="btn btn-lg btn-secondary btn-block text-uppercase">Back</a>
+                        <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-lg btn-secondary btn-block text-uppercase">Back</a>
                     }
                     else
                     {

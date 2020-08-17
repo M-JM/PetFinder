@@ -67,7 +67,7 @@ namespace PetFinder.Controllers
         //   Can this be done in JQ ? and pass then through Ajax the data object to Method ??
 
         ///6. Move Uploadfunctionality to a Service with an Iservice to inject it in controller where i would use this method ??
-       
+
         public IActionResult PetList()
         {
             try
@@ -85,7 +85,7 @@ namespace PetFinder.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, User")]
+        [AllowAnonymous]
         public IActionResult Search()
         {
             
@@ -113,7 +113,7 @@ namespace PetFinder.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public JsonResult GetSearchedPets(SearchViewModel model)
         {
             try
@@ -423,6 +423,7 @@ namespace PetFinder.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
 

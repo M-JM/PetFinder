@@ -49,6 +49,9 @@ namespace PetFinder
             }).AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
             ;
+            services.ConfigureApplicationCookie(options => {
+                options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Administration/AccessDenied");
+            });
 
             services.AddSession(options =>
             {
