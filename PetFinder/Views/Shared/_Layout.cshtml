@@ -23,16 +23,17 @@
             <partial name="_Footer" />
         </footer>
     </div>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/jquery.timepicker.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/fullcalendar/main.js"></script>
+    <script src="~/lib/fontawesome-free-5.14.0-web/js/fontawesome.js"></script>
+    <script src="~/fotorama/fotorama.js"></script>
+    <script src="~/feather-icons/feather.js"></script>
 
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/js/jquery.timepicker.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/fullcalendar/main.js"></script>
-        <script src="~/lib/fontawesome-free-5.14.0-web/js/fontawesome.js"></script>
-        <script src="~/fotorama/fotorama.js"></script>
-        <script src="~/feather-icons/feather.js"></script>
-        @RenderSection("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

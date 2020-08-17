@@ -190,8 +190,10 @@
     </div>
 
     <div class="col-md-12 centerdiv text align-items-center justify-content-center" style="text-align:center">
+
+        <a asp-action="PetList" asp-controller="Pet" class="btn btn-info">Back</a>
         <a asp-action="DeleteSure" asp-controller="Pet" asp-route-id="@Model.PetId" class="btn btn-danger">Delete</a>
-        <a asp-action="PetList" asp-controller="Pet" class="btn btn-primary">Back to pet list</a>
+
     </div>
 
   

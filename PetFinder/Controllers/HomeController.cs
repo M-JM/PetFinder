@@ -37,7 +37,10 @@ namespace PetFinder.Controllers
         //From high priority to low 
 
         ///1.Pass Startweek and Endweek as parameters to Appointment repo instead of linq where statement on getallappointments.
-     
+
+        ///2. More statistics on first page ? Maybe integrate graphs using Microsoft Graph API
+
+
 
         [AllowAnonymous]
         public IActionResult Index()

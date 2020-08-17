@@ -17,14 +17,18 @@ namespace PetFinderDAL.Models
     {
         public int PetId { get; set; }
         [Required]
+        [DisplayName("Pet Name")]
+        [StringLength(30)]
         public string Name { get; set; }
         [Required]
         public string Gender { get; set; }
-  
+        [Required]
         public  DateTime DOB { get; set; }
         [Required]
         public string Size { get; set; }
         [Required]
+        [DisplayName("Pet Description")]
+        [StringLength(500)]
         public string Description { get; set; }
         [Required]
         [DisplayName("Social With Dogs")]
@@ -33,12 +37,14 @@ namespace PetFinderDAL.Models
         [DisplayName("Social With Cats")]
         public Tristate? SocialWithCats { get; set; }
         [Required]
+        [DisplayName("Fit for Appartment")]
         public Tristate? Appartmentfit { get; set; }
         [Required]
+        [DisplayName("Friendly with kids")]
         public Tristate? KidsFriendly { get; set; }
 
-        //Social with kids,dogs,cats stored as comma separated String.
-        //When retrieving the value to display , split(",") to get the values as Array.
+        //Social with kids,dogs,cats stored as comma separated String?
+        //When retrieving the value to display , split(",") to get the values as Array?
 
 
         public List<PetPicture> PetPictures { get; set; }

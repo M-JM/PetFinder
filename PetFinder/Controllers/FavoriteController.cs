@@ -33,6 +33,13 @@ namespace PetFinder.Controllers
 
         //From high priority to low 
 
+        /// 1. fix the layout of the favorite button.
+        // the user should be able to favorite pets from the search function and not have to specifically go to the detail of pet page.
+        // make it a heart icon ( empty/fill) and use AJAX to call method so no refresh happens on the page. 
+
+        ///2. Implement sort of donation system ? (Check out stripe - sort of free payment gateway).
+    
+
         [HttpGet]
         [Authorize(Roles = "User")]
         public IActionResult FavoriteList()

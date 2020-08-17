@@ -1,4 +1,4 @@
-﻿
+﻿@inject SignInManager<ApplicationUser> signInManager;
 @model PetDetailViewModel
 
 @{
@@ -28,231 +28,258 @@
 
 <div id="PlaceHolderHere"></div>
 
-<div class="container mt-5 pl-0 pr-0" style="background-color:LavenderBlush">
+    <div class="container mt-5 pl-0 pr-0" style="background-color:LavenderBlush">
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="fotorama"
-                         data-width="500"
-                         data-height="300"
-                         data-nav="thumbs"
-                         data-thumbwidth="120"
-                         data-thumbheight="120"
-                         data-fit="cover">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="fotorama"
+                             data-width="500"
+                             data-height="300"
+                             data-nav="thumbs"
+                             data-thumbwidth="120"
+                             data-thumbheight="120"
+                             data-fit="cover">
 
-                        @if (pet.PetPictures.Count > 0)
-                        {
-                            foreach (var picture in pet.PetPictures)
+                            @if (pet.PetPictures.Count > 0)
+                            {
+                                foreach (var picture in pet.PetPictures)
+                                {
+
+                                    var imagepath = "~/images/" + picture.PhotoPath;
+
+                                    <img src="@imagepath" asp-append-version="true" />
+
+                                }
+                            }
+                            else
                             {
 
-                                var imagepath = "~/images/" + picture.PhotoPath;
-
-                                <img src="@imagepath" asp-append-version="true" />
+                                <img src="~/images/noimage.jpg" asp-append-version="true" />
 
                             }
-                        }
-                        else
-                        {
-
-                            <img src="~/images/noimage.jpg" asp-append-version="true" />
-
-                        }
 
 
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-md-12 mt-2 mb-2">
+                                <h2>
+                                    My Details
+                                </h2>
+                            </div>
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td>Age:&nbsp;</td>
+                                <td>@Model.Age</td>
+                            </tr>
+                            <tr>
+                                <td>Sex:&nbsp;</td>
+                                <td> @Model.Pet.Gender</td>
+                            </tr>
+                            <tr>
+                                <td>Breed:&nbsp;</td>
+                                <td>@Model.Pet.PetRace.RaceName</td>
+                            </tr>
+                            <tr>
+                                <td>Color:&nbsp;</td>
+                                <td>@Model.Pet.PetColor.Color</td>
+                            </tr>
+                            <tr>
+                                <td>Size:&nbsp;</td>
+                                <td>@Model.Pet.Size</td>
+                            </tr>
+
+                        </table>
+
+                        <div class="row">
+                            <div class="col-md-12 mt-3 mb-2">
+                                <h2>
+                                    My Info
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mt-1 mb-1">
+
+
+                                @if (@Model.Pet.SocialWithCats.Value == Tristate.No)
+                                {
+                                    <img src="~/assets/close.png" /> }
+                                else if (@Model.Pet.SocialWithCats.Value == Tristate.Yes)
+                                {<img src="~/assets/tick.png" />
+                                }
+                                else if (@Model.Pet.SocialWithCats.Value == Tristate.Unknown)
+                                {
+                                    <img src="~/assets/question.png" />
+                                }
+                                Can live with cats
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mt-1 mb-1">
+                                @if (@Model.Pet.SocialWithDogs.Value == Tristate.No)
+                                {
+                                    <img src="~/assets/close.png" /> }
+                                else if (@Model.Pet.SocialWithDogs.Value == Tristate.Yes)
+                                {<img src="~/assets/tick.png" />
+                                }
+                                else if (@Model.Pet.SocialWithDogs.Value == Tristate.Unknown)
+                                {
+                                    <img src="~/assets/question.png" />
+                                }
+                                Can Live with dogs
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mt-1 mb-1">
+
+                                @if (@Model.Pet.Appartmentfit.Value == Tristate.No)
+                                {
+                                    <img src="~/assets/close.png" /> }
+                                else if (@Model.Pet.Appartmentfit.Value == Tristate.Yes)
+                                {<img src="~/assets/tick.png" />
+                                }
+                                else if (@Model.Pet.Appartmentfit.Value == Tristate.Unknown)
+                                {
+                                    <img src="~/assets/question.png" />
+                                }
+                                Is fit for an appatrment
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mt-1 mb-1">
+
+                                @if (@Model.Pet.KidsFriendly.Value == Tristate.No)
+                                {
+                                    <img src="~/assets/close.png" /> }
+                                else if (@Model.Pet.KidsFriendly.Value == Tristate.Yes)
+                                {<img src="~/assets/tick.png" />
+                                }
+                                else if (@Model.Pet.KidsFriendly.Value == Tristate.Unknown)
+                                {
+                                    <img src="~/assets/question.png" />
+                                }
+                                Is friendly with kids
+
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-5">
-                    <div class="row">
-                        <div class="col-md-12 mt-2 mb-2">
-                            <h2>
-                                My Details
-                            </h2>
-                        </div>
-                    </div>
-
-                    <table cellspacing="0" cellpadding="0">
-                        <tr>
-                            <td>Age:&nbsp;</td>
-                            <td>@Model.Age</td>
-                        </tr>
-                        <tr>
-                            <td>Sex:&nbsp;</td>
-                            <td> @Model.Pet.Gender</td>
-                        </tr>
-                        <tr>
-                            <td>Breed:&nbsp;</td>
-                            <td>@Model.Pet.PetRace.RaceName</td>
-                        </tr>
-                        <tr>
-                            <td>Color:&nbsp;</td>
-                            <td>@Model.Pet.PetColor.Color</td>
-                        </tr>
-                        <tr>
-                            <td>Size:&nbsp;</td>
-                            <td>@Model.Pet.Size</td>
-                        </tr>
-
-                    </table>
-
-                    <div class="row">
-                        <div class="col-md-12 mt-3 mb-2">
-                            <h2>
-                                My Info
-                            </h2>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 mt-1 mb-1">
 
 
-                            @if (@Model.Pet.SocialWithCats.Value == Tristate.No)
-                            {
-                                <img src="~/assets/close.png" /> }
-                            else if (@Model.Pet.SocialWithCats.Value == Tristate.Yes)
-                            {<img src="~/assets/tick.png" />
-                            }
-                            else if (@Model.Pet.SocialWithCats.Value == Tristate.Unknown)
-                            {
-                                <img src="~/assets/question.png" />
-                            }
-                            Can live with cats
+                <div class="col-md-12 mt-2">
 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mt-1 mb-1">
-                            @if (@Model.Pet.SocialWithDogs.Value == Tristate.No)
-                            {
-                                <img src="~/assets/close.png" /> }
-                            else if (@Model.Pet.SocialWithDogs.Value == Tristate.Yes)
-                            {<img src="~/assets/tick.png" />
-                            }
-                            else if (@Model.Pet.SocialWithDogs.Value == Tristate.Unknown)
-                            {
-                                <img src="~/assets/question.png" />
-                            }
-                            Can Live with dogs
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mt-1 mb-1">
-
-                            @if (@Model.Pet.Appartmentfit.Value == Tristate.No)
-                            {
-                                <img src="~/assets/close.png" /> }
-                            else if (@Model.Pet.Appartmentfit.Value == Tristate.Yes)
-                            {<img src="~/assets/tick.png" />
-                            }
-                            else if (@Model.Pet.Appartmentfit.Value == Tristate.Unknown)
-                            {
-                                <img src="~/assets/question.png" />
-                            }
-                            Is fit for an appatrment
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mt-1 mb-1">
-
-                            @if (@Model.Pet.KidsFriendly.Value == Tristate.No)
-                            {
-                                <img src="~/assets/close.png" /> }
-                            else if (@Model.Pet.KidsFriendly.Value == Tristate.Yes)
-                            {<img src="~/assets/tick.png" />
-                            }
-                            else if (@Model.Pet.KidsFriendly.Value == Tristate.Unknown)
-                            {
-                                <img src="~/assets/question.png" />
-                            }
-                            Is friendly with kids
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-12 mt-2">
-                
                     <h2>
                         About Myself
                     </h2>
-                
-                <div>
-                    <p>
-                        @Html.Raw(Model.Pet.Description)
 
-                    </p>
+                    <div>
+                        <p>
+                            @Html.Raw(Model.Pet.Description)
+
+                        </p>
+                    </div>
                 </div>
+
+
+
             </div>
-            
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
 
-
-        </div>
-        <div class="col-md-4">
-            <div class="row">
-                <div class="col-md-12">
-
-                    <div class="card border-light p-3">
-                        @if (Model.Isfavorite)
+                        @if (signInManager.IsSignedIn(User) && User.IsInRole("User"))
                         {
-                            <a asp-action="AddFavorite" asp-controller="favorite" asp-route-id="@pet.PetId" class="btn btn-warning">Remove from Favorite</a>
+
+                            <div class="card border-light p-3">
+                                @if (Model.Isfavorite)
+                                {
+                                    <a asp-action="AddFavorite" asp-controller="favorite" asp-route-id="@pet.PetId" class="btn btn-warning  text align-items-center justify-content-center" style="text-align:center">Remove from Favorite</a>
+                                }
+                                else
+                                {
+
+                                    <a asp-action="AddFavorite" asp-controller="favorite" asp-route-id="@pet.PetId" class="btn btn-success text align-items-center justify-content-center" style="text-align:center">Add to Favorite</a>
+
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="card border-light p-3">
+                                        <button type="button" class="btn btn-success text align-items-center justify-content-center" style="text-align:center" data-toggle="ajax-modal" date-target="#CreateAppointment" data-url="@Url.Action("Create","Appointment", new { petid = Model.Pet.PetId })">
+                                            Book appointment
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="card border-light p-3">
+                                        <a asp-action="Search" asp-controller="Pet" class="btn btn-info text align-items-center justify-content-center" style="text-align:center">Back to Search</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <div class="card border-light p-3">
+
+                                <a asp-action="PetList" asp-controller="Pet" asp-route-id="@pet.PetId" class="btn btn-info  text align-items-center justify-content-center" style="text-align:center">Go back to petlist</a>
+                            </div>
                         }
                         else
                         {
-                            <a asp-action="AddFavorite" asp-controller="favorite" asp-route-id="@pet.PetId" class="btn btn-success">Add to Favorite</a>
+
+                            <a asp-action="Register" asp-controller="Account" class="btn btn-info text align-items-center justify-content-center" style="text-align:center">Please Register to book appointment</a>
 
                         }
-
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
 
-                    <div class="card border-light p-3">
-                        <button type="button" class="btn btn-primary" data-toggle="ajax-modal" date-target="#CreateAppointment" data-url="@Url.Action("Create","Appointment", new { petid = Model.Pet.PetId })">
-                            Book appointment
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <h5 class="card-header">
-                            I'm currently residing at @Model.Pet.Shelter.Name
-                        </h5>
-                        <div class="card-body" id="canvas" style="height:400px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <h5 class="card-header">
+                                I'm currently residing at @Model.Pet.Shelter.Name
+                            </h5>
+                            <div class="card-body" id="canvas" style="height:400px;">
 
 
-                        </div>
-                        <div class="card-footer">
-                            <div class="post-preview-meta">
-                                <div class="post-preview-meta-details">
-                                 
-                                    <div class="post-preview-meta-details-name">
-                                        <div class="row mb-1">
-                                            <h4>More about us</h4>
-                                            <br />
-                                            <p>
-                                                @Html.Raw(Model.Pet.Shelter.Description)
-                                            </p>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <i>
-                                                <img src="~/assets/phone-call.png" /> : @Model.Pet.Shelter.PhoneNumber
-                                            </i>
+                            </div>
+                            <div class="card-footer">
+                                <div class="post-preview-meta">
+                                    <div class="post-preview-meta-details">
+
+                                        <div class="post-preview-meta-details-name">
+                                            <div class="row mb-1">
+                                                <h4>More about us</h4>
+                                                <br />
+                                                <p>
+                                                    @Html.Raw(Model.Pet.Shelter.Description)
+                                                </p>
+                                            </div>
+                                            <div class="row mb-1">
+                                                <i>
+                                                    <img src="~/assets/phone-call.png" /> : @Model.Pet.Shelter.PhoneNumber
+                                                </i>
+
+                                            </div>
+                                            <div class="row mb-1">
+                                                <i><img src="~/assets/mail.png" /> : @Model.Pet.Shelter.Email </i>
+
+                                            </div>
+
 
                                         </div>
-                                        <div class="row mb-1">
-                                            <i><img src="~/assets/mail.png" /> : @Model.Pet.Shelter.Email </i>
-
-                                        </div>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -261,79 +288,78 @@
                 </div>
             </div>
         </div>
+
     </div>
 
-   </div>
 
 
+    @section scripts{
 
-@section scripts{
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr0pt_xuJO0N8VFX_OB2iV6nOlee9_d1I&callback=initMap&libraries=&v=weekly"
-     defer></script>
-
-
-    <script>
-        $(function () {
-            $("#datepicker").datepicker({
-                format: "dd/mm/yyyy",
-                "setDate": new Date(),
-                autohide: true,
-                "autoclose": true,
-                startDate: 'd'
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr0pt_xuJO0N8VFX_OB2iV6nOlee9_d1I&callback=initMap&libraries=&v=weekly"
+                defer></script>
 
 
+        <script>
+            $(function () {
+                $("#datepicker").datepicker({
+                    format: "dd/mm/yyyy",
+                    "setDate": new Date(),
+                    autohide: true,
+                    "autoclose": true,
+                    startDate: 'd'
+
+
+                });
+
+            }
+            );</script>
+
+        <script>
+            $(document).ready(function () {
+                $('.test').timepicker({
+                    timeFormat: 'H:i:s',
+                    step: '60',
+                    minTime: '8',
+                    maxTime: '6:00pm',
+                    defaultTime: '8',
+                    startTime: '8',
+                    dynamic: true,
+                    dropdown: true,
+                    scrollbar: true
+                });
+                $('.test').on('changeTime', function () {
+                    $('.test2').text($(this).val());
+                });
             });
+        </script>
 
-        }
-        );</script>
+        <script>
 
-    <script>
-        $(document).ready(function () {
-            $('.test').timepicker({
-                timeFormat: 'H:i:s',
-                step: '60',
-                minTime: '8',
-                maxTime: '6:00pm',
-                defaultTime: '8',
-                startTime: '8',
-                dynamic: true,
-                dropdown: true,
-                scrollbar: true
-            });
-            $('.test').on('changeTime', function () {
-                $('.test2').text($(this).val());
-            });
-        });
-    </script>
+            $(function () {
 
-    <script>
+                var PlaceHolderElement = $('#PlaceHolderHere');
+                $('button[data-toggle="ajax-modal"]').click(function (event) {
 
-        $(function () {
+                    var url = $(this).data('url');
+                    $.get(url).done(function (data) {
+                        PlaceHolderElement.html(data);
+                        PlaceHolderElement.find('.modal').modal('show');
+                    })
 
-            var PlaceHolderElement = $('#PlaceHolderHere');
-            $('button[data-toggle="ajax-modal"]').click(function (event) {
-
-                var url = $(this).data('url');
-                $.get(url).done(function (data) {
-                    PlaceHolderElement.html(data);
-                    PlaceHolderElement.find('.modal').modal('show');
                 })
 
             })
 
-        })
+        </script>
 
-    </script>
-
-    <script>
+        <script>
 
      "use strict";
     var lat = parseFloat(('@Model.Pet.Shelter.Location.Latitude').replace(',','.'));
     var long = parseFloat(('@Model.Pet.Shelter.Location.Longitude').replace(',','.'));
   console.log(long);
     console.log(lat);
-   
+
     let map;
 
     function initMap() {
@@ -347,18 +373,18 @@
   fullscreenControl: false
 
         };
-   
+
     map = new google.maps.Map(document.getElementById("canvas"), mapOptions);
     const marker = new google.maps.Marker({
-    
+
     position: {
     lat: lat,
     lng: long
     },
     map: map
     });
-      
-    
+
+
     const infowindow = new google.maps.InfoWindow({
     content: "<p>Marker Location:" + marker.getPosition() + "</p>"
     });
@@ -366,5 +392,5 @@
     infowindow.open(map, marker);
     });
     }
-    </script>
-}
+        </script>
+    }

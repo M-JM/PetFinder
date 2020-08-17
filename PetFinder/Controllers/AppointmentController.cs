@@ -53,6 +53,7 @@ namespace PetFinder.Controllers
 
         //From high priority to low 
 
+
         /// 1. Get the hours to block selectlistitems of TimePicker.
         // Find out why Datepicker does not fire function to pass Date to GetHours Method ???
         // The rest of method is straight foward -> get date from Datepicker , send it via AJAX post to method gethours.
@@ -81,24 +82,53 @@ namespace PetFinder.Controllers
         // the exception is being logged though, so might not be to bad??
 
         ///6. Make a proper email body -> fix date to only show date and time correctly. -> add shelter info maybe.
-       
+        // -> see if there is not an easier way to write the HTML body of the email -> put email sending in seperate service taken body, header, sender as parameters and inject in controller ? 
+
         ///7. Is there any sense in having more then 3 categories of appointments ?.
         // -> maybe for stat purpose ?
 
         ///8. Make it that if booking date < DateTime.Now() => automatic assign of category so they do not appear as accepted anymore ?
-        
-        public IActionResult List()
+
+        ///9.Allow the user to cancel an appointment 
+        // The user should be able to cancel an appointment in their list of appointments. The Admin should the be notified that the appointment was cancelled by user (seperate status?)
+
+        ///10. Notification system for users and Admins when new appointments are pending approval , being able to sort by creation date would be good. 
+
+        ///11. Make it possible to have stats for admins ? # of no shows , history of users.
+        ///# of favorite pets and how many traffic view ? counter of views as property van pet ? increment telkens de get view word aangeroepen ?
+
+        ///12. Make customer authorization / AuthorizeAttribute.HandleUnauthorizedRequest(AuthorizationContext) Method -> currently when not authorized it redirect to Error controller
+        // Which returns the 404 page instead of the not authorized page. In cases where admin of the wrong shelter accesses it is intended that notauthorized be checked against shelterid of the ressource he is trying to view
+        //
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Agenda()
         {
             // this gives the values for statusesdropdown in View 
             // this is required so when the Edit Modal is called 
             // the dropdown is populated with values from DB instead of hardcoding them in a select form-group.
-            List<AppointmentStatus> statuses = _appointmentRepository.GetStatus();
-            StatusViewModel updateModel = new StatusViewModel(statuses)
+            try
             {
-            
-            };
+                List<AppointmentStatus> statuses = _appointmentRepository.GetStatus();
+                StatusViewModel updateModel = new StatusViewModel(statuses)
+                {
 
-            return View(updateModel);
+                };
+
+                if (User.IsInRole("Admin"))
+                {
+                    return View(updateModel);
+                }
+                return View("NotAuthorized");
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, $"When getting the agenda.");
+                throw;
+            }
         }
 
         [HttpGet]
@@ -227,51 +257,56 @@ namespace PetFinder.Controllers
             // change the status 
             // the return of this method is a JSON containing the value of the boleaan in order to check the succes function in the script of the view.
 
-            Appointment appointment = _appointmentRepository.GetAppointment(Updatedevent.AppointmentId);
-            ApplicationUser usertoreceiveEmail = await _userManager.FindByIdAsync(appointment.ApplicationUserId);
-
-            appointment.AppointmentStatusId = Updatedevent.appointmentstatusId;
-            Appointment response = _appointmentRepository.UpdateAppointment(appointment);
-            Boolean status = false;
-
-            if (response != null && new int[] { 2, 3, }.Contains(response.AppointmentStatusId))
+            try
             {
-                string emailbody ="";
+                Appointment appointment = _appointmentRepository.GetAppointment(Updatedevent.AppointmentId);
+                ApplicationUser usertoreceiveEmail = await _userManager.FindByIdAsync(appointment.ApplicationUserId);
 
-                switch (response.AppointmentStatusId)
+                appointment.AppointmentStatusId = Updatedevent.appointmentstatusId;
+                Appointment response = _appointmentRepository.UpdateAppointment(appointment);
+                Boolean status = false;
+
+                if (response != null && new int[] { 2, 3, }.Contains(response.AppointmentStatusId))
                 {
+                    string emailbody = "";
 
-                    case 3:
+                    switch (response.AppointmentStatusId)
+                    {
+                        case 2:
 
-                      emailbody ="<html><body><p>Dear,</p>" +
-                      "<p>We hereby confirm your appointment with " + appointment.Pet.Name + ".</p>"
-                      +"<p>Please present yourself on " + response.Date.ToShortDateString() + " at " + response.StartTime + "</p>"
-                     +"<p>Sincerely,<br>Petfinder Team</br></p> </body> </html>";
+                            emailbody = "<html><body><p>Dear,</p>" +
+                            "<p>Your appointment with " + appointment.Pet.Name + " has been rejected.</p>" +
+                            "<p>Please contact " + response.Shelter.Name + " at " + response.Shelter.PhoneNumber + " or email them at " + response.Shelter.Email + " for more information.</p>"
+                            + "<p>Sincerely,<br>Petfinder Team</br></p> </body> </html>";
 
-                        //"Your Appointment with " + appointment.Pet.Name + " at " + appointment.Shelter.Name + " on " + response.Date + " has been confirmed";
+                            break;
 
-                        break;
+                        case 3:
 
-                    case 2:
+                            emailbody = "<html><body><p>Dear,</p>" +
+                            "<p>We hereby confirm your appointment with " + appointment.Pet.Name + ".</p>"
+                            + "<p>Please present yourself on " + response.Date.ToShortDateString() + " at " + response.StartTime + " at shelter " + response.Shelter.Name + "</p>"
+                            + "<p>Should you want to cancel your appointment please contact " + response.Shelter.Name + " at " + response.Shelter.PhoneNumber + " or email them at " + response.Shelter.Email + "</p>"
+                            + "<p>Sincerely,<br>Petfinder Team</br></p> </body> </html>";
 
-                        emailbody = "Your Appointment with " + appointment.Pet.Name + " at " + appointment.Shelter.Name + " on " + response.Date + " has been Rejected";
-                        
-                        break;
-             
+                            break;
+
+                        default:
+
+                            break;
+                    }
+
+                    await _emailService.SendAsync(usertoreceiveEmail.UserName, "Appointment - PetFinder", emailbody, true);
+                    status = true;
                 }
 
-                await _emailService.SendAsync(usertoreceiveEmail.UserName, "Appointment - PetFinder", emailbody, true);
-
+                return Json(status);
             }
-
-            if (response != null)
+            catch (Exception ex)
             {
-                status = true;
+                _logger.LogError(ex, $"When trying to save the appointment after choosing status");
+                throw;
             }
-
-           
-
-            return Json(status);
         }
 
         [HttpGet]
@@ -341,12 +376,22 @@ namespace PetFinder.Controllers
 
         // Non Functional see-> TODO
         [HttpGet]
+        [Authorize(Roles = "User")]
         public JsonResult GetBlockHours(int PetId, DateTime date)
         {
-            List<Appointment> appointments = _appointmentRepository.GetHoursofAppointment(PetId, date);
+            try
+            {
+                List<Appointment> appointments = _appointmentRepository.GetHoursofAppointment(PetId, date);
 
-            return Json(appointments);
+                return Json(appointments);
 
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, $"When trying to retrieve appointments on the given date.");
+                throw;
+            }
         }
 
 

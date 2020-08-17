@@ -30,6 +30,7 @@ namespace PetFinder.Controllers
             var ErrorMessages = new ErrorMessage();
             switch (statusCode)
             {
+        
                 case 404:
                     ErrorMessages.TheErrorMessage = "sorry this page does not exist";
                     ErrorMessages.Path = statusCodeResult.OriginalPath;

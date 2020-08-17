@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <form enctype="multipart/form-data" method="post">
                         <input type="hidden" asp-for="ShelterId" />
-                    
+
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label asp-for="PetKindId" class="small mb-1 Label-text-form">Pet Kind</label>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
 
-                       
+
                         <!-- Form Row        -->
                         <div class="form-row">
 
@@ -185,7 +185,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <a asp-action="PetList" asp-controller="Pet" class="btn btn-info" style="text-align:center">cancel</a>
                         <input type="submit" value="Create Pet" class="btn btn-primary" />
                     </form>
                 </div>

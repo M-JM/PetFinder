@@ -25,7 +25,6 @@
 <div class="container mt-2 pt-5 mb-5" style="background-color:white;">
     <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center"
          style="min-height: 30px; ">
-
         <!-- Then put toasts within -->
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="succesalert"
              style="background-color:palegreen">
@@ -34,7 +33,15 @@
                 Succesfully updated appointment
             </div>
         </div>
+        @*<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="Failalert"
+             style="background-color:red">
+
+            <div class="toast-body">
+                Something went wrong when updated appointment
+            </div>
+        </div>*@
     </div>
+    
     <div id='calendar' style="max-width: 1200px; margin: 20px auto;"></div>
 </div>
 
@@ -180,7 +187,7 @@
                 slotMinTime: "8:00:00",
                 slotMaxTime: "20:00:00",
                 initialView: 'timeGridWeek',
-                initialDate: '2020-08-12',
+                initialDate: '2020-08-18',
                 
                 events: {
                     url: '/Appointment/GetAppointments',
@@ -216,7 +223,6 @@
             });
 
             $('#btnSave').click(function () {
-
                 var data = {
                     AppointmentId: $('#appointmentid').val(),
                     appointmentstatusId: $('#appointmentstatusId').val(),
@@ -224,7 +230,6 @@
                 SaveEvent(data);
                 // call function for submit data to the server
                 $('#myModalSave').modal('hide');
-
             })
 
             function SaveEvent(data) {
@@ -238,14 +243,16 @@
                             calendar.refetchEvents();
                             $('#myModalSave').modal('hide');
                             $('#succesalert').toast({
-                                delay: 3000
+                                delay: 2000
                             }).toast('show').toast('hide');
                         }
                     },
                     error: function () {
-                        alert('Failed');
-                        console.log('status');
-                        console.log(status);
+                         console.log('Post was unsuccesfull');
+                            calendar.refetchEvents();
+                            $('#Failalert').toast({
+                                delay: 2000
+                            }).toast('show').toast('hide');
                     }
                 })
             }
