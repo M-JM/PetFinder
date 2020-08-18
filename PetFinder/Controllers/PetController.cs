@@ -37,6 +37,7 @@ namespace PetFinder.Controllers
 
         //INFO
 
+          
         /// Async methods 
         //Asynchronous action methods are useful when an action must perform several independent long running operations. these happen on a seperate thread then the main thread.
         //Making a method asynchronous does not make it execute faster, and that is an important factor to understand and a misconception many people have.
@@ -53,7 +54,7 @@ namespace PetFinder.Controllers
         //   in html implement Ajax call to delete methode and call it on span/link item on each existing photo
         //   the Method will take the photopath as parameter and retrieve the selected photo and delete it from DB and WWWROOT.
 
-        ///2. Move the CalculateAge Method in Viewmodel ? 
+        ///2. Move the CalculateAge Method in Viewmodel or maybe service ?? 
         // This should be doable ... seperate concern (MVC pattern) -> View data representation goes in viewmodel not controller...
 
         ///3. Log warning when triggering the notauthorized View call to log who tried to access the ressources ??
@@ -338,6 +339,7 @@ namespace PetFinder.Controllers
             try
             {
                 Pet pet = _petRepository.GetById(editModel.PetId);
+
                 if (pet.ShelterId == Convert.ToInt32(HttpContext.Session.GetString("shelterid")))
                 {
                     if (ModelState.IsValid)
@@ -356,6 +358,8 @@ namespace PetFinder.Controllers
                         pet.Appartmentfit = editModel.Appartmentfit;
 
                         var response = _petRepository.EditPet(pet);
+
+
 
                         if (response != null & response.PetId != 0)
                         {

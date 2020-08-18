@@ -99,7 +99,7 @@
                     </li>
 
                 }
-                else
+                else if(!User.IsInRole("User") && !User.IsInRole("Admin"))
                 {
                     <li class="nav-item active">
                         <a class="nav-link" asp-action="Index" asp-controller="Home">Home <span class="sr-only">(current)</span></a>

@@ -65,6 +65,7 @@ namespace PetFinder.Controllers
                                 new { ReturnUrl = returnUrl });
             var properties = _signInManager
                 .ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+         
             return new ChallengeResult(provider, properties);
         }
 
@@ -101,9 +102,14 @@ namespace PetFinder.Controllers
             
             var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider,
                 info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            
 
             if (signInResult.Succeeded)
             {
+                var currentuser = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                HttpContext.Session.SetString("Username", currentuser.UserName);
+                HttpContext.Session.SetString("id", currentuser.Id);
+                HttpContext.Session.SetString("shelterid", currentuser.ShelterId.ToString());
                 return LocalRedirect(returnUrl);
             }
             
@@ -140,7 +146,7 @@ namespace PetFinder.Controllers
                 // If we cannot find the user email we cannot continue
                 ViewBag.ErrorTitle = $"Email claim not received from: {info.LoginProvider}";
                 ViewBag.ErrorMessage = "Please contact support on PetfinderInfo@gmail.com";
-
+           
                 return View("Error");
             }
         }
@@ -645,6 +651,7 @@ namespace PetFinder.Controllers
                     location.Zipcode = model.Zipcode;
                     location.HouseNumber = model.HouseNumber;
                     location.Country = model.Country;
+                   location.City = model.City;
                     location.Latitude = googleApiResult.Result.geometry.location.lat;
                     location.Longitude = googleApiResult.Result.geometry.location.lng;
 
@@ -654,6 +661,7 @@ namespace PetFinder.Controllers
                 shelter.Email = model.Email;
                 shelter.PhoneNumber = model.PhoneNumber;
                 shelter.LocationId = location.LocationtId;
+                shelter.Description = model.Description;
 
 
                _shelterRepository.UpdateShelter(shelter);

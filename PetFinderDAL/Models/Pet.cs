@@ -16,7 +16,7 @@ namespace PetFinderDAL.Models
     public class Pet
     {
         public int PetId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Give your pet a name")]
         [DisplayName("Pet Name")]
         [StringLength(30)]
         public string Name { get; set; }
@@ -24,22 +24,22 @@ namespace PetFinderDAL.Models
         public string Gender { get; set; }
         [Required]
         public  DateTime DOB { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please select a value")]
         public string Size { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please write a description")]
         [DisplayName("Pet Description")]
         [StringLength(500)]
         public string Description { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please select a value")]
         [DisplayName("Social With Dogs")]
         public Tristate? SocialWithDogs { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please select a value")]
         [DisplayName("Social With Cats")]
         public Tristate? SocialWithCats { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please select a value")]
         [DisplayName("Fit for Appartment")]
         public Tristate? Appartmentfit { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please select a value")]
         [DisplayName("Friendly with kids")]
         public Tristate? KidsFriendly { get; set; }
 

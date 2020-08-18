@@ -75,11 +75,11 @@ namespace PetFinder.Controllers
         // Calendar lib takes a well defined class to show the events.
         // Appointment class could be modified so the properties have the correct name so Calendar gets JSON feed with proper property name
         // This would avoid to have to make new CalendarEvents with repetition of Data that is at 90% already available through class Appointment...
-        // Alternative is creating an Array to map the values from response of method , does not work. -> Mapped event object are not being pushed in Array before the Calender has rendered
+        // Alternative is creating an Array to map the values from JSON response of method , does not work. -> Mapped event object are not being pushed in Array before the Calender has rendered
         // thus Calendar uses empty Array and return no appointments...
 
         ///5.Is it ok to instead of Throw to return View Error ? Does it lose important infomation in Dev. env ? (Test this out).
-        // the exception is being logged though, so might not be to bad??
+        // the exception is being logged though, so might not be too bad??
 
         ///6. Make a proper email body -> fix date to only show date and time correctly. -> add shelter info maybe.
         // -> see if there is not an easier way to write the HTML body of the email -> put email sending in seperate service taken body, header, sender as parameters and inject in controller ? 
@@ -97,10 +97,11 @@ namespace PetFinder.Controllers
         ///11. Make it possible to have stats for admins ? # of no shows , history of users.
         ///# of favorite pets and how many traffic view ? counter of views as property van pet ? increment telkens de get view word aangeroepen ?
 
-        ///12. Make customer authorization / AuthorizeAttribute.HandleUnauthorizedRequest(AuthorizationContext) Method -> currently when not authorized it redirect to Error controller
+        ///12.(Fixed) Make customer authorization / AuthorizeAttribute.HandleUnauthorizedRequest(AuthorizationContext) Method -> currently when not authorized it redirect to Error controller
         // Which returns the 404 page instead of the not authorized page. In cases where admin of the wrong shelter accesses it is intended that notauthorized be checked against shelterid of the ressource he is trying to view
-        //
+        
 
+            
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult Agenda()
@@ -130,7 +131,7 @@ namespace PetFinder.Controllers
                 throw;
             }
         }
-
+       
         [HttpGet]
         [Authorize(Roles = "User")]
         public IActionResult Create(int petid)
@@ -266,8 +267,9 @@ namespace PetFinder.Controllers
                 Appointment response = _appointmentRepository.UpdateAppointment(appointment);
                 Boolean status = false;
 
-                if (response != null && new int[] { 2, 3, }.Contains(response.AppointmentStatusId))
+                if (response != null) 
                 {
+                    if(new int[] { 2, 3, }.Contains(response.AppointmentStatusId)) { 
                     string emailbody = "";
 
                     switch (response.AppointmentStatusId)
@@ -297,6 +299,7 @@ namespace PetFinder.Controllers
                     }
 
                     await _emailService.SendAsync(usertoreceiveEmail.UserName, "Appointment - PetFinder", emailbody, true);
+                    }
                     status = true;
                 }
 
@@ -374,25 +377,25 @@ namespace PetFinder.Controllers
             }
         }
 
-        // Non Functional see-> TODO
-        [HttpGet]
-        [Authorize(Roles = "User")]
-        public JsonResult GetBlockHours(int PetId, DateTime date)
-        {
-            try
-            {
-                List<Appointment> appointments = _appointmentRepository.GetHoursofAppointment(PetId, date);
+        //// Non Functional see-> TODO
+        //[HttpGet]
+        //[Authorize(Roles = "User")]
+        //public JsonResult GetBlockHours(int PetId, DateTime date)
+        //{
+        //    try
+        //    {
+        //        List<Appointment> appointments = _appointmentRepository.GetHoursofAppointment(PetId, date);
 
-                return Json(appointments);
+        //        return Json(appointments);
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                _logger.LogError(ex, $"When trying to retrieve appointments on the given date.");
-                throw;
-            }
-        }
+        //        _logger.LogError(ex, $"When trying to retrieve appointments on the given date.");
+        //        throw;
+        //    }
+        //}
 
 
 

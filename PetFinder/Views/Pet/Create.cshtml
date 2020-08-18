@@ -31,7 +31,7 @@
             <div class="card mb-4">
                 <div class="card-header">Pet Creation</div>
                 <div class="card-body">
-                    <form enctype="multipart/form-data" method="post">
+                    <form enctype="multipart/form-data" asp-action="Create" asp-controller="Pet">
                         <input type="hidden" asp-for="ShelterId" />
 
                         <div class="form-row">
